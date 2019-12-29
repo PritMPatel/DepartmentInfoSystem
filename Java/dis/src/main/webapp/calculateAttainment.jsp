@@ -16,42 +16,29 @@
 <%@include file="/headerFaculty.jsp"%>
 	<title>CALCULATE ATTAINMENT</title>
 	<script src="js/jquery.table2excel.js"></script>
-		<style type="text/css">
-		@media print {@page { size: landscape;}}
-		table{
-		border-collapse: collapse;
-		}
-		th,td{
-			border: 1px solid black;
-			
-			text-align: center;
-			vertical-align: center;
-			padding: 2px 5px;
-		}
-		</style>
 <style type="text/css">
-.col-sm{
-	padding-left: 30px !important;
-	padding-right: 30px !important;
-}
-.form-row .col-sm .form-row{
-    padding:0px !important;
-    display: inline !important;
-    margin: 0px !important;
-}
-.uk-table{
-    width: auto !important;
-}
-/* Chrome, Safari, Edge, Opera */
-		input::-webkit-outer-spin-button,
-		input::-webkit-inner-spin-button {
+	.col-sm{
+		padding-left: 30px !important;
+		padding-right: 30px !important;
+	}
+	.form-row .col-sm .form-row{
+		padding:0px !important;
+		display: inline !important;
+		margin: 0px !important;
+	}
+	.uk-table{
+		width: auto !important;
+	}
+	/* Chrome, Safari, Edge, Opera */
+	input::-webkit-outer-spin-button,
+	input::-webkit-inner-spin-button {
 		-webkit-appearance: none;
 		margin: 0;
-		}
-/* Firefox */
-		input[type=number] {
+	}
+	/* Firefox */
+	input[type=number] {
 		-moz-appearance: textfield;
-		}
+	}
 </style>
 <div class="navigation" id="navbar">
 	<div class="dropdown">
@@ -222,7 +209,7 @@
 					if(rs6.next()){
 						out.println("<td colspan=1 bgcolor='peachpuff'><center>"+rs6.getFloat("totalCalcObt")+"</center></td>");
 						out.println("<td colspan=1 bgcolor='peachpuff'><center>"+rs6.getFloat("totalNCalcObt")+"</center></td>");
-						out.println("<td colspan=1 bgcolor='lightsalmon' ><center><input type='number' id='atTable' class='uk-input uk-form-blank uk-form-small uk-width-xsmall' step='0.01' value='"+rs6.getFloat("attainPercent")+"' readonly/></center></td>");
+						out.println("<td colspan=1 bgcolor='lightsalmon' ><center>"+rs6.getFloat("attainPercent")+"<input type='number' id='atTable' class='uk-input uk-form-blank uk-form-small uk-width-xsmall' step='0.01' value='"+rs6.getFloat("attainPercent")+"' readonly hidden/></center></td>");
 						float percent=rs6.getFloat("attainPercent");
 						int lvl=0;
 						if(percent>=70)
@@ -233,7 +220,7 @@
 							lvl=1;
 						else
 							lvl=0;
-						out.println("<td colspan=1 bgcolor='thistle'><center><input type='number' id='atTable' class='uk-input uk-form-blank uk-form-small uk-width-xsmall' value='"+lvl+"' readonly/>");
+						out.println("<td colspan=1 bgcolor='thistle'><center>"+lvl+"<input type='number' id='atTable' class='uk-input uk-form-blank uk-form-small uk-width-xsmall' value='"+lvl+"' hidden readonly/>");
 						
 						out.println("</center></td>");
 					}
@@ -257,7 +244,7 @@
 
                      window.print();
 
-                     document.body.innerHTML = originalContents;
+                    document.body.innerHTML = originalContents;
                 }
 	$(function() {
 				$("#exportExcel").click(function(){
