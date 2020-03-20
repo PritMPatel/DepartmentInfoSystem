@@ -196,13 +196,17 @@
                             var row = table.insertRow(-1);
                             for (var j = 0; j < cells.length; j++) {
                                 var cell = row.insertCell(-1);
-                                if(j!=0)
+                                if(j!=0){
                                     var inTable = document.getElementById((i)+"que"+(j));
+                                    if(inTable!=null)
+                                    inTable.value = cells[j];
+                                }
                                 else{
                                     //var inTable = document.getElementById("enroll"+(i));
+                                    //if(inTable!=null)
+                                    //    inTable.value = cells[j];
                                 }
-                                if(inTable!=null)
-                                    inTable.value = cells[j];
+                                
                             }
                         }}
                     }
@@ -231,13 +235,16 @@
                             var row = table.insertRow(-1);
                             for (var j = 0; j < cells.length; j++) {
                                 var cell = row.insertCell(-1);
-                                if(j!=0)
+                                if(j!=0){
                                     var inTable = document.getElementById((i)+"marks");
+                                    if(inTable!=null)
+                                        inTable.value = cells[j];
+                                }
                                 else{
                                     //var inTable = document.getElementById("enroll"+(i));
+                                    //if(inTable!=null)
+                                    //    inTable.value = cells[j];
                                 }
-                                if(inTable!=null)
-                                    inTable.value = cells[j];
                             }
                         }}
                     }
