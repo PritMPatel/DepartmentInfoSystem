@@ -82,7 +82,13 @@
 									{
 										if(con.CheckData("select * from faculty_master where facultyEmail='"+request.getParameter("email")+"' and facultyPassword='"+request.getParameter("password")+"'"))
 										{
+											ResultSet rs = con.SelectData("select facultyName from faculty_master where facultyEmail='"+request.getParameter("email")+"' and facultyPassword='"+request.getParameter("password")+"'");
 											String Uname=request.getParameter("email");
+											String Name = null;
+											if(rs.next()){
+											Name=rs.getString("facultyName");
+											}
+											session.setAttribute("getfacultyName",Name);
 											session.setAttribute("facultyUsername" ,Uname);
 											session.setAttribute("role" ,"faculty");
 											response.sendRedirect("facultyHome.jsp");
