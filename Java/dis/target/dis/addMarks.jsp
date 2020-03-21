@@ -64,7 +64,7 @@
                 }
                 else{    
                 out.println("<br/>ExamID: <input type='number' name='examid2' value='"+request.getParameter("examid")+"' disabled/>");
-                rs2=con.SelectData("SELECT questionID,queDesc,queMaxMarks,nQueMaxMarks,queMaxWeighMarks,coSrNo FROM question_master qm,co_master cm where qm.coID=cm.coID and examID="+request.getParameter("examid")+" order by questionID;");
+                rs2=con.SelectData("SELECT questionID,queDesc,queMaxMarks,calcQuesMaxMarks,nCalcQuesMaxMarks FROM question_master qm where examID="+request.getParameter("examid")+" order by questionID;");
                 rs2.last();
                 nOfQue = rs2.getRow();
                 x=1;
@@ -72,7 +72,7 @@
                 rs2.beforeFirst();
                 out.println("<form method='POST'><table border='1'><tr><th>Exam</th><th colspan='"+nOfQue+"'><input type='number' value='"+request.getParameter("examid")+"' disabled/></th></tr><tr><th>Enrollment</th>");
                 while(x<=nOfQue && rs2.next()){
-                    out.println("<th>Q"+x+" - CO "+rs2.getInt("coSrNo")+"</th>");
+                    out.println("<th>Q"+x+"</th>");
                     x++;
                 }
                 out.println("</tr>");
@@ -100,7 +100,7 @@
                     
                     rs4=con.SelectData("select typeDescription from exam_master,examtype_master where exam_master.examtypeID=examtype_master.examtypeID and examID="+request.getParameter("examid2")+";");
                     rs4.next();
-                    rs2=con.SelectData("SELECT questionID,queDesc,queMaxMarks,nQueMaxMarks,queMaxWeighMarks,coSrNo FROM question_master qm, co_master cm where qm.coID=cm.coID and examID="+request.getParameter("examid2")+" order by questionID;");
+                    rs2=con.SelectData("SELECT questionID,queDesc,queMaxMarks,calcQuesMaxMarks,nCalcQuesMaxMarks FROM question_master qm where examID="+request.getParameter("examid2")+" order by questionID;");
                     rs2.last();
                     nOfQue = rs2.getRow();
                     //out.println(nOfQue);
@@ -109,8 +109,7 @@
                     nOfStudents = rs3.getRow();
                     //out.println(nOfStudents);
                     if(s.equals(rs4.getString("typeDescription"))){
-                        rs2=con.SelectData("SELECT questionID,queDesc,queMaxMarks,nQueMaxMarks,queMaxWeighMarks,coSrNo FROM question_master qm, co_master cm where qm.coID=cm.coID and examID="+request.getParameter("examid2")+" order by questionID;");
-                        rs2.last();
+                        rs2=con.SelectData("SELECT questionID,queDesc,queMaxMarks,calcQuesMaxMarks,nCalcQuesMaxMarks FROM question_master qm where examID="+request.getParameter("examid2")+" order by questionID;");
                         rs2.last();
                         nOfQue = rs2.getRow();
                         rs3=con.SelectData("select enrollmentno from student_master where batch in (select batch from exam_master where examID="+request.getParameter("examid2")+") order by enrollmentno;");
@@ -119,20 +118,20 @@
                         x=1;
                         x2=1;
                         rs3.beforeFirst();
-                        rs5=con.SelectData("select maxMarks from exam_master where examID="+request.getParameter("examid2")+";");
+                        rs5=con.SelectData("select * from exam_master where examID="+request.getParameter("examid2")+";");
                         rs5.next();
-                        float examMaxMarks = rs5.getFloat("maxMarks");
+                        float examMaxMarks = rs5.getFloat("totalMaxMarks");
                         while(x2<=nOfStudents && rs3.next()){
                             rs2.beforeFirst();
                             x=1;
                             float marks = Float.parseFloat(request.getParameter(x2+"marks"));
                             while(x<=nOfQue && rs2.next()){
-                                float nFact = rs2.getFloat("nQueMaxMarks")/rs2.getFloat("queMaxMarks");
-                                float wFact = rs2.getFloat("queMaxWeighMarks")/rs2.getFloat("queMaxMarks");                               
-                                float obtMarks = rs2.getFloat("queMaxMarks")*marks/examMaxMarks;
-                                float obtWeighMarks = obtMarks*wFact;
-                                float obtNormMarks = obtMarks*nFact;    
-                                if(con.Ins_Upd_Del("insert into marks_obtained_master(enrollmentno,questionID,obtainedMarks,calcObtainedMarks,nCalcObtainedMarks) values("+rs3.getString("enrollmentno")+","+rs2.getInt("questionID")+","+obtMarks+","+obtNormMarks+","+obtWeighMarks+");")){}
+                                float nFact = rs2.getFloat("calcQuesMaxMarks")/rs2.getFloat("queMaxMarks");
+                                float wFact = rs2.getFloat("nCalcQuesMaxMarks")/rs2.getFloat("queMaxMarks");                               
+                                float obtMarks = marks*rs2.getFloat("queMaxMarks")/examMaxMarks;
+                                float calcObtMarks = obtMarks*nFact;
+                                float nCalcObtMarks = obtMarks*wFact;
+                                if(con.Ins_Upd_Del("insert into marks_obtained_master(enrollmentno,questionID,obtainedMarks,calcObtainedMarks,nCalcObtainedMarks) values("+rs3.getString("enrollmentno")+","+rs2.getInt("questionID")+","+obtMarks+","+calcObtMarks+","+nCalcObtMarks+");")){}
                                 else{
                                     out.println("<script>alert('ERROR : @"+request.getParameter("enroll"+x2)+" FOR QUESTION "+x+"');</script>");
                                 }
@@ -152,12 +151,14 @@
                         x=1;
                         while(x<=nOfQue && rs2.next()){
                             //out.println("It reach inside Second loop");
-                            float nFact = rs2.getFloat("nQueMaxMarks")/rs2.getFloat("queMaxMarks");
-                            float wFact = rs2.getFloat("queMaxWeighMarks")/rs2.getFloat("queMaxMarks");
-                            float obtWeighMarks = Float.parseFloat(request.getParameter(x2+"que"+x))*wFact;
-                            float obtNormMarks = Float.parseFloat(request.getParameter(x2+"que"+x))*nFact;
+                            float nFact = rs2.getFloat("calcQuesMaxMarks")/rs2.getFloat("queMaxMarks");
+                            float wFact = rs2.getFloat("nCalcQuesMaxMarks")/rs2.getFloat("queMaxMarks");
+                            float calcObtMarks = Float.parseFloat(request.getParameter(x2+"que"+x))*nFact;
+                            float nCalcObtMarks = Float.parseFloat(request.getParameter(x2+"que"+x))*wFact;
+                            //float obtWeighMarks = Float.parseFloat(request.getParameter(x2+"que"+x))*wFact;
+                            //float obtNormMarks = Float.parseFloat(request.getParameter(x2+"que"+x))*nFact;
                             //out.println("<br><br>n w oN oW"+"-"+nFact+"-"+wFact+"-"+obtNormMarks+"-"+obtWeighMarks+"<br><br>");
-                            if(con.Ins_Upd_Del("insert into marks_obtained_master(enrollmentno,questionID,obtainedMarks,nObtainedMarks,obtainedWeighMarks) values("+rs3.getString("enrollmentno")+","+rs2.getInt("questionID")+","+Float.parseFloat(request.getParameter(x2+"que"+x))+","+obtNormMarks+","+obtWeighMarks+");")){}
+                            if(con.Ins_Upd_Del("insert into marks_obtained_master(enrollmentno,questionID,obtainedMarks,calcObtainedMarks,nCalcObtainedMarks) values("+rs3.getString("enrollmentno")+","+rs2.getInt("questionID")+","+Float.parseFloat(request.getParameter(x2+"que"+x))+","+calcObtMarks+","+nCalcObtMarks+");")){}
                             else{
                                 out.println("<script>alert('ERROR : @"+request.getParameter("enroll"+x2)+" FOR QUESTION "+x+"');</script>");
                             }

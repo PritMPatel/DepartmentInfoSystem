@@ -11,7 +11,8 @@
        <repository>
          <id>internal.repo</id>
          <name>Internal repo</name>
-        <url>file:///C:/Users/Sakshi/Documents/S/GITHUB/dis/Java/dis</url>
+         <url>file:///C:/Users/Sakshi/Documents/S/GITHUB/dis/Java/dis</url> 
+        <!--<url>file:///C:/Users/Preet/Documents/GitHub/dis/Java/dis</url>-->
        </repository>
    </distributionManagement>
   <dependencies>
@@ -50,6 +51,16 @@
       <groupId>org.json</groupId>
       <artifactId>json</artifactId>
       <version>20180813</version>
+    </dependency>
+    <dependency>
+        <groupId>org.apache.poi</groupId>
+        <artifactId>poi</artifactId>
+        <version>3.12</version>
+    </dependency>
+    <dependency>
+        <groupId>org.apache.poi</groupId>
+        <artifactId>poi-ooxml</artifactId>
+        <version>3.12</version>
     </dependency>
   </dependencies>
   <build>
