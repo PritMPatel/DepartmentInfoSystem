@@ -14,6 +14,7 @@ import java.util.logging.*;
 
 public class Connect {
 	Connection con = null;
+
 	public Connect() {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");

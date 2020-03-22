@@ -1,10 +1,11 @@
+
 <%
 	String userRole = new String("SUPERSTAR");
-	
-	if(session.getAttribute("role") != null){
-		userRole = (String)session.getAttribute("role");
+
+	if (session.getAttribute("role") != null) {
+		userRole = (String) session.getAttribute("role");
 	}
-	if(userRole.equals("faculty")){
+	if (userRole.equals("faculty")) {
 %>
 <%@page import="java.sql.ResultSet"%>
 <%@page import="java.io.*"%>
@@ -13,7 +14,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-<title>ADD EXAM</title>
+<title>FACULTY HOME</title>
 <script src="js/jquery-3.2.1.min.js"></script>
 <link rel="icon" type="image/ico" href="images/download.jpg" />
 <link rel="stylesheet"
@@ -87,12 +88,11 @@
         <a href="addQue.jsp">Add Question</a><br/>
         <a href="addMarks.jsp">Add Marks</a><br/>
         <a href="calculateAttainment.jsp">Calculate Attainment</a><br/>--%>
-	
+
 </body>
 </html>
 <%
-	}
-	else{
+	} else {
 		out.println("<script>alert('SESSION INVALID!!! PLEASE LOGIN AGAIN!!!!!');</script>");
 		response.sendRedirect("login.jsp");
 	}

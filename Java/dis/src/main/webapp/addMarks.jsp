@@ -1,25 +1,66 @@
+
+<%
+	String userRole = new String("SUPERSTAR");
+
+	if (session.getAttribute("role") != null) {
+		userRole = (String) session.getAttribute("role");
+	}
+	if (userRole.equals("faculty")) {
+%>
 <%@page import="java.sql.ResultSet"%>
 <%@page import="java.io.*"%>
 <%@page import="Connection.Connect"%>
 <%@page import="java.sql.ResultSetMetaData"%>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-        <title>ADD MARKS</title>
-        <script src="js/jquery-3.2.1.min.js"></script>
-    </head>
-    <body>
-        <a href="addCo.jsp">Add CO</a><br/>
+<%@include file="/headerFaculty.jsp"%>
+<title>ADD MARKS</title>
+<div class="navigation" id="navbar">
+	<div class="dropdown">
+		<!-- navigation STARTS here -->
+		<label for="show-menu" class="show-menu" style="margin-bottom: 0px">Show
+			Menu</label> <input type="checkbox" id="show-menu" role="button">
+		<ul id="menu">
+			<li><a href="facultyHome.jsp" class="active main-link">HOME</a></li>
+			<li><a href="addCo.jsp" class="active main-link">ADD CO</a></li>
+			<li><a href="addExam.jsp" class="active main-link">ADD EXAM</a></li>
+			<li><a href="addQue.jsp" class="active main-link">ADD
+					QUESTION</a></li>
+			<li><a href="addMarks.jsp" class="active main-link">ADD
+					MARKS</a></li>
+			<li><a href="calculateAttainment.jsp" class="active main-link">VIEW
+					ATTAINMENT</a></li>
+			<li><a href="#" class="active main-link">LOGOUT</a></li>
+		</ul>
+	</div>
+</div>
+<!-- navigation ENDS here -->
+</div>
+<%-- <a href="addCo.jsp">Add CO</a><br/>
         <a href="addExam.jsp">Add Exam</a><br/>
         <a href="addQue.jsp">Add Question</a><br/>
         <a href="addMarks.jsp">Add Marks</a><br/>
-        <a href="calculateAttainment.jsp">Calculate Attainment</a><br/>
-        <br/><br/>
-        <form method="POST">
-                SubjectID:<input type="number" name="subject1"/><br/> 
-                Batch:<input type="number" name="batch1"/><br/><br/>
-                <button name="examselect" value="examselect">Select Exam</button><br/></form>
-            <%
+        <a href="calculateAttainment.jsp">Calculate Attainment</a><br/> --%>
+<div class="container" style="width: 80%; margin-bottom: 100px">
+	<h3 id="head" style="text-align: center; padding-bottom: 10px;">ADD
+		MARKS</h3>
+	<form method="POST">
+		<div class="form-row">
+			<div class="col-sm">
+				<label for="subjectID"> SubjectID:</label><input type="number"
+					class="uk-input" id="subject1" name="subject1"
+					placeholder="Subject ID" />
+			</div>
+			<div class="col-sm-1"></div>
+			<div class="col-sm">
+				<label for="batch"> Batch:</label><input type="number"
+					class="uk-input" id="batch1" name="batch1" placeholder="Batch" />
+			</div>
+		</div>
+		<center class="mt-3">
+			<button name="examselect" class="btn" value="examselect">Select
+				Exam</button>
+		</center>
+	</form>
+	<%
                 Connect con=null;
                 ResultSet rs=null;
                 ResultSet rs2=null;
@@ -36,11 +77,11 @@
                 con=new Connect();
                 if(request.getParameter("examselect")!=null){
                     rs=con.SelectData("select * from exam_master where examID in (select distinct examID from question_master where questionID not in (select questionID from marks_obtained_master)) and subjectID="+request.getParameter("subject1")+" and batch="+request.getParameter("batch1")+";");
-                    out.println("<br/><form method='POST'>SubjectID:<input type='number' name='subject1' value='"+request.getParameter("subject1")+"' disabled/><br/> ");
-                    out.println("Batch:<input type='number' name='batch1' value='"+request.getParameter("batch1")+"' disabled/><br/> ");
+                    out.println("<form method='POST'><div class='form-row'><div class='col-sm'><label for='subjectID'>SubjectID:</label><input type='number' class='uk-input' id='subject1' name='subject1' value='"+request.getParameter("subject1")+"' disabled/></div> ");
+                    out.println("<div class='col-sm-1'></div><div class='col-sm'><label for='batch'>Batch:</label><input type='number' name='batch1' class='uk-input' id='batch1' value='"+request.getParameter("batch1")+"' disabled/></div></div> ");
                     out.println("ExamID:<select name='examid'>");
                     while(rs.next()){
-                        out.println("<option value='"+rs.getInt("examID")+"'>"+rs.getInt("examID")+" - "+rs.getString("examName")+"</option>");
+                        out.println("<div uk-dropdown><option value='"+rs.getInt("examID")+"'>"+rs.getInt("examID")+" - "+rs.getString("examName")+"</option></div>");
                     }
                     out.println("</select><br/><br/><button name='addMarks' value='addMarks'>Add Marks</button></form><br/><br/>");
                 }  
@@ -94,8 +135,8 @@
                 }
                 out.println("</table><br/>Confirm ExamID<input type='number' name='examid2'><br/><br/><button type='submit' name='submit' value='submit'>Submit</button></form>");  
             }}%>
-                
-                <%
+
+	<%
                 if(request.getParameter("submit")!=null){
                     
                     rs4=con.SelectData("select typeDescription from exam_master,examtype_master where exam_master.examtypeID=examtype_master.examtypeID and examID="+request.getParameter("examid2")+";");
@@ -168,6 +209,7 @@
                     }
                     }
                 }
+    }
             %>
-    </body>
-</html>
+	</body>
+	</html>
