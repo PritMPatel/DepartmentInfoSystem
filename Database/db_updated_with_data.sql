@@ -323,7 +323,7 @@ CREATE TABLE `subject_master` (
   `subjectName` varchar(50) NOT NULL,
   `subjectCode` decimal(7,0) NOT NULL,
   `semester` int(11) NOT NULL,
-  `branch` varchar(45) NOT NULL,
+  `branch` varchar(50) NOT NULL,
   PRIMARY KEY (`subjectID`),
   UNIQUE KEY `subjectCode` (`subjectCode`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -348,4 +348,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-03-23 11:37:35
+-- Dump completed on 2020-03-23 11:40:10
