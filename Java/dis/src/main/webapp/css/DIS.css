@@ -1,426 +1,497 @@
-body, html {
-	height: 100%;
-	margin: 0;
-	font: 400 15px/1.8 "Lato", sans-serif;
-	color: #777;
+body,
+html {
+    height: 100%;
+    margin: 0;
+    font: 400 15px/1.8 "Lato", sans-serif;
+    color: #777;
 }
 
 .bgimg-1 {
-	position: relative;
-	opacity: 1;
-	background-attachment: fixed;
-	background-position: center;
-	background-repeat: no-repeat;
-	background-size: cover;
+    position: relative;
+    opacity: 1;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .bgimg-1 {
-	background-image: url("../images/preview-75762-mWCVVwqEKJ_0000.jpg");
-	min-height: 100%;
+    background-image: url("../images/preview-75762-mWCVVwqEKJ_0000.jpg");
+    min-height: 100%;
 }
 
 .caption {
-	position: absolute;
-	opacity: 1;
-	left: 0;
-	top: 50%;
-	width: 100%;
-	text-align: center;
-	color: #000;
+    position: absolute;
+    opacity: 1;
+    left: 0;
+    top: 50%;
+    width: 100%;
+    text-align: center;
+    color: #000;
 }
 
 .caption-img {
-	position: absolute;
-	opacity: 0.75;
-	left: 0;
-	top: 25%;
-	width: 100%;
-	text-align: center;
-	color: #000;
+    position: absolute;
+    opacity: 0.75;
+    left: 0;
+    top: 25%;
+    width: 100%;
+    text-align: center;
+    color: #000;
 }
 
 .container {
-	margin-top: 50px;
-	margin-bottom: 100px;
+    margin-top: 50px;
+    margin-bottom: 100px;
 }
 
 .container-fluid {
-	width: 100%;
-	background: lightgrey;
-	padding-right: 15px;
-	padding-left: 15px;
-	margin-right: auto;
-	margin-left: auto;
+    width: 100%;
+    background: lightgrey;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
 }
 
 .caption span.border-dte {
-	background-color: #111;
-	color: #fff;
-	padding: 18px;
-	font-size: 25px;
-	letter-spacing: 10px;
+    background-color: #111;
+    color: #fff;
+    padding: 18px;
+    font-size: 25px;
+    letter-spacing: 10px;
 }
 
 h3 {
-	letter-spacing: 5px;
-	text-transform: uppercase;
-	font: 20px "Lato", sans-serif;
-	color: #111;
-	margin-top: 0px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    font: 20px "Lato", sans-serif;
+    color: #111;
+    margin-top: 0px;
 }
+
 
 /* Sticky footer styles
 -------------------------------------------------- */
+
 html {
-	position: relative;
-	min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 .footer {
-	position: fixed;
-	bottom: 0;
-	width: 100%;
-	height: 60px; /* Height of the footer */
-	line-height: 60px; /* Vertically center the text there */
-	background-color: #f5f5f5;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 40px;
+    /* Height of the footer */
+    line-height: 40px;
+    /* Vertically center the text there */
+    background-color: #f5f5f5;
 }
 
+
 /*form*/
-html, body {
-	height: 100%;
+
+html,
+body {
+    height: 100%;
 }
 
 body {
-	/*display: -ms-flexbox;
+    /*display: -ms-flexbox;
   display: -webkit-box;
   display: flex;*/
-	-ms-flex-align: center;
-	-ms-flex-pack: center;
-	-webkit-box-align: center;
-	align-items: center;
-	-webkit-box-pack: center;
-	justify-content: center;
-	/*  padding-top: 40px;
+    -ms-flex-align: center;
+    -ms-flex-pack: center;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+    /*  padding-top: 40px;
   padding-bottom: 40px;
   background-color: #f5f5f5;
 */
 }
 
 .form-signin {
-	width: 100%;
-	max-width: 330px;
-	padding: 15px;
-	margin: 0 auto;
+    width: 100%;
+    max-width: 330px;
+    padding: 15px;
+    margin: 0 auto;
 }
 
 .form-signin .checkbox {
-	font-weight: 400;
+    font-weight: 400;
 }
 
 .form-signin .form-control {
-	position: relative;
-	box-sizing: border-box;
-	height: auto;
-	padding: 10px;
-	font-size: 16px;
+    position: relative;
+    box-sizing: border-box;
+    height: auto;
+    padding: 10px;
+    font-size: 16px;
 }
 
 .form-signin .form-control:focus {
-	z-index: 2;
+    z-index: 2;
 }
 
 .form-signin input[type="email"] {
-	margin-bottom: -1px;
-	border-bottom-right-radius: 0;
-	border-bottom-left-radius: 0;
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
 }
 
 .form-signin input[type="password"] {
-	margin-bottom: 10px;
-	border-top-left-radius: 0;
-	border-top-right-radius: 0;
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
 }
+
 
 /* LOGIN BOX*/
-input[type=text], input[type=password], input[type=Date] {
-	width: 100%;
-	padding: 12px 20px;
-	/*margin: 8px 0;*/
-	display: inline-block;
-	border: 1px solid #ccc;
-	box-sizing: border-box;
+
+input[type=text],
+input[type=password],
+input[type=Date] {
+    width: 100%;
+    padding: 12px 20px;
+    /*margin: 8px 0;*/
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
 }
 
+
 /*=== 2. Anchor Link ===*/
+
 a {
-	color: #aaaaaa;
-	transition: all ease-in-out 200ms;
+    color: #aaaaaa;
+    transition: all ease-in-out 200ms;
 }
 
 a:hover {
-	color: white;
-	text-decoration: none;
+    color: white;
+    text-decoration: none;
 }
+
+
 /*=== 3. Text Outside the Box ===*/
+
 .etc-login-form {
-	color: white;
-	padding: 10px 20px;
+    color: white;
+    padding: 10px 20px;
 }
 
 .etc-login-form p {
-	margin-bottom: 5px;
+    margin-bottom: 5px;
 }
+
+
 /*=== 4. Main Form ===*/
+
 .login-form-1 {
-	max-width: 300px;
-	border-radius: 5px;
-	display: inline-block;
+    max-width: 300px;
+    border-radius: 5px;
+    display: inline-block;
 }
 
 .main-login-form {
-	position: relative;
+    position: relative;
 }
 
 .login-form-1 .form-control {
-	border: 0;
-	box-shadow: 0 0 0;
-	border-radius: 0;
-	background: transparent;
-	color: #555555;
-	padding: 7px 0;
-	font-weight: bold;
-	height: auto;
+    border: 0;
+    box-shadow: 0 0 0;
+    border-radius: 0;
+    background: transparent;
+    color: #555555;
+    padding: 7px 0;
+    font-weight: bold;
+    height: auto;
 }
 
 .login-form-1 .form-control::-webkit-input-placeholder {
-	color: #999999;
+    color: #999999;
 }
 
-.login-form-1 .form-control:-moz-placeholder, .login-form-1 .form-control::-moz-placeholder,
-	.login-form-1 .form-control:-ms-input-placeholder {
-	color: #999999;
+.login-form-1 .form-control:-moz-placeholder,
+.login-form-1 .form-control::-moz-placeholder,
+.login-form-1 .form-control:-ms-input-placeholder {
+    color: #999999;
 }
 
 .login-form-1 .form-group {
-	margin-bottom: 0;
-	border-bottom: 2px solid #efefef;
-	padding-right: 20px;
-	position: relative;
+    margin-bottom: 0;
+    border-bottom: 2px solid #efefef;
+    padding-right: 20px;
+    position: relative;
 }
 
 .login-form-1 .form-group:last-child {
-	border-bottom: 0;
+    border-bottom: 0;
 }
 
 .login-group {
-	background: #ffffff;
-	color: #999999;
-	border-radius: 8px;
-	padding: 10px 20px;
+    background: #ffffff;
+    color: #999999;
+    border-radius: 8px;
+    padding: 10px 20px;
 }
 
 .login-group-checkbox {
-	padding: 5px 0;
+    padding: 5px 0;
 }
+
+
 /*=== 5. Login Button ===*/
+
 .login-form-1 .login-button {
-	position: absolute;
-	right: -25px;
-	top: 50%;
-	background: #ffffff;
-	color: #999999;
-	padding: 0px;
-	width: 50px;
-	height: 50px;
-	margin-top: -25px;
-	border: 5px solid #efefef;
-	border-radius: 50%;
-	transition: all ease-in-out 500ms;
+    position: absolute;
+    right: -25px;
+    top: 50%;
+    background: #ffffff;
+    color: #999999;
+    padding: 0px;
+    width: 50px;
+    height: 50px;
+    margin-top: -25px;
+    border: 5px solid #efefef;
+    border-radius: 50%;
+    transition: all ease-in-out 500ms;
 }
 
 .login-form-1 .login-button:hover {
-	color: #555555;
-	transform: rotate(450deg);
+    color: #555555;
+    transform: rotate(450deg);
 }
 
 .login-form-1 .login-button.clicked {
-	color: #555555;
+    color: #555555;
 }
 
 .login-form-1 .login-button.clicked:hover {
-	transform: none;
+    transform: none;
 }
 
 .login-form-1 .login-button.clicked.success {
-	color: #2ecc71;
+    color: #2ecc71;
 }
 
 .login-form-1 .login-button.clicked.error {
-	color: #e74c3c;
+    color: #e74c3c;
 }
+
+
 /*=== 6. Form Invalid ===*/
+
 label.form-invalid {
-	position: absolute;
-	top: 0;
-	right: 0;
-	z-index: 5;
-	display: block;
-	margin-top: -25px;
-	padding: 7px 9px;
-	background: #777777;
-	color: #ffffff;
-	border-radius: 5px;
-	font-weight: bold;
-	font-size: 11px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 5;
+    display: block;
+    margin-top: -25px;
+    padding: 7px 9px;
+    background: #777777;
+    color: #ffffff;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 11px;
 }
 
 label.form-invalid:after {
-	top: 100%;
-	right: 10px;
-	border: solid transparent;
-	content: " ";
-	height: 0;
-	width: 0;
-	position: absolute;
-	pointer-events: none;
-	border-color: transparent;
-	border-top-color: #777777;
-	border-width: 6px;
+    top: 100%;
+    right: 10px;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-color: transparent;
+    border-top-color: #777777;
+    border-width: 6px;
 }
+
+
 /*=== 7. Form - Main Message ===*/
+
 .login-form-main-message {
-	background: #ffffff;
-	color: #999999;
-	border-left: 3px solid transparent;
-	border-radius: 3px;
-	margin-bottom: 8px;
-	font-weight: bold;
-	height: 0;
-	padding: 0 20px 0 17px;
-	opacity: 0;
-	transition: all ease-in-out 200ms;
+    background: #ffffff;
+    color: #999999;
+    border-left: 3px solid transparent;
+    border-radius: 3px;
+    margin-bottom: 8px;
+    font-weight: bold;
+    height: 0;
+    padding: 0 20px 0 17px;
+    opacity: 0;
+    transition: all ease-in-out 200ms;
 }
 
 .login-form-main-message.show {
-	height: auto;
-	opacity: 1;
-	padding: 10px 20px 10px 17px;
+    height: auto;
+    opacity: 1;
+    padding: 10px 20px 10px 17px;
 }
 
 .login-form-main-message.success {
-	border-left-color: #2ecc71;
+    border-left-color: #2ecc71;
 }
 
 .login-form-main-message.error {
-	border-left-color: #e74c3c;
-}
-/*=== 8. Custom Checkbox & Radio ===*/
-/* Base for label styling */
-[type="checkbox"]:not (:checked ), [type="checkbox"]:checked {
-	position: absolute;
-	left: -9999px;
+    border-left-color: #e74c3c;
 }
 
-[type="checkbox"]:not (:checked ) +label, [type="checkbox"]:checked+label
-	{
-	position: relative;
-	padding-left: 25px;
-	padding-top: 1px;
-	cursor: pointer;
+
+/*=== 8. Custom Checkbox & Radio ===*/
+
+
+/* Base for label styling */
+
+[type="checkbox"]:not (:checked),
+[type="checkbox"]:checked {
+    position: absolute;
+    left: -9999px;
 }
+
+[type="checkbox"]:not (:checked)+label,
+[type="checkbox"]:checked+label {
+    position: relative;
+    padding-left: 25px;
+    padding-top: 1px;
+    cursor: pointer;
+}
+
+
 /* checkbox aspect */
-[type="checkbox"]:not (:checked ) +label:before, [type="checkbox"]:checked+label:before
-	{
-	content: '';
-	position: absolute;
-	left: 0;
-	top: 2px;
-	width: 17px;
-	height: 17px;
-	border: 0px solid #aaa;
-	background: #f0f0f0;
-	border-radius: 3px;
-	box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+
+[type="checkbox"]:not (:checked)+label:before,
+[type="checkbox"]:checked+label:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 2px;
+    width: 17px;
+    height: 17px;
+    border: 0px solid #aaa;
+    background: #f0f0f0;
+    border-radius: 3px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
 }
+
+
 /* checked mark aspect */
-[type="checkbox"]:not (:checked ) +label:after, [type="checkbox"]:checked+label:after
-	{
-	position: absolute;
-	color: #555555;
-	transition: all .2s;
+
+[type="checkbox"]:not (:checked)+label:after,
+[type="checkbox"]:checked+label:after {
+    position: absolute;
+    color: #555555;
+    transition: all .2s;
 }
+
+
 /* checked mark aspect changes */
-[type="checkbox"]:not (:checked ) +label:after {
-	opacity: 0;
-	transform: scale(0);
+
+[type="checkbox"]:not (:checked)+label:after {
+    opacity: 0;
+    transform: scale(0);
 }
 
 [type="checkbox"]:checked+label:after {
-	opacity: 1;
-	transform: scale(1);
+    opacity: 1;
+    transform: scale(1);
 }
+
+
 /* disabled checkbox */
-[type="checkbox"]:disabled:not (:checked ) +label:before, [type="checkbox"]:disabled:checked+label:before
-	{
-	box-shadow: none;
-	border-color: #8c8c8c;
-	background-color: #878787;
+
+[type="checkbox"]:disabled:not (:checked)+label:before,
+[type="checkbox"]:disabled:checked+label:before {
+    box-shadow: none;
+    border-color: #8c8c8c;
+    background-color: #878787;
 }
 
 [type="checkbox"]:disabled:checked+label:after {
-	color: #555555;
+    color: #555555;
 }
 
 [type="checkbox"]:disabled+label {
-	color: #8c8c8c;
-}
-/* accessibility */
-[type="checkbox"]:checked:focus+label:before, [type="checkbox"]:not (:checked
-	):focus+label:before, [type="checkbox"]:checked:focus+label:before, [type="checkbox"]:not
-	(:checked ):focus+label:before {
-	border: 1px dotted #f6f6f6;
-}
-/* hover style just for information */
-label:hover:before {
-	border: 1px solid #f6f6f6 !important;
-}
-/*=== Customization ===*/
-/* radio aspect */
-[type="checkbox"]:not (:checked ) +label:before, [type="checkbox"]:checked+label:before
-	{
-	border-radius: 3px;
-}
-/* selected mark aspect */
-[type="checkbox"]:not (:checked ) +label:after, [type="checkbox"]:checked+label:after
-	{
-	content: '✔';
-	top: 0;
-	left: 2px;
-	font-size: 14px;
+    color: #8c8c8c;
 }
 
+
+/* accessibility */
+
+[type="checkbox"]:checked:focus+label:before,
+[type="checkbox"]:not (:checked):focus+label:before,
+[type="checkbox"]:checked:focus+label:before,
+[type="checkbox"]:not (:checked):focus+label:before {
+    border: 1px dotted #f6f6f6;
+}
+
+
+/* hover style just for information */
+
+label:hover:before {
+    border: 1px solid #f6f6f6 !important;
+}
+
+
+/*=== Customization ===*/
+
+
+/* radio aspect */
+
+[type="checkbox"]:not (:checked)+label:before,
+[type="checkbox"]:checked+label:before {
+    border-radius: 3px;
+}
+
+
+/* selected mark aspect */
+
+[type="checkbox"]:not (:checked)+label:after,
+[type="checkbox"]:checked+label:after {
+    content: '✔';
+    top: 0;
+    left: 2px;
+    font-size: 14px;
+}
+
+
 /*=== 9. Misc ===*/
+
 .logo {
-	padding: 15px 0;
-	font-size: 25px;
-	color: #aaaaaa;
-	font-weight: bold;
+    padding: 15px 0;
+    font-size: 25px;
+    color: #aaaaaa;
+    font-weight: bold;
 }
 
 .form-row {
-	padding-top: 10px;
-	padding-bottom: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 .col-sm {
-	padding-left: 20px;
-	padding-right: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
+
 /****************************************************************************************/
+
+
 /* Turn off parallax scrolling for tablets and phones */
+
 @media only screen and (max-device-width: 1024px) {
-	.bgimg-1, .bgimg-2, .bgimg-3 {
-		background-attachment: scroll;
-	}
+    .bgimg-1,
+    .bgimg-2,
+    .bgimg-3 {
+        background-attachment: scroll;
+    }
 }

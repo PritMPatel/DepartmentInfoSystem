@@ -68,16 +68,16 @@
 					Menu</label> <input type="checkbox" id="show-menu" role="button">
 				<ul id="menu">
 					<li><a href="facultyHome.jsp" class="active main-link">HOME</a></li>
-					<li><a href="addCo.jsp" class="active main-link">ADD CO</a></li>
-					<li><a href="addExam.jsp" class="active main-link">ADD
+					<li><a href="addCo.jsp" class="main-link">ADD CO</a></li>
+					<li><a href="addExam.jsp" class="main-link">ADD
 							EXAM</a></li>
-					<li><a href="addQue.jsp" class="active main-link">ADD
+					<li><a href="addQue.jsp" class="main-link">ADD
 							QUESTION</a></li>
-					<li><a href="addMarks.jsp" class="active main-link">ADD
+					<li><a href="addMarks.jsp" class="main-link">ADD
 							MARKS</a></li>
-					<li><a href="calculateAttainment.jsp" class="active main-link">VIEW
+					<li><a href="calculateAttainment.jsp" class="main-link">VIEW
 							ATTAINMENT</a></li>
-					<li><a href="#" class="active main-link">LOGOUT</a></li>
+					<li><a href="#" class="main-link">LOGOUT</a></li>
 				</ul>
 			</div>
 		</div>
@@ -88,12 +88,10 @@
         <a href="addQue.jsp">Add Question</a><br/>
         <a href="addMarks.jsp">Add Marks</a><br/>
         <a href="calculateAttainment.jsp">Calculate Attainment</a><br/>--%>
-
-</body>
-</html>
 <%
 	} else {
 		out.println("<script>alert('SESSION INVALID!!! PLEASE LOGIN AGAIN!!!!!');</script>");
 		response.sendRedirect("login.jsp");
 	}
 %>
+<%@include file="/footer.jsp"%>

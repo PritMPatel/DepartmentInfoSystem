@@ -19,16 +19,16 @@
 		<label for="show-menu" class="show-menu" style="margin-bottom: 0px">Show
 			Menu</label> <input type="checkbox" id="show-menu" role="button">
 		<ul id="menu">
-			<li><a href="facultyHome.jsp" class="active main-link">HOME</a></li>
-			<li><a href="addCo.jsp" class="active main-link">ADD CO</a></li>
-			<li><a href="addExam.jsp" class="active main-link">ADD EXAM</a></li>
-			<li><a href="addQue.jsp" class="active main-link">ADD
+			<li><a href="facultyHome.jsp" class="main-link">HOME</a></li>
+			<li><a href="addCo.jsp" class="main-link">ADD CO</a></li>
+			<li><a href="addExam.jsp" class="main-link">ADD EXAM</a></li>
+			<li><a href="addQue.jsp" class="main-link">ADD
 					QUESTION</a></li>
 			<li><a href="addMarks.jsp" class="active main-link">ADD
 					MARKS</a></li>
-			<li><a href="calculateAttainment.jsp" class="active main-link">VIEW
+			<li><a href="calculateAttainment.jsp" class="main-link">VIEW
 					ATTAINMENT</a></li>
-			<li><a href="#" class="active main-link">LOGOUT</a></li>
+			<li><a href="#" class="main-link">LOGOUT</a></li>
 		</ul>
 	</div>
 </div>
@@ -211,5 +211,5 @@
                 }
     }
             %>
-	</body>
-	</html>
+	
+<%@include file="/footer.jsp"%>
