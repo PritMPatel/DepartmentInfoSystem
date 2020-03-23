@@ -5,6 +5,9 @@
 	if (session.getAttribute("role") != null) {
 		userRole = (String) session.getAttribute("role");
 	}
+	if (!userRole.equals("faculty")){
+		response.sendRedirect("/dis/login.jsp");
+	}
 	if (userRole.equals("faculty")) {
 %>
 <%@page import="java.sql.ResultSet"%>
@@ -13,6 +16,12 @@
 <%@page import="java.sql.ResultSetMetaData"%>
 <%@include file="/headerFaculty.jsp"%>
 <title>ADD QUESTION</title>
+<style>
+.col-sm{
+	padding-left: 30px !important;
+	padding-right: 30px !important;
+}
+</style>
 <div class="navigation" id="navbar">
 	<div class="dropdown">
 		<!-- navigation STARTS here -->
@@ -28,7 +37,7 @@
 					MARKS</a></li>
 			<li class="nav-item"><a href="calculateAttainment.jsp" class="main-link">VIEW
 					ATTAINMENT</a></li>
-			<li><a href="#" class="main-link">LOGOUT</a></li>
+			<li><a href="logout.jsp" class="main-link">LOGOUT</a></li>
 		</ul>
 	</div>
 </div>
@@ -45,7 +54,7 @@
 		QUESTION</h3>
 	<form method="POST">
 
-		<div id="selectexam">
+		<%-- <div id="selectexam">
 			<div class="form-row">
 				<div class="col-sm">
 					<label for="subjectID">SubjectID:</label><input type="number"
@@ -63,51 +72,50 @@
 					Exam</button>
 				<br />
 			</center>
-		</div>
+		</div> --%>
 		<%
 				Connect con = null;
 					ResultSet rs = null;
 					ResultSet rs2 = null;
+					ResultSet rsSubject=null;
 					ResultSetMetaData mtdt = null;
 					String s = "";
 					con = new Connect();
-					if (request.getParameter("examselect") != null) {
+					if(request.getParameter("next")==null){%>
+						<%@include file="/subjectBatchForm.jsp"%>
+					<%}
+					if (request.getParameter("next") != null) {
+						rsSubject=con.SelectData("select subjectName from subject_master where subjectID="+request.getParameter("subjectid")+";");
+						rsSubject.next();
 						rs = con.SelectData("select * from exam_master where subjectID=" + request.getParameter("subjectid")
 								+ " and batch=" + request.getParameter("batch1") + ";");
 						out.println(
-								"<div class='form-row'><div class='col-sm'><label for='subjectID'>SubjectID:</label><input type='number' class='uk-input' id='subject_id' name='subject_id' value='"
-										+ request.getParameter("subjectid")
-										+ "' disabled/></div><div class='col-sm-1'></div>");
+								"<div class='form-row'><div class='col-sm'><label for='subjectID'>Subject:</label><input type='number' class='uk-input' id='subject_id' name='subject_id' value='"+request.getParameter("subjectid")+"' hidden/><input type='text' class='uk-input' id='subjectName' name='subjectName' value='"+ rsSubject.getString("subjectName")+"' readonly/></div>");
 						out.println(
 								"<div class='col-sm'><label for='batch'>Batch:</label><input type='number' name='batch1' class='uk-input' id='batch1' value='"
-										+ request.getParameter("batch1") + "' disabled/></div></div> ");
+										+ request.getParameter("batch1") + "' readonly/></div></div> ");
 						out.println(
-								"<div class='form-row'><div class='col-sm'></div><div class='col-sm'><label for='examID'>ExamID:</label><select class='uk-input' id='exam_id' name='exam_id'>");
+								"<div class='form-row'><div class='col-sm'><label for='examID'>Exam:</label><select class='uk-select' id='exam_id' name='exam_id'><option selected disabled>SELECT EXAM</option>");
 						while (rs.next()) {
-							out.println("<option value='" + rs.getInt("examID") + "'>" + rs.getInt("examID") + " - "
+							out.println("<option value='" + rs.getInt("examID") + "'>"
 									+ rs.getString("examName") + "</option>");
 						}
-						out.println("</select></div><div class='col-sm'></div></div>");
+						out.println("</select></div>");
+						out.println(""+
+								"<div class=\"col-sm\">"+
+									"<label for=\"noQues\"> No of Questions: </label> <input type=\"number\""+
+										"class='uk-input' id='qno' name=\"qno\" id=\"quNo\" placeholder='No of Questions'/>"+
+								"</div>"+
+							"</div><div id=\"ques\"></div>"+
+							"<center class=\"mt-3\">"+
+								"<button type=\"submit\" class=\"btn\" id='submit' name=\"submit\" value=\"submit\" disabled>Submit</button>"+
+							"</center>");
 					}
 			%>
-		<div class="form-row mt-3">
-			<div class="col-sm"></div>
-			<div class="col-sm-3">
-				<label for="noQues"> No of QUESTION: </label> <input type="number"
-					class='uk-input' id='qno' name="qno" id="quNo" />
-			</div>
-			<div class="mt-4 mb-1 ml-4 mr-3">
-				<input onclick="addRow(this.form);" class="btn" type="button"
-					name="addbut" value="Add">
-			</div>
-			<div class="col-sm"></div>
-		</div>
+		
 		<%-- :::Question Normalized Max Marks Calculated From Multiply QuesMarks with exam_master nMaxMarks/MaxMarks:::<br/><br/>
             :::Question Weighted Max Marks Calculated From Multiply nQuesMarks with exam_master maxWeighMarks/nMaxMarks:::<br/><br/> --%>
-		<div id="ques"></div>
-		<center class="mt-3">
-			<button type="submit" class="btn" name="submit" value="submit">Submit</button>
-		</center>
+		
 		<%
 				if (request.getParameter("submit") != null) {
 						int qunos = Integer.parseInt(request.getParameter("qno"));
@@ -158,13 +166,14 @@
 							x++;
 						}
 					}
+	
 			%>
 
 
 	</form>
 
 	<script type="text/javascript">
-        var st = '<%if (request.getParameter("examselect") != null) {
+        var st = '<%if (request.getParameter("next") != null) {
 					rs2 = con.SelectData(
 							"select * from co_master where subjectID=" + request.getParameter("subjectid") + ";");
 					while (rs2.next()) {
@@ -176,33 +185,59 @@
 			}%>';
         var n=1;
         
-        function addRow(frm) {
-            var qno = frm.qno.value;
-            while(n<=qno){
+        // function addRow(frm) {
+        //     var qno = frm.qno.value;
+        //     while(n<=qno){
+        //         console.log( "ready!" );
+        //         var i=1;
+        //         jQuery('#ques').append('\
+        //         <div name="dQ'+n+'">\
+        //             <div class="form-row"><div class="col-sm"><label for="questionDesc">Ques '+n+' Desc:</label><input type="text" class="uk-input" id="q'+n+'" name="q'+n+'"></div></div>\
+        //             <div class="form-row"><div class="col-sm"><label for="questionMarks">Ques '+n+' MaxMarks:</label><input type="number" class="uk-input" id="qMarks'+(n)+'" name="qMarks'+(n)+'"></div><div class="col-sm-1"></div>\
+        //                 <div class="col-sm"><label for="multiMap">MultipleMapping:</label><input class="uk-input multiMap" type="number" id="map'+n+'" name="map'+n+'"></div></div>\
+        //                 \
+        //                 <div id="map'+n+'Co">\
+        //                 </div></div><br/>');
+        //         n++;
+        //     }
+        //     frm.addbut.disabled="true";
+		// }
+		
+		$(document).on("change","#qno",function(){
+			var qno= this.value;
+			var appendLoc = $("#ques");
+			appendLoc.text('');
+			var i=1;
+			var n=1;
+			while(n<=qno){
                 console.log( "ready!" );
                 var i=1;
-                jQuery('#ques').append('\
-                <div name="dQ'+n+'">\
-                    <div class="form-row"><div class="col-sm"><label for="questionDesc">Ques '+n+' Desc:</label><input type="text" class="uk-input" id="q'+n+'" name="q'+n+'"></div></div>\
-                    <div class="form-row"><div class="col-sm"><label for="questionMarks">Ques '+n+' MaxMarks:</label><input type="number" class="uk-input" id="qMarks'+(n)+'" name="qMarks'+(n)+'"></div><div class="col-sm-1"></div>\
-                        <div class="col-sm"><label for="multiMap">MultipleMapping:</label><input class="uk-input multiMap" type="number" id="map'+n+'" name="map'+n+'"></div></div>\
+                $(appendLoc).append('\
+				<div name="dQ'+n+'">\
+					<div class="form-row" style="padding-bottom:0px !important;"><label style="padding-left:30px !important;">Ques '+n+'</lable></div>\
+                    <div class="form-row" style="padding-top:0px !important;"><div class="col-sm"><label for="questionDesc">Description:</label><input type="text" class="uk-input" id="q'+n+'" name="q'+n+'"></div>\
+                    <div class="col-sm"><div class="form-row" style="padding:0px; margin:0px;"><div class="col-sm" style="padding:0px !important;"><label for="questionMarks">Marks:</label><input type="number" class="uk-input" id="qMarks'+(n)+'" name="qMarks'+(n)+'"></div><div class="col-sm-1"></div>\
+                        <div class="col-sm" style="padding: 0px !important;"><label for="multiMap">MultipleMapping:</label><input class="uk-input multiMap" type="number" id="map'+n+'" name="map'+n+'"></div></div></div></div>\
                         \
-                        <div id="map'+n+'Co">\
+                        <div class="form-row" id="map'+n+'Co" style="padding-bottom:0px;">\
                         </div></div><br/>');
                 n++;
-            }
-            frm.addbut.disabled="true";
-        }
+			}
+			if(qno>0)
+				$('#submit').removeAttr("disabled");
+			else
+				$('#submit').attr("disabled","true");
+		});
+
         $(document).on("change",".multiMap",function(){
                     var i= document.getElementById(this.id+"Co");
                     var no = this.value;
                     var j=1;
                     $(i).text('');
                     while(j<=no){
-                        $(i).append('<div class="form-row"><div class="col-sm"></div><div class="col-sm"><label for="coselect">'+j+'Co:</label><select class="uk-input" id="q'+(this.id)+'co'+j+'" name="q'+(this.id)+'co'+j+'">'+st+'</select></div><div class="col-sm"></div></div>');
+                        $(i).append('<div class="col-sm-6" style="padding-bottom:10px; padding-left:30px;padding-right:30px;"><label for="coselect">CO:</label><select class="uk-input" id="q'+(this.id)+'co'+j+'" name="q'+(this.id)+'co'+j+'">'+st+'</select></div>');
                         j++;
                     }
         });
-
     </script>
 <%@include file="/footer.jsp"%>

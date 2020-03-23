@@ -38,13 +38,27 @@
 									<center>Login</center>
 								</div>
 								<div class="form-group">
+                                    <div class="selectgroup w-100">
+                                        <label class="selectgroup-item">
+                                            <input type="radio" name="roleSelect" value="Admin"
+                                                class="selectgroup-input">
+                                            <span class="selectgroup-button">Admin</span>
+                                        </label>
+                                        <label class="selectgroup-item">
+                                            <input type="radio" name="roleSelect" value="Faculty"
+                                                class="selectgroup-input">
+                                            <span class="selectgroup-button">Faculty</span>
+                                        </label>
+                                    </div>
+                                </div>
+								<%-- <div class="form-group">
 									<label class="form-label">You are</label> <select
 										class="form-control custom-select" id="roleSelect"
 										name="roleSelect">
 										<option value="Admin">Admin</option>
 										<option value="Faculty">Faculty</option>
 									</select>
-								</div>
+								</div> --%>
 								<div class="form-group">
 									<label class="form-label">Email</label> <input type="email"
 										name="email" class="form-control" id="InputEmail1"
@@ -81,17 +95,24 @@
 										if (con.CheckData(
 												"select * from faculty_master where facultyEmail='" + request.getParameter("email")
 														+ "' and facultyPassword='" + request.getParameter("password") + "'")) {
-											ResultSet rs = con.SelectData("select facultyName from faculty_master where facultyEmail='"
+											ResultSet rs = con.SelectData("select facultyID,facultyName,facultyDepartment from faculty_master where facultyEmail='"
 													+ request.getParameter("email") + "' and facultyPassword='"
 													+ request.getParameter("password") + "'");
 											String Uname = request.getParameter("email");
 											String Name = null;
+											String dept = null;
+											int id=0;
 											if (rs.next()) {
 												Name = rs.getString("facultyName");
+												dept = rs.getString("facultyDepartment");
+												id = rs.getInt("facultyID");
+
 											}
 											session.setAttribute("getfacultyName", Name);
 											session.setAttribute("facultyUsername", Uname);
+											session.setAttribute("facultyID",id);
 											session.setAttribute("role", "faculty");
+											session.setAttribute("facultyDepartment", dept);
 											response.sendRedirect("facultyHome.jsp");
 										} else {
 											out.println("<script>alert('Wrong username or password')</script>");

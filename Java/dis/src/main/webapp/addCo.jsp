@@ -5,6 +5,9 @@
 	if (session.getAttribute("role") != null) {
 		userRole = (String) session.getAttribute("role");
 	}
+	if (!userRole.equals("faculty")){
+		response.sendRedirect("/dis/login.jsp");
+	}
 	if (userRole.equals("faculty")) {
 %>
 <%@page import="java.sql.ResultSet"%>
@@ -12,6 +15,14 @@
 <%@page import="Connection.Connect"%>
 <%@page import="java.sql.ResultSetMetaData"%>
 <%@include file="/headerFaculty.jsp"%>
+<%
+	Connect con = null;
+	ResultSet rs = null;
+	ResultSet rsAllSubject=null;
+	ResultSetMetaData mtdt = null;
+	con = new Connect();
+	String userDept = "";
+%>
 <title>ADD A COURSE OUTCOME</title>
 <div class="navigation" id="navbar">
 	<div class="dropdown">
@@ -28,7 +39,7 @@
 					MARKS</a></li>
 			<li><a href="calculateAttainment.jsp" class="main-link">VIEW
 					ATTAINMENT</a></li>
-			<li><a href="#" class="main-link">LOGOUT</a></li>
+			<li><a href="logout.jsp" class="main-link">LOGOUT</a></li>
 			<%-- <li><a href="#" class="main-link">MANAGE USERS &nbsp;<i
 							class="fa fa-caret-down"></i></a>
 						<ul class="hidden">
@@ -54,9 +65,31 @@
 		<div class="form-row">
 			<div class="col-sm"></div>
 			<div class="col-sm">
-				<label for="subjectID">SubjectID:</label> <input type="number"
-					class="uk-input" id="subject_id" name="subject_id"
-					placeholder="SUBJECT ID" />
+					<label for="subjectID">Subject:</label>
+					<select class="uk-select" name="subject_id" id="subject_id">
+						<option value=0 disabled selected>SELECT SUBJECT</option>
+						<%
+							if (session.getAttribute("facultyDepartment") != null) {
+								userDept = (String) session.getAttribute("facultyDepartment");
+							}
+							rsAllSubject=con.SelectData("select * from subject_master where branch='"+userDept+"';");
+							while(rsAllSubject.next()){
+								out.println("<option value="+rsAllSubject.getInt("subjectID")+">"+rsAllSubject.getString("subjectName")+"</option>");
+							}
+						%>
+					</select>
+				</div>
+			<div class="col-sm"></div>
+		</div>
+
+		<div class="form-row">
+			<div class="col-sm"></div>
+			<div class="col-sm">
+
+				<label for="facultyID">Faculty Name: </label><input type="number" value='<%=session.getAttribute("fscultyID")%>' name="faculty_id" id="faculty_id" hidden> <input type="text"
+					value='<%=session.getAttribute("getfacultyName")%>'
+					class="uk-input" id="facultyName" name="facultyName"
+					placeholder="FACULTY NAME" readonly />
 			</div>
 			<div class="col-sm"></div>
 		</div>
@@ -65,48 +98,34 @@
 			<div class="col-sm"></div>
 			<div class="col-sm">
 
-				<label for="facultyID">Faculty Name: </label> <input type="text"
-					value='<%=session.getAttribute("getfacultyName")%>'
-					class="uk-input" id="faculty_id" name="faculty_id"
-					placeholder="FACULTY ID" readonly />
-			</div>
-			<div class="col-sm"></div>
-		</div>
-
-		<div class="form-row">
-			<div class="col-sm"></div>
-			<div class="col-sm-3">
-
 				<label for="noCO">No of CO:</label> <input type="number"
 					class="uk-input" name="cono" id="cono"
 					placeholder="ADD THE NUMBER OF COs" />
-			</div>
-			<div class="col-sm-1 mt-4 ml-2">
-				<input onclick="addRow(this.form);" class="mt-2 btn" type="button"
-					name="addbut" value="Add">
 			</div>
 			<div class="col-sm"></div>
 		</div>
 		<div id="cos"></div>
 		<center class="mt-3">
-			<button type="submit" class="btn" name="submit" value="submit">Submit</button>
+			<button type="submit" class="btn" id="submit" name="submit" value="submit" disabled>Submit</button>
 		</center>
 		<script type="text/javascript">
-            function addRow(frm) {
-                var cono = frm.cono.value;
-                var n = 1;
+			$(document).on("change","#cono",function(){
+				var cono = this.value;
+				var n = 1;
+				$("#cos").text('');
                 while(n<=cono){
-                    jQuery('#cos').append('<div class="form-row"><label for="coStmt">CoStatement '+n+' :</label><input type="text" class="uk-input" name="co'+(n)+'" placeholder="COURSE OUTCOME STATEMENT"></div>');
+                    $('#cos').append('<div class="form-row"><label for="coStmt">CO Statement '+n+' :</label><input type="text" class="uk-input" name="co'+(n)+'" placeholder="COURSE OUTCOME STATEMENT"></div>');
                     n++;
-                }
-                frm.addbut.disabled="true";
-            }
+				}
+				if(cono>0)
+					$('#submit').removeAttr("disabled");
+				else
+					$('#submit').attr("disabled","true");
+			});
+
         </script>
 		<%
-				Connect con = null;
-					ResultSet rs = null;
-					ResultSetMetaData mtdt = null;
-					con = new Connect();
+				
 					if (request.getParameter("submit") != null) {
 						int conos = Integer.parseInt(request.getParameter("cono"));
 						int x = 1;
