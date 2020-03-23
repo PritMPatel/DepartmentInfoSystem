@@ -5,6 +5,9 @@
 	if (session.getAttribute("role") != null) {
 		userRole = (String) session.getAttribute("role");
 	}
+	if (!userRole.equals("faculty")){
+		response.sendRedirect("/dis/login.jsp");
+	}
 	if (userRole.equals("faculty")) {
 %>
 <%@page import="java.sql.ResultSet"%>
@@ -12,6 +15,20 @@
 <%@page import="Connection.Connect"%>
 <%@page import="java.sql.ResultSetMetaData"%>
 <%@include file="/headerFaculty.jsp"%>
+<%
+	Connect con = null;
+	ResultSet rs = null;
+	ResultSetMetaData mtdt = null;
+	con = new Connect();
+	ResultSet rsAllSubject = null;
+	ResultSet rsExamType = null;
+%>
+<style>
+.col-sm{
+	padding-left: 30px !important;
+	padding-right: 30px !important;
+}
+</style>
 <title>ADD AN EXAMINATION</title>
 <div class="navigation" id="navbar">
 	<div class="dropdown">
@@ -26,7 +43,7 @@
 			<li><a href="addMarks.jsp" class="main-link">ADD MARKS</a></li>
 			<li><a href="calculateAttainment.jsp" class="main-link">VIEW
 					ATTAINMENT</a></li>
-			<li><a href="#" class="main-link">LOGOUT</a></li>
+			<li><a href="logout.jsp" class="main-link">LOGOUT</a></li>
 		</ul>
 	</div>
 </div>
@@ -45,27 +62,41 @@
 		<%-- ExamID:        <input type="number" name="exam_id"/><br/> --%>
 		<div class="form-row">
 			<div class="col-sm">
-				<label for="examName">ExamName:</label> <input type="text"
+				<label for="examName">Exam Name:</label> <input type="text"
 					class="uk-input" id="exam_name" name="exam_name"
-					placeholder="Exam Name" />
+					placeholder="EXAM NAME" />
 			</div>
-			<div class="col-sm-1"></div>
+			
 			<div class="col-sm">
-				<label for="examTypeID">ExamType ID: </label> <input type="number"
-					class="uk-input" id="exam_type" name="exam_type"
-					placeholder="Exam Type" />
-			</div>
+					<label for="examTypeID">Category of Exam:</label>
+					<select class="uk-select" name="exam_type" id="exam_type">
+						<option value=0 disabled selected>SELECT CATEGORY OF EXAM</option>
+						<%
+							rsExamType=con.SelectData("select * from examtype_master;");
+							while(rsExamType.next()){
+								out.println("<option value="+rsExamType.getInt("examtypeID")+">"+rsExamType.getString("typeDescription")+"</option>");
+							}
+						%>
+					</select>
+				</div>
 		</div>
 		<%-- EXAM Date:     <input type="date" name="exam_date"/><br/> --%>
 		<div class="form-row">
 			<div class="col-sm">
-				<label for="subjectID">SubjectID: </label> <input type="number"
-					class="uk-input" id="subject_id" name="subject_id"
-					placeholder="Subject ID" />
-			</div>
-			<div class="col-sm-1"></div>
+					<label for="subjectID">Subject:</label>
+					<select class="uk-select" name="subject_id" id="subject_id">
+						<option value=0 disabled selected>SELECT SUBJECT</option>
+						<%
+							rsAllSubject=con.SelectData("select * from subject_master where subjectID in(select distinct subjectID from co_master where facultyID="+session.getAttribute("facultyID")+");");
+							while(rsAllSubject.next()){
+								out.println("<option value="+rsAllSubject.getInt("subjectID")+">"+rsAllSubject.getString("subjectName")+"</option>");
+							}
+						%>
+					</select>
+				</div>
+			
 			<div class="col-sm">
-				<label for="totalMarks">TotalMaxMarks:</label> <input type="number"
+				<label for="totalMarks">Total Marks:</label> <input type="number"
 					class="uk-input" id="total_max_marks" name="total_max_marks"
 					placeholder="Total Marks" />
 			</div>
@@ -78,28 +109,18 @@
 			</div>
 			<!-- MaxWeightMarks:<input type="text" name="max_weighted_marks"/><br/>:::Calculated Based on Type Of Exam::: -->
 
-			<div class="col-sm-1"></div>
+			
 			<div class="col-sm">
 				<label for="batch">Batch: </label> <input type="number"
 					class="uk-input" id="batch" name="batch" placeholder="Batch" />
 			</div>
 
 		</div>
-		<div class="form-row">
-			<div class="col-sm"></div>
-			<div class="col-sm">
-				FacultyID: <input type="number" name="faculty_id" />
-			</div>
-			<div class="col-sm"></div>
-		</div>
 		<center class="mt-3">
 			<button type="submit" class="btn" name="submit" value="submit">Submit</button>
 		</center>
 		<%
-				Connect con = null;
-					ResultSet rs = null;
-					ResultSetMetaData mtdt = null;
-					con = new Connect();
+				
 					/*float exam_weightage=0;
 					int n_marks1 = 0;
 					float MaxWeightMarks = 0;*/
@@ -111,7 +132,7 @@
 										+ request.getParameter("exam_name") + "'," + request.getParameter("batch") + ","
 										+ request.getParameter("total_max_marks") + "," + request.getParameter("weightage")
 										+ "," + request.getParameter("subject_id") + "," + i + ","
-										+ request.getParameter("faculty_id") + ");"))
+										+ session.getAttribute("facultyID") + ");"))
 							out.println("<script>alert('Record inserted......');</script>");
 						else
 							out.println("<script>alert('Record was not inserted......');</script>");

@@ -235,7 +235,7 @@
                     var j=1;
                     $(i).text('');
                     while(j<=no){
-                        $(i).append('<div class="col-sm-6" style="padding-bottom:10px; padding-left:30px;padding-right:30px;"><label for="coselect">CO:</label><select class="uk-input" id="q'+(this.id)+'co'+j+'" name="q'+(this.id)+'co'+j+'">'+st+'</select></div>');
+                        $(i).append('<div class="col-sm-6" style="padding-bottom:10px; padding-left:30px;padding-right:30px;"><label for="coselect">'+j+'. CO:</label><select class="uk-input" id="q'+(this.id)+'co'+j+'" name="q'+(this.id)+'co'+j+'">'+st+'</select></div>');
                         j++;
                     }
         });

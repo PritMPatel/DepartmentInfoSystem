@@ -24,15 +24,26 @@
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script type="text/javascript">
+<style type="text/javascript">
         .body {
             height: 100%;
             margin: 0;
             font: 400 10px/1.8 "Lato", sans-serif;
             margin-bottom: 60px; /* Margin bottom by footer height */
             color: #777;
-        }
-    </script>
+		}
+		/* Chrome, Safari, Edge, Opera */
+		input::-webkit-outer-spin-button,
+		input::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+		}
+
+		/* Firefox */
+		input[type=number] {
+		-moz-appearance: textfield;
+		}
+    </style>
 <%-- <script src="js/jquery-3.2.1.min.js"></script> --%>
 </head>
 <body>
