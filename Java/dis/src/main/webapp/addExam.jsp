@@ -5,9 +5,9 @@
 	if (session.getAttribute("role") != null) {
 		userRole = (String) session.getAttribute("role");
 	}
-	if (!userRole.equals("faculty")){
-		response.sendRedirect("/dis/login.jsp");
-	}
+	//if (!userRole.equals("faculty")){
+	//	response.sendRedirect("/dis/login.jsp");
+	//}
 	if (userRole.equals("faculty")) {
 %>
 <%@page import="java.sql.ResultSet"%>
@@ -33,7 +33,7 @@
 <div class="navigation" id="navbar">
 	<div class="dropdown">
 		<!-- navigation STARTS here -->
-		<label for="show-menu" class="show-menu" style="margin-bottom: 0px">Show
+		<label for="show-menu" class="show-menu" style="margin-bottom: 0px"><i class="fa fa-bars mr-3"></i>Show
 			Menu</label> <input type="checkbox" id="show-menu" role="button">
 		<ul id="menu">
 			<li><a href="facultyHome.jsp" class=" main-link">HOME</a></li>
@@ -137,8 +137,15 @@
 						else
 							out.println("<script>alert('Record was not inserted......');</script>");
 					}
-				}
+				
 			%>
 	</form>
 
 <%@include file="/footer.jsp"%>
+<%
+  }
+  else{
+		out.println("<script>alert('SESSION INVALID!!! PLEASE LOGIN AGAIN!!!!!');</script>");
+		response.sendRedirect("login.jsp");
+	}
+  %>

@@ -1,4 +1,5 @@
-	<script type="text/javascript">
+
+<script type="text/javascript">
          window.onscroll = function() {myFunction()};
         // Get the navbar
         var navbar = document.getElementById("navbar");
@@ -24,5 +25,5 @@
 	</div>
 </footer>
 
-	</body>
-	</html>
+</body>
+</html>

@@ -46,8 +46,8 @@
     display: block;
     height: 50px;
     text-align: center;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
     line-height: 50px;
     font: "Lato", sans-serif;
     color: #fff;
@@ -138,7 +138,7 @@ input[type=checkbox]:checked~#menu {
 .show-menu {
     font: "Lato", sans-serif;
     text-decoration: none;
-    color: #fff;
+    color: black;
     background-color: darkgray;
     text-align: center;
     padding: 10px 0;
@@ -148,7 +148,7 @@ input[type=checkbox]:checked~#menu {
 
 /*responsive style*/
 
-@media screen and (max-width: 760px) {
+@media screen and (max-width: 950px) {
     /*make dropdown links appear links*/
     .navigation ul {
         position: static;

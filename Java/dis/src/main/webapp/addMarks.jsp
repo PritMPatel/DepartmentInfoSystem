@@ -5,6 +5,9 @@
 	if (session.getAttribute("role") != null) {
 		userRole = (String) session.getAttribute("role");
 	}
+    //if (!userRole.equals("faculty")){
+	//	response.sendRedirect("/dis/login.jsp");
+	//}
 	if (userRole.equals("faculty")) {
 %>
 <%@page import="java.sql.ResultSet"%>
@@ -14,35 +17,39 @@
 <%@include file="/headerFaculty.jsp"%>
 <title>ADD MARKS</title>
 <style>
-.col-sm{
+.col-sm {
 	padding-left: 30px !important;
 	padding-right: 30px !important;
 }
-td{
-    padding: 0px !important;
+
+td {
+	padding: 0px !important;
 }
-th{
-    background-color: lightgreen !important;
-    color: black !important;
+
+th {
+	background-color: darkgray !important;
+	color: black !important;
 }
-table input{
-    border: 0px !important;
+
+table input {
+	border: 0px !important;
 }
-.uk-table{
-    width: auto !important;
+
+.uk-table {
+	width: auto !important;
 }
 </style>
 <div class="navigation" id="navbar">
 	<div class="dropdown">
 		<!-- navigation STARTS here -->
-		<label for="show-menu" class="show-menu" style="margin-bottom: 0px">Show
-			Menu</label> <input type="checkbox" id="show-menu" role="button">
+		<label for="show-menu" class="show-menu" style="margin-bottom: 0px"><i
+			class="fa fa-bars mr-3"></i>Show Menu</label> <input type="checkbox"
+			id="show-menu" role="button">
 		<ul id="menu">
 			<li><a href="facultyHome.jsp" class="main-link">HOME</a></li>
 			<li><a href="addCo.jsp" class="main-link">ADD CO</a></li>
 			<li><a href="addExam.jsp" class="main-link">ADD EXAM</a></li>
-			<li><a href="addQue.jsp" class="main-link">ADD
-					QUESTION</a></li>
+			<li><a href="addQue.jsp" class="main-link">ADD QUESTION</a></li>
 			<li><a href="addMarks.jsp" class="active main-link">ADD
 					MARKS</a></li>
 			<li><a href="calculateAttainment.jsp" class="main-link">VIEW
@@ -79,7 +86,7 @@ table input{
 				Exam</button>
 		</center>
 	</form> --%>
-	<%
+		<%
                 Connect con=null;
                 ResultSet rs=null;
                 ResultSet rs2=null;
@@ -96,8 +103,8 @@ table input{
                 int eid=0;
                 con=new Connect();
                 if(request.getParameter("next")==null && request.getParameter("addMarks")==null){%>
-                <%@include file="/subjectBatchForm.jsp"%>
-                <%}
+		<%@include file="/subjectBatchForm.jsp"%>
+		<%}
                 if(request.getParameter("next")!=null){
                     rsSubject=con.SelectData("select subjectName from subject_master where subjectID="+request.getParameter("subjectid")+";");
                     rsSubject.next();
@@ -182,7 +189,7 @@ table input{
                 out.println("</table><input type='number' name='examid2' value='"+request.getParameter("exam_id")+"' hidden readonly/><button class='btn' type='submit' name='submit' value='submit'>Submit</button></center></form>");  
             }}%>
 
-	<%
+		<%
                 if(request.getParameter("submit")!=null){
                     
                     rs4=con.SelectData("select typeDescription from exam_master,examtype_master where exam_master.examtypeID=examtype_master.examtypeID and examID="+request.getParameter("examid2")+";");
@@ -263,9 +270,8 @@ table input{
                     }
                     }
                 }
-    }
-            %>
-	<script type="text/javascript">
+              %>
+		<script type="text/javascript">
     $(document).on("change","#exam_id",function(){
         var id = this.value;
         if(id>0)
@@ -274,4 +280,11 @@ table input{
             $("#addMarks").attr("disabled","true");
     });
     </script>
-<%@include file="/footer.jsp"%>
+		<%@include file="/footer.jsp"%>
+  <%
+  }
+  else{
+		out.println("<script>alert('SESSION INVALID!!! PLEASE LOGIN AGAIN!!!!!');</script>");
+		response.sendRedirect("login.jsp");
+	}
+  %>

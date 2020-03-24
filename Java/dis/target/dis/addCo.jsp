@@ -5,9 +5,9 @@
 	if (session.getAttribute("role") != null) {
 		userRole = (String) session.getAttribute("role");
 	}
-	if (!userRole.equals("faculty")){
-		response.sendRedirect("/dis/login.jsp");
-	}
+	//if (!userRole.equals("faculty")){
+	//	response.sendRedirect("/dis/login.jsp");
+	//}
 	if (userRole.equals("faculty")) {
 %>
 <%@page import="java.sql.ResultSet"%>
@@ -27,7 +27,7 @@
 <div class="navigation" id="navbar">
 	<div class="dropdown">
 		<!-- navigation STARTS here -->
-		<label for="show-menu" class="show-menu" style="margin-bottom: 0px">Show
+		<label for="show-menu" class="show-menu" style="margin-bottom: 0px"><i class="fa fa-bars mr-3"></i>Show
 			Menu</label> <input type="checkbox" id="show-menu" role="button">
 		<ul id="menu">
 			<li><a href="facultyHome.jsp" class="main-link">HOME</a></li>
@@ -132,15 +132,23 @@
 						while (x <= conos) {
 							if (con.Ins_Upd_Del("insert into co_master(coID,coStatement,subjectID,facultyID) VALUES(" + x
 									+ ",'" + request.getParameter("co" + x) + "'," + request.getParameter("subject_id")
-									+ "," + request.getParameter("faculty_id") + ");"))
+									+ "," + request.getParameter("faculty_id") + ");")){
 								out.println("<script>alert('CO " + x + " inserted......');</script>");
-							else
+							}
+							else{
 								out.println("<script>alert('CO was not inserted......');</script>");
+							}
 							x++;
 						}
 					}
-				}
-			%>
+				%>
 	</form>
 	
 <%@include file="/footer.jsp"%>
+<%
+  }
+  else{
+		out.println("<script>alert('SESSION INVALID!!! PLEASE LOGIN AGAIN!!!!!');</script>");
+		response.sendRedirect("/dis/login.jsp");
+	}
+  %>
