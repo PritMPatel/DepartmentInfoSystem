@@ -19,7 +19,7 @@
 							if (session.getAttribute("facultyDepartment") != null) {
 								userDept = (String) session.getAttribute("facultyDepartment");
 							}
-							rsAllSubject=con.SelectData("select * from subject_master where subjectID in(select distinct subjectID from co_master where facultyID="+session.getAttribute("facultyID")+");");
+							rsAllSubject=con.SelectData("select * from subject_master where subjectID in(select distinct subjectID from exam_master where facultyID="+session.getAttribute("facultyID")+");");
 							while(rsAllSubject.next()){
 								out.println("<option value="+rsAllSubject.getInt("subjectID")+">"+rsAllSubject.getString("subjectName")+"</option>");
 							}
