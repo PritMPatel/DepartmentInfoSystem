@@ -77,13 +77,13 @@
                 con=new Connect();
                 if(request.getParameter("examselect")!=null){
                     rs=con.SelectData("select * from exam_master where examID in (select distinct examID from question_master where questionID not in (select questionID from marks_obtained_master)) and subjectID="+request.getParameter("subject1")+" and batch="+request.getParameter("batch1")+";");
-                    out.println("<form method='POST'><div class='form-row'><div class='col-sm'><label for='subjectID'>SubjectID:</label><input type='number' class='uk-input' id='subject1' name='subject1' value='"+request.getParameter("subject1")+"' disabled/></div> ");
+                    out.println("<div class='form-row'><div class='col-sm'><label for='subjectID'>SubjectID:</label><input type='number' class='uk-input' id='subject1' name='subject1' value='"+request.getParameter("subject1")+"' disabled/></div> ");
                     out.println("<div class='col-sm-1'></div><div class='col-sm'><label for='batch'>Batch:</label><input type='number' name='batch1' class='uk-input' id='batch1' value='"+request.getParameter("batch1")+"' disabled/></div></div> ");
-                    out.println("ExamID:<select name='examid'>");
+                    out.println("<div class='form-row'><div class='col-sm'><label for='examID'>ExamID:</label><select class='uk-input' id='examid' name='examid'>");
                     while(rs.next()){
-                        out.println("<div uk-dropdown><option value='"+rs.getInt("examID")+"'>"+rs.getInt("examID")+" - "+rs.getString("examName")+"</option></div>");
+                        out.println("<option value='"+rs.getInt("examID")+"'>"+rs.getInt("examID")+" - "+rs.getString("examName")+"</option>");
                     }
-                    out.println("</select><br/><br/><button name='addMarks' value='addMarks'>Add Marks</button></form><br/><br/>");
+                    out.println("</select></div><div class='col-sm'><br/><button name='addMarks' class='btn mt-2 ml-3' value='addMarks'>Add Marks</button></div><div class='col-sm'></div></div></form>");
                 }  
                 if(request.getParameter("addMarks")!=null){
                 rs4=con.SelectData("select typeDescription from exam_master,examtype_master where exam_master.examtypeID=examtype_master.examtypeID and examID="+request.getParameter("examid")+";");
