@@ -28,6 +28,11 @@ th{
 table input{
     border: 0px !important;
 }
+.form-row .col-sm .form-row{
+    padding:0px !important;
+    display: inline !important;
+    margin: 0px !important;
+}
 .uk-table{
     width: auto !important;
 }
@@ -120,14 +125,21 @@ table input{
                 rs4=con.SelectData("select typeDescription,examName from exam_master,examtype_master where exam_master.examtypeID=examtype_master.examtypeID and examID="+request.getParameter("exam_id")+";");
                 rs4.next();
                 if(s.equals(rs4.getString("typeDescription"))){
-                    
+                    out.println("<a class=\"uk-button uk-button-default\" href=\"#modal-center\" uk-toggle>Import</a>");
+                    out.println("<div id=\"modal-center\" class=\"uk-flex-top\" uk-modal>"
+                                    +"<div class=\"uk-modal-dialog uk-modal-body uk-margin-auto-vertical\">"
+                                        +"<button class=\"uk-modal-close-default\" type=\"button\" uk-close></button>"
+                                        +"<b>Instructions for IMPORT:</b><br/><li>Upload .csv File Only</li><li>Enrollment should be same as mentioned below.</li><li>Column Order Should be same as Below</li><li>First will be considered as a HEADING</li><li>Please <b>VERIFY</b> the Data before SUBMIT</li><br/>"
+                                    +"</div>"
+                                +"</div>");
                     out.println("<form method='POST'><input type='number' name='examid2' value='"+request.getParameter("exam_id")+"' hidden disabled/>");
                     out.println("<div class=\"form-row\">"
                         +"<div class=\"col-sm\"></div>"
                         +"<div class=\"col-sm\"><label for='exam'>Exam:</label><input type='text' value='"+rs4.getString("examName")+"' name='examName' readonly/></div>"
                         +"<div class=\"col-sm\"></div>"
-                    +"</div><div class=\"form-row\"></div>");
-                    out.println("<center><table class='uk-table uk-table-hover uk-table-divider uk-table-small' border='1'><tr><th class='uk-table-small'>Enrollment</th><th class='uk-width-auto'>Obtained Marks</th></tr>");
+                    +"</div><div class=\"form-row\"><div class=\"col-sm\"></div><div class=\"col-sm\"><div class=\"form-row\" style=\"margin:0px !important;\"><div class=\"col-sm\" style='padding:0px !important;'><label><input class=\"uk-radio\" type=\"radio\" id='import' name=\"import\" value='importdata'> Import</label></div><div class=\"col-sm\" style='padding:0px !important;'><label><input class=\"uk-radio\" type=\"radio\" id='import' name=\"import\" value='insertdata'> Insert</label></div></div></div><div class=\"col-sm\"></div></div>");
+                    out.println("<div class='form-row' id='importAuto' style='display: none;'><div class='col-sm'><div class='form-row'><b>Instructions for IMPORT:</b></div><div class='form-row'><li>Upload .csv File Only</li></div><div class='form-row'><li>Enrollment should be same as mentioned below.</li></div><div class='form-row'><li>Column Order Should be same as Below</li></div><div class='form-row'><li>First Row will be considered as a HEADING</li></div><div class='form-row'><li>Please <b>VERIFY</b> the Data before SUBMIT</li></div></div><div class='col-sm'><div class='uk-form-custom'><input type=\"file\" id=\"fileUpload\"><button class=\"uk-button uk-button-default\" type=\"button\">SELECT FILE</button></div><button class=\"uk-button uk-button-default\" type=\"button\" id=\"upload\" value=\"Import\" onclick=\"UploadESE()\">Import</button></div></div>");
+                    out.println("<div id='insertManual' style='display: none;'><div class=\"form-row\"></div><center><table class='uk-table uk-table-hover uk-table-divider uk-table-small' border='1'><tr><th class='uk-table-small'>Enrollment</th><th class='uk-width-auto'>Obtained Marks</th></tr>");
                     rs3=con.SelectData("select enrollmentno from student_master where batch in (select batch from exam_master where examID="+request.getParameter("exam_id")+");");
                     rs3.last();
                     nOfStudents=rs3.getRow();
@@ -135,16 +147,17 @@ table input{
                     x2=1;
                     while(x2<=nOfStudents && rs3.next()){
                         out.println("<tr><td class='uk-width-small'><input class='uk-input uk-form-blank uk-form-small' type='text' name='enroll"+x2+"' value='"+rs3.getString("enrollmentno")+"' readonly></td>");
-                        out.println("<td class='uk-width-small'><input class='uk-input uk-form-blank uk-form-small uk-form-width-small' type='text' name='"+x2+"marks'></td></tr>");
+                        out.println("<td class='uk-width-small'><input class='uk-input uk-form-blank uk-form-small uk-form-width-small' type='text' id='"+x2+"marks' name='"+x2+"marks'></td></tr>");
                         x2++; 
                     }
-                    out.println("</table><button class='btn' type='submit' name='submit' value='submit'>Submit</button></center></form>");  
+                    out.println("</table><button class='btn' type='submit' name='submit' value='submit'>Submit</button></center></div></form>");  
                 }
 
 
 
 
                 else{    
+                
                 out.println("<form method='POST'><input type='number' name='examid2' value='"+request.getParameter("exam_id")+"' hidden readonly/>");
                 rs2=con.SelectData("SELECT questionID,queDesc,queMaxMarks,calcQuesMaxMarks,nCalcQuesMaxMarks FROM question_master qm where examID="+request.getParameter("exam_id")+" order by questionID;");
                 rs2.last();
@@ -156,10 +169,11 @@ table input{
                         +"<div class=\"col-sm\"></div>"
                         +"<div class=\"col-sm\"><label for='exam'>Exam:</label><input type='text' value='"+rs4.getString("examName")+"' name='examName' readonly/></div>"
                         +"<div class=\"col-sm\"></div>"
-                    +"</div><div class=\"form-row\"></div>");
-                out.println("<center><table class='uk-table uk-table-hover uk-table-divider uk-table-small' border='1'><tr><th class='uk-table-small'>Enrollment</th>");
+                    +"</div><div class=\"form-row\"><div class=\"col-sm\"></div><div class=\"col-sm\"><div class=\"form-row\" style=\"margin:0px !important;\"><div class=\"col-sm\" style='padding:0px !important;'><label><input class=\"uk-radio\" type=\"radio\" id='import' name=\"import\" value='importdata'> Import</label></div><div class=\"col-sm\" style='padding:0px !important;'><label><input class=\"uk-radio\" type=\"radio\" id='import' name=\"import\" value='insertdata'> Insert</label></div></div></div><div class=\"col-sm\"></div></div>");
+                out.println("<div class='form-row' id='importAuto' style='display: none;'><div class='col-sm'><div class='form-row'><b>Instructions for IMPORT:</b></div><div class='form-row'><li>Upload .csv File Only</li></div><div class='form-row'><li>Enrollment should be same as mentioned below.</li></div><div class='form-row'><li>Column Order Should be same as Below</li></div><div class='form-row'><li>First Row will be considered as a HEADING</li></div><div class='form-row'><li>Please <b>VERIFY</b> the Data before SUBMIT</li></div></div><div class='col-sm'><div class='uk-form-custom'><input type=\"file\" id=\"fileUpload\"><button class=\"uk-button uk-button-default\" type=\"button\">SELECT FILE</button></div><button class=\"uk-button uk-button-default\" type=\"button\" id=\"upload\" value=\"Import\" onclick=\"Upload()\">Import</button></div></div>");
+                out.println("<div id='insertManual' style='display: none;'><div class=\"form-row\"></div><center><table class='uk-table uk-table-hover uk-table-divider uk-table-small' border='1'><tr><th class='uk-table-small'>Enrollment</th>");
                 while(x<=nOfQue && rs2.next()){
-                    out.println("<th class='uk-width-auto'>Q"+x+"</th>");
+                    out.println("<th class='uk-width-auto'>"+rs2.getString("queDesc")+"</th>");
                     x++;
                 }
                 out.println("</tr>");
@@ -172,14 +186,14 @@ table input{
                 while(x2<=nOfStudents && rs3.next()){
                     out.println("<tr><td class='uk-width-small'><input class='uk-input uk-form-blank uk-form-small' type='text' name='enroll"+x2+"' value='"+rs3.getString("enrollmentno")+"' readonly></td>");
                     while(x<=nOfQue){
-                        out.println("<td class='uk-width-small'><input class='uk-input uk-form-blank uk-form-small uk-form-width-small' type='text' name='"+x2+"que"+x+"'></td>");
+                        out.println("<td class='uk-width-small'><input class='uk-input uk-form-blank uk-form-small uk-form-width-small' type='text' id='"+x2+"que"+x+"' name='"+x2+"que"+x+"'></td>");
                         x++;
                     }
                     x=1;
                     out.println("</tr>");
                     x2++;
                 }
-                out.println("</table><input type='number' name='examid2' value='"+request.getParameter("exam_id")+"' hidden readonly/><button class='btn' type='submit' name='submit' value='submit'>Submit</button></center></form>");  
+                out.println("</table><input type='number' name='examid2' value='"+request.getParameter("exam_id")+"' hidden readonly/><button class='btn' type='submit' name='submit' value='submit'>Submit</button></center></div></form>");  
             }}%>
 
 	<%
@@ -220,11 +234,11 @@ table input{
                                 float nCalcObtMarks = obtMarks*wFact;
                                 if(con.Ins_Upd_Del("insert into marks_obtained_master(enrollmentno,questionID,obtainedMarks,calcObtainedMarks,nCalcObtainedMarks) values("+rs3.getString("enrollmentno")+","+rs2.getInt("questionID")+","+obtMarks+","+calcObtMarks+","+nCalcObtMarks+");")){
                                     if(x2==nOfStudents && x==nOfQue){
-                                        out.println("<script>$('.container').prepend('<div class=\"uk-alert-success\" uk-alert><a class=\"uk-alert-close\" uk-close></a><p>Marks Inserted Successfully.</p></div>')</script>");        
+                                        out.println("<script>$('.container').prepend('<div class=\"uk-alert-success\" uk-alert><a class=\"uk-alert-close\" uk-close></a>Marks Inserted Successfully.</div>')</script>");        
                                     }
                                 }
                                 else{
-                                    out.println("<script>$('.container').prepend('<div class=\"uk-alert-danger\" uk-alert><a class=\"uk-alert-close\" uk-close></a><p>ERROR : @"+request.getParameter("enroll"+x2)+" FOR QUESTION "+x+"</p></div>')</script>");
+                                    out.println("<script>$('.container').prepend('<div class=\"uk-alert-danger\" uk-alert><a class=\"uk-alert-close\" uk-close></a>ERROR : @"+request.getParameter("enroll"+x2)+" FOR QUESTION "+x+"</div>')</script>");
                                 }
                                 x++;
                             }
@@ -251,11 +265,11 @@ table input{
                             //out.println("<br><br>n w oN oW"+"-"+nFact+"-"+wFact+"-"+obtNormMarks+"-"+obtWeighMarks+"<br><br>");
                             if(con.Ins_Upd_Del("insert into marks_obtained_master(enrollmentno,questionID,obtainedMarks,calcObtainedMarks,nCalcObtainedMarks) values("+rs3.getString("enrollmentno")+","+rs2.getInt("questionID")+","+Float.parseFloat(request.getParameter(x2+"que"+x))+","+calcObtMarks+","+nCalcObtMarks+");")){
                                 if(x2==nOfStudents && x==nOfQue){
-                                    out.println("<script>$('.container').prepend('<div class=\"uk-alert-success\" uk-alert><a class=\"uk-alert-close\" uk-close></a><p>Marks Inserted Successfully.</p></div>')</script>");        
+                                    out.println("<script>$('.container').prepend('<div class=\"uk-alert-success uk-alert\" ><a class=\"uk-alert-close uk-close\" ></a>Marks Inserted Successfully.</div>')</script>");        
                                 }
                             }
                             else{
-                                out.println("<script>$('.container').prepend('<div class=\"uk-alert-danger\" uk-alert><a class=\"uk-alert-close\" uk-close></a><p>ERROR : @"+request.getParameter("enroll"+x2)+" FOR QUESTION "+x+"</p></div>')</script>");
+                                out.println("<script>$('.container').prepend('<div class=\"uk-alert-danger uk-alert\" ><a class=\"uk-alert-close uk-close\" ></a>ERROR : @"+request.getParameter("enroll"+x2)+" FOR QUESTION "+x+"</div>')</script>");
                             }
                             x++;
                         }
@@ -266,12 +280,103 @@ table input{
     }
             %>
 	<script type="text/javascript">
+    function Upload() {
+        var fileUpload = document.getElementById("fileUpload");
+        console.log(fileUpload.value);
+        var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv|.txt)$/;
+        if (regex.test(fileUpload.value.toLowerCase())) {
+            if (typeof (FileReader) != "undefined") {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var table = document.createElement("table");
+                    var rows = e.target.result.split("\n");
+                    for (var i = 0; i < rows.length; i++) {
+                        if(i!=0){
+                        var cells = rows[i].split(",");
+                        if (cells.length > 1) {
+                            var row = table.insertRow(-1);
+                            for (var j = 0; j < cells.length; j++) {
+                                var cell = row.insertCell(-1);
+                                if(j!=0){
+                                    var inTable = document.getElementById((i)+"que"+(j));
+                                    console.log(inTable.value);
+                                    if(inTable!=null)
+                                    inTable.value = cells[j];
+                                }
+                                else{
+                                    //var inTable = document.getElementById("enroll"+(i));
+                                    //if(inTable!=null)
+                                    //    inTable.value = cells[j];
+                                }
+                                
+                            }
+                        }}
+                    }
+                }
+                reader.readAsText(fileUpload.files[0]);
+            } else {
+                alert("This browser does not support HTML5.");
+            }
+        } else {
+            alert("Please upload a valid CSV file.");
+        }
+    }
+        function UploadESE() {
+        var fileUpload = document.getElementById("fileUpload");
+        var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv|.txt)$/;
+        if (regex.test(fileUpload.value.toLowerCase())) {
+            if (typeof (FileReader) != "undefined") {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var table = document.createElement("table");
+                    var rows = e.target.result.split("\n");
+                    for (var i = 0; i < rows.length; i++) {
+                        if(i!=0){
+                        var cells = rows[i].split(",");
+                        if (cells.length > 1) {
+                            var row = table.insertRow(-1);
+                            for (var j = 0; j < cells.length; j++) {
+                                var cell = row.insertCell(-1);
+                                if(j!=0){
+                                    var inTable = document.getElementById((i)+"marks");
+                                    if(inTable!=null)
+                                        inTable.value = cells[j];
+                                }
+                                else{
+                                    //var inTable = document.getElementById("enroll"+(i));
+                                    //if(inTable!=null)
+                                    //    inTable.value = cells[j];
+                                }
+                            }
+                        }}
+                    }
+                }
+                reader.readAsText(fileUpload.files[0]);
+            } else {
+                alert("This browser does not support HTML5.");
+            }
+        } else {
+            alert("Please upload a valid CSV file.");
+        }
+    }
     $(document).on("change","#exam_id",function(){
         var id = this.value;
         if(id>0)
             $("#addMarks").removeAttr("disabled");
         else
             $("#addMarks").attr("disabled","true");
+    });
+    $(document).on("click","#import",function(){
+        var state=this.value;
+        console.log(state);
+        if(state=='importdata'){
+            $('#importAuto').show();
+            $('#insertManual').show();
+        }
+        else{
+            $('#importAuto').hide();
+            $('#insertManual').show();
+        }
     });
     </script>
 <%@include file="/footer.jsp"%>
