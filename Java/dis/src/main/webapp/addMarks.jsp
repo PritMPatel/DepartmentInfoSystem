@@ -287,7 +287,6 @@ table input{
                     }
                     }
                 }
-    
             %>
 	<script type="text/javascript">
     function Upload() {
