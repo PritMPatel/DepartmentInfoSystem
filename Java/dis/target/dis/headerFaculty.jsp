@@ -35,18 +35,7 @@
             margin-bottom: 60px; /* Margin bottom by footer height */
             color: #777;
 		}
-		/* Chrome, Safari, Edge, Opera */
-		input::-webkit-outer-spin-button,
-		input::-webkit-inner-spin-button {
-		-webkit-appearance: none;
-		margin: 0;
-		}
-
-		/* Firefox */
-		input[type=number] {
-		-moz-appearance: textfield;
-		}
-    </style>
+	</style>
 <%-- <script src="js/jquery-3.2.1.min.js"></script> --%>
 </head>
 <body>

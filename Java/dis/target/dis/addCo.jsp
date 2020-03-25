@@ -24,11 +24,17 @@
 	String userDept = "";
 %>
 <style>
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
+/* Chrome, Safari, Edge, Opera */
+		input::-webkit-outer-spin-button,
+		input::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+		}
+
+/* Firefox */
+		input[type=number] {
+		-moz-appearance: textfield;
+		}
 </style>
 <title>ADD A COURSE OUTCOME</title>
 <div class="navigation" id="navbar">
@@ -73,8 +79,8 @@ input::-webkit-inner-spin-button {
 			<div class="col-sm"></div>
 			<div class="col-sm">
 					<label for="subjectID">Subject:</label>
-					<select class="uk-select" name="subject_id" id="subject_id">
-						<option value=0 disabled selected>Select Subject</option>
+					<select class="uk-select" name="subject_id" id="subject_id" required>
+						<option value="" disabled selected>Select Subject</option>
 						<%
 							if (session.getAttribute("facultyDepartment") != null) {
 								userDept = (String) session.getAttribute("facultyDepartment");

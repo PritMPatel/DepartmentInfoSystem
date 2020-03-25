@@ -36,6 +36,16 @@ table input{
 .uk-table{
     width: auto !important;
 }
+/* Chrome, Safari, Edge, Opera */
+		input::-webkit-outer-spin-button,
+		input::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+		}
+/* Firefox */
+		input[type=number] {
+		-moz-appearance: textfield;
+		}
 </style>
 <div class="navigation" id="navbar">
 	<div class="dropdown">
@@ -51,7 +61,7 @@ table input{
 					MARKS</a></li>
 			<li><a href="calculateAttainment.jsp" class="main-link">VIEW
 					ATTAINMENT</a></li>
-			<li><a href="#" class="main-link">LOGOUT</a></li>
+			<li><a href="logout.jsp" class="main-link">LOGOUT</a></li>
 		</ul>
 	</div>
 </div>
@@ -112,7 +122,7 @@ table input{
                             "<div class='col-sm'><label for='batch'>Batch:</label><input type='number' name='batch' class='uk-input' id='batch' value='"
                                     + request.getParameter("batch1") + "' readonly/></div></div> ");
                     out.println(
-                            "<div class='form-row'><div class='col-sm'><label for='examID'>Exam:</label><select class='uk-select' id='exam_id' name='exam_id'><option value='0' selected disabled>SELECT EXAM</option>");
+                            "<div class='form-row'><div class='col-sm'><label for='examID'>Exam:</label><select class='uk-select' id='exam_id' name='exam_id' required><option value='' selected disabled>SELECT EXAM</option>");
                     while (rs.next()) {
                         out.println("<option value='" + rs.getInt("examID") + "'>"
                                 + rs.getString("examName") + "</option>");
@@ -277,7 +287,6 @@ table input{
                     }
                     }
                 }
-    
             %>
 	<script type="text/javascript">
     function Upload() {

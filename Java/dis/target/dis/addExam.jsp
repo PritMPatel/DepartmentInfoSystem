@@ -28,6 +28,17 @@
 	padding-left: 30px !important;
 	padding-right: 30px !important;
 }
+/* Chrome, Safari, Edge, Opera */
+		input::-webkit-outer-spin-button,
+		input::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+		}
+
+/* Firefox */
+		input[type=number] {
+		-moz-appearance: textfield;
+		}
 </style>
 <title>ADD AN EXAMINATION</title>
 <div class="navigation" id="navbar">
@@ -70,7 +81,7 @@
 			<div class="col-sm">
 					<label for="examTypeID">Category of Exam:</label>
 					<select class="uk-select" name="exam_type" id="exam_type" required>
-						<option value=0 disabled selected>Select Category of Exam</option>
+						<option value="" disabled selected>Select Category of Exam</option>
 						<%
 							rsExamType=con.SelectData("select * from examtype_master;");
 							while(rsExamType.next()){
@@ -85,7 +96,7 @@
 			<div class="col-sm">
 					<label for="subjectID">Subject:</label>
 					<select class="uk-select" name="subject_id" id="subject_id" required>
-						<option value=0 disabled selected>Select Subject</option>
+						<option value="" disabled selected>Select Subject</option>
 						<%
 							rsAllSubject=con.SelectData("select * from subject_master where subjectID in(select distinct subjectID from co_master where facultyID="+session.getAttribute("facultyID")+");");
 							while(rsAllSubject.next()){

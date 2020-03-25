@@ -89,7 +89,6 @@
 											response.sendRedirect("adminHome.jsp");
 										} else {
 											out.println("<script>alert('Wrong username or password')</script>");
-
 										}
 									} else if (request.getParameter("btnLogin") != null && role.equals("Faculty")) {
 										if (con.CheckData(
@@ -116,7 +115,7 @@
 											response.sendRedirect("facultyHome.jsp");
 										} else {
 											out.println("<script>alert('Wrong username or password')</script>");
-
+		
 										}
 									}
 							%>

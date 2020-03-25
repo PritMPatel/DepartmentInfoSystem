@@ -106,7 +106,7 @@
 								"<div class='col-sm'><label for='batch'>Batch:</label><input type='number' name='batch1' class='uk-input' id='batch1' value='"
 										+ request.getParameter("batch1") + "' readonly/></div></div> ");
 						out.println(
-								"<div class='form-row'><div class='col-sm'><label for='examID'>Exam:</label><select class='uk-select' id='exam_id' name='exam_id'><option selected disabled>Select Exam</option>");
+								"<div class='form-row'><div class='col-sm'><label for='examID'>Exam:</label><select class='uk-select' id='exam_id' name='exam_id' required><option value='' selected disabled>Select Exam</option>");
 						while (rs.next()) {
 							out.println("<option value='" + rs.getInt("examID") + "'>"
 									+ rs.getString("examName") + "</option>");
@@ -236,7 +236,7 @@
                     var j=1;
                     $(i).text('');
                     while(j<=no){
-                        $(i).append('<div class="col-sm-6" style="padding-bottom:10px; padding-left:30px;padding-right:30px;"><label for="coselect">'+j+'. CO:</label><select class="uk-input" id="q'+(this.id)+'co'+j+'" name="q'+(this.id)+'co'+j+'" required><option disabled selected>Select CO</option>'+st+'</select></div>');
+                        $(i).append('<div class="col-sm-6" style="padding-bottom:10px; padding-left:30px;padding-right:30px;"><label for="coselect">'+j+'. CO:</label><select class="uk-input" id="q'+(this.id)+'co'+j+'" name="q'+(this.id)+'co'+j+'" required><option value="" disabled selected>Select CO</option>'+st+'</select></div>');
                         j++;
                     }
         });
