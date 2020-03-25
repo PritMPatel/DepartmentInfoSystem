@@ -21,6 +21,11 @@
 	padding-left: 30px !important;
 	padding-right: 30px !important;
 }
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
 </style>
 <div class="navigation" id="navbar">
 	<div class="dropdown">
@@ -95,7 +100,7 @@
 								"<div class='col-sm'><label for='batch'>Batch:</label><input type='number' name='batch1' class='uk-input' id='batch1' value='"
 										+ request.getParameter("batch1") + "' readonly/></div></div> ");
 						out.println(
-								"<div class='form-row'><div class='col-sm'><label for='examID'>Exam:</label><select class='uk-select' id='exam_id' name='exam_id'><option selected disabled>SELECT EXAM</option>");
+								"<div class='form-row'><div class='col-sm'><label for='examID'>Exam:</label><select class='uk-select' id='exam_id' name='exam_id'><option selected disabled>Select Exam</option>");
 						while (rs.next()) {
 							out.println("<option value='" + rs.getInt("examID") + "'>"
 									+ rs.getString("examName") + "</option>");
@@ -104,7 +109,7 @@
 						out.println(""+
 								"<div class=\"col-sm\">"+
 									"<label for=\"noQues\"> No of Questions: </label> <input type=\"number\""+
-										"class='uk-input' id='qno' name=\"qno\" id=\"quNo\" placeholder='No of Questions'/>"+
+										"class='uk-input' id='qno' name=\"qno\" id=\"qno\" placeholder='No of Questions' min=\"1\"/>"+
 								"</div>"+
 							"</div><div id=\"ques\"></div>"+
 							"<center class=\"mt-3\">"+
@@ -159,14 +164,18 @@
 											+ request.getParameter("qMarks" + x) + "," + request.getParameter("map" + x)
 											+ "," + calcQuesMaxMarks + "," + nCalcQuesMaxMarks + ","
 											+ request.getParameter("exam_id") + "," + coVal + ");")) {
-								out.println("<script>alert('Question " + x + " inserted......');</script>");
+												if(x==qunos){
+													out.println("<script>$('.container').prepend('<div class=\"uk-alert-success\" uk-alert><a class=\"uk-alert-close\" uk-close></a>Questions Inserted Successfully.</div>')</script>");        
+													con.commitData();
+												}
 							} else {
-								out.println("<script>alert('Question " + x + " was not inserted......');</script>");
+								out.println("<script>$('.container').prepend('<div class=\"uk-alert-danger\" uk-alert><a cl-ass=\"uk-alert-close\" uk-close></a>ERROR: @Question "+x+": Please Insert All Questions Again.</div>')</script>");
+								con.rollbackData();
 							}
 							x++;
 						}
 				
-	
+				}
 			%>
 
 
@@ -182,26 +191,8 @@
 					}
 					out.print(s);
 				}
-			}%>';
+			%>';
         var n=1;
-        
-        // function addRow(frm) {
-        //     var qno = frm.qno.value;
-        //     while(n<=qno){
-        //         console.log( "ready!" );
-        //         var i=1;
-        //         jQuery('#ques').append('\
-        //         <div name="dQ'+n+'">\
-        //             <div class="form-row"><div class="col-sm"><label for="questionDesc">Ques '+n+' Desc:</label><input type="text" class="uk-input" id="q'+n+'" name="q'+n+'"></div></div>\
-        //             <div class="form-row"><div class="col-sm"><label for="questionMarks">Ques '+n+' MaxMarks:</label><input type="number" class="uk-input" id="qMarks'+(n)+'" name="qMarks'+(n)+'"></div><div class="col-sm-1"></div>\
-        //                 <div class="col-sm"><label for="multiMap">MultipleMapping:</label><input class="uk-input multiMap" type="number" id="map'+n+'" name="map'+n+'"></div></div>\
-        //                 \
-        //                 <div id="map'+n+'Co">\
-        //                 </div></div><br/>');
-        //         n++;
-        //     }
-        //     frm.addbut.disabled="true";
-		// }
 		
 		$(document).on("change","#qno",function(){
 			var qno= this.value;
@@ -214,20 +205,24 @@
                 var i=1;
                 $(appendLoc).append('\
 				<div name="dQ'+n+'">\
-					<div class="form-row" style="padding-bottom:0px !important;"><label style="padding-left:30px !important;">Ques '+n+'</lable></div>\
-                    <div class="form-row" style="padding-top:0px !important;"><div class="col-sm"><label for="questionDesc">Description:</label><input type="text" class="uk-input" id="q'+n+'" name="q'+n+'"></div>\
-                    <div class="col-sm"><div class="form-row" style="padding:0px; margin:0px;"><div class="col-sm" style="padding:0px !important;"><label for="questionMarks">Marks:</label><input type="number" class="uk-input" id="qMarks'+(n)+'" name="qMarks'+(n)+'"></div><div class="col-sm-1"></div>\
-                        <div class="col-sm" style="padding: 0px !important;"><label for="multiMap">MultipleMapping:</label><input class="uk-input multiMap" type="number" id="map'+n+'" name="map'+n+'"></div></div></div></div>\
+					<div class="form-row" style="padding-bottom:0px !important;"><label style="padding-left:30px !important;">Question '+n+'</lable></div>\
+                    <div class="form-row" style="padding-top:0px !important;"><div class="col-sm"><label for="questionDesc">Description:</label><input type="text" class="uk-input" id="q'+n+'" name="q'+n+'" required></div>\
+                    <div class="col-sm"><div class="form-row" style="padding:0px; margin:0px;"><div class="col-sm" style="padding:0px !important;"><label for="questionMarks">Marks:</label><input type="number" class="uk-input" id="qMarks'+(n)+'" name="qMarks'+(n)+'" required></div><div class="col-sm-1"></div>\
+                        <div class="col-sm" style="padding: 0px !important;"><label for="multiMap">Multiple Mapping:</label><input class="uk-input multiMap" type="number" id="map'+n+'" name="map'+n+'" required></div></div></div></div>\
                         \
                         <div class="form-row" id="map'+n+'Co" style="padding-bottom:0px;">\
                         </div></div><br/>');
                 n++;
 			}
-			if(qno>0)
-				$('#submit').removeAttr("disabled");
-			else
-				$('#submit').attr("disabled","true");
 		});
+		$(document).on("change","#qno",function(){
+                    var no = this.value;
+                    if (no>0) {
+						$('#submit').removeAttr("disabled");
+					} else {
+						$('#submit').attr("disabled","true");
+					}
+        });
 
         $(document).on("change",".multiMap",function(){
                     var i= document.getElementById(this.id+"Co");
@@ -235,7 +230,7 @@
                     var j=1;
                     $(i).text('');
                     while(j<=no){
-                        $(i).append('<div class="col-sm-6" style="padding-bottom:10px; padding-left:30px;padding-right:30px;"><label for="coselect">'+j+'. CO:</label><select class="uk-input" id="q'+(this.id)+'co'+j+'" name="q'+(this.id)+'co'+j+'">'+st+'</select></div>');
+                        $(i).append('<div class="col-sm-6" style="padding-bottom:10px; padding-left:30px;padding-right:30px;"><label for="coselect">'+j+'. CO:</label><select class="uk-input" id="q'+(this.id)+'co'+j+'" name="q'+(this.id)+'co'+j+'" required><option disabled selected>Select CO</option>'+st+'</select></div>');
                         j++;
                     }
         });

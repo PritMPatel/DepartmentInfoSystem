@@ -33,7 +33,7 @@
 							MARKS</a></li>
 					<li><a href="calculateAttainment.jsp" class="main-link">VIEW
 							ATTAINMENT</a></li>
-					<li><a href="#" class="main-link">LOGOUT</a></li>
+					<li><a href="logout.jsp" class="main-link">LOGOUT</a></li>
 				</ul>
 			</div>
 		</div>

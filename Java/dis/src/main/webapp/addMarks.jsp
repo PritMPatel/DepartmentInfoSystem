@@ -36,6 +36,16 @@ table input{
 .uk-table{
     width: auto !important;
 }
+/* Chrome, Safari, Edge, Opera */
+		input::-webkit-outer-spin-button,
+		input::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+		}
+/* Firefox */
+		input[type=number] {
+		-moz-appearance: textfield;
+		}
 </style>
 <div class="navigation" id="navbar">
 	<div class="dropdown">
@@ -277,7 +287,7 @@ table input{
                     }
                     }
                 }
-    }
+    
             %>
 	<script type="text/javascript">
     function Upload() {

@@ -23,6 +23,19 @@
 	con = new Connect();
 	String userDept = "";
 %>
+<style>
+/* Chrome, Safari, Edge, Opera */
+		input::-webkit-outer-spin-button,
+		input::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+		}
+
+/* Firefox */
+		input[type=number] {
+		-moz-appearance: textfield;
+		}
+</style>
 <title>ADD A COURSE OUTCOME</title>
 <div class="navigation" id="navbar">
 	<div class="dropdown">
@@ -99,7 +112,7 @@
 			<div class="col-sm">
 
 				<label for="noCO">No of CO:</label> <input type="number"
-					class="uk-input" name="cono" id="cono"
+					class="uk-input" name="cono" id="cono" min="1"
 					placeholder="Add No of COs" />
 			</div>
 			<div class="col-sm"></div>

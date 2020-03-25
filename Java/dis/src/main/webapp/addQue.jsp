@@ -21,6 +21,17 @@
 	padding-left: 30px !important;
 	padding-right: 30px !important;
 }
+/* Chrome, Safari, Edge, Opera */
+		input::-webkit-outer-spin-button,
+		input::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+		}
+
+/* Firefox */
+		input[type=number] {
+		-moz-appearance: textfield;
+		}
 </style>
 <div class="navigation" id="navbar">
 	<div class="dropdown">
@@ -104,7 +115,7 @@
 						out.println(""+
 								"<div class=\"col-sm\">"+
 									"<label for=\"noQues\"> No of Questions: </label> <input type=\"number\""+
-										"class='uk-input' id='qno' name=\"qno\" id=\"qno\" placeholder='No of Questions'/>"+
+										"class='uk-input' id='qno' name=\"qno\" id=\"qno\" placeholder='No of Questions' min=\"1\"/>"+
 								"</div>"+
 							"</div><div id=\"ques\"></div>"+
 							"<center class=\"mt-3\">"+
