@@ -5,9 +5,6 @@
 	if (session.getAttribute("role") != null) {
 		userRole = (String) session.getAttribute("role");
 	}
-    //if (!userRole.equals("faculty")){
-	//	response.sendRedirect("/dis/login.jsp");
-	//}
 	if (userRole.equals("faculty")) {
 %>
 <%@page import="java.sql.ResultSet"%>
@@ -17,22 +14,19 @@
 <%@include file="/headerFaculty.jsp"%>
 <title>ADD MARKS</title>
 <style>
-.col-sm {
+.col-sm{
 	padding-left: 30px !important;
 	padding-right: 30px !important;
 }
-
-td {
-	padding: 0px !important;
+td{
+    padding: 0px !important;
 }
-
-th {
-	background-color: darkgray !important;
-	color: black !important;
+th{
+    background-color: lightgreen !important;
+    color: black !important;
 }
-
-table input {
-	border: 0px !important;
+table input{
+    border: 0px !important;
 }
 .form-row .col-sm .form-row{
     padding:0px !important;
@@ -47,8 +41,7 @@ table input {
 	<div class="dropdown">
 		<!-- navigation STARTS here -->
 		<label for="show-menu" class="show-menu" style="margin-bottom: 0px"><i
-			class="fa fa-bars mr-3"></i>Show Menu</label> <input type="checkbox"
-			id="show-menu" role="button">
+			class="fa fa-bars mr-3"></i>Show Menu</label> <input type="checkbox" id="show-menu" role="button">
 		<ul id="menu">
 			<li><a href="facultyHome.jsp" class="main-link">HOME</a></li>
 			<li><a href="addCo.jsp" class="main-link">ADD CO</a></li>
@@ -90,7 +83,7 @@ table input {
 				Exam</button>
 		</center>
 	</form> --%>
-		<%
+	<%
                 Connect con=null;
                 ResultSet rs=null;
                 ResultSet rs2=null;
@@ -107,8 +100,8 @@ table input {
                 int eid=0;
                 con=new Connect();
                 if(request.getParameter("next")==null && request.getParameter("addMarks")==null){%>
-		<%@include file="/subjectBatchForm.jsp"%>
-		<%}
+                <%@include file="/subjectBatchForm.jsp"%>
+                <%}
                 if(request.getParameter("next")!=null){
                     rsSubject=con.SelectData("select subjectName from subject_master where subjectID="+request.getParameter("subjectid")+";");
                     rsSubject.next();
@@ -131,14 +124,7 @@ table input {
                 rs4=con.SelectData("select typeDescription,examName from exam_master,examtype_master where exam_master.examtypeID=examtype_master.examtypeID and examID="+request.getParameter("exam_id")+";");
                 rs4.next();
                 if(s.equals(rs4.getString("typeDescription"))){
-                    out.println("<a class=\"uk-button uk-button-default\" href=\"#modal-center\" uk-toggle>Import</a>");
-                    out.println("<div id=\"modal-center\" class=\"uk-flex-top\" uk-modal>"
-                                    +"<div class=\"uk-modal-dialog uk-modal-body uk-margin-auto-vertical\">"
-                                        +"<button class=\"uk-modal-close-default\" type=\"button\" uk-close></button>"
-                                        +"<b>Instructions for IMPORT:</b><br/><li>Upload .csv File Only</li><li>Enrollment should be same as mentioned below.</li><li>Column Order Should be same as Below</li><li>First will be considered as a HEADING</li><li>Please <b>VERIFY</b> the Data before SUBMIT</li><br/>"
-                                    +"</div>"
-                                +"</div>");
-                    out.println("<form method='POST'><input type='number' name='examid2' value='"+request.getParameter("exam_id")+"' hidden disabled/>");
+                    out.println("<form method='POST'><input type='number' name='examid2' value='"+request.getParameter("exam_id")+"' hidden readonly/>");
                     out.println("<div class=\"form-row\">"
                         +"<div class=\"col-sm\"></div>"
                         +"<div class=\"col-sm\"><label for='exam'>Exam:</label><input type='text' value='"+rs4.getString("examName")+"' name='examName' readonly/></div>"
@@ -153,7 +139,7 @@ table input {
                     x2=1;
                     while(x2<=nOfStudents && rs3.next()){
                         out.println("<tr><td class='uk-width-small'><input class='uk-input uk-form-blank uk-form-small' type='text' name='enroll"+x2+"' value='"+rs3.getString("enrollmentno")+"' readonly></td>");
-                        out.println("<td class='uk-width-small'><input class='uk-input uk-form-blank uk-form-small uk-form-width-small' type='text' id='"+x2+"marks' name='"+x2+"marks'></td></tr>");
+                        out.println("<td class='uk-width-small'><input class='uk-input uk-form-blank uk-form-small uk-form-width-small' type='text' id='"+x2+"marks' name='"+x2+"marks' required></td></tr>");
                         x2++; 
                     }
                     out.println("</table><button class='btn' type='submit' name='submit' value='submit'>Submit</button></center></div></form>");  
@@ -192,7 +178,7 @@ table input {
                 while(x2<=nOfStudents && rs3.next()){
                     out.println("<tr><td class='uk-width-small'><input class='uk-input uk-form-blank uk-form-small' type='text' name='enroll"+x2+"' value='"+rs3.getString("enrollmentno")+"' readonly></td>");
                     while(x<=nOfQue){
-                        out.println("<td class='uk-width-small'><input class='uk-input uk-form-blank uk-form-small uk-form-width-small' type='text' id='"+x2+"que"+x+"' name='"+x2+"que"+x+"'></td>");
+                        out.println("<td class='uk-width-small'><input class='uk-input uk-form-blank uk-form-small uk-form-width-small' type='text' id='"+x2+"que"+x+"' name='"+x2+"que"+x+"' required></td>");
                         x++;
                     }
                     x=1;
@@ -202,7 +188,7 @@ table input {
                 out.println("</table><input type='number' name='examid2' value='"+request.getParameter("exam_id")+"' hidden readonly/><button class='btn' type='submit' name='submit' value='submit'>Submit</button></center></div></form>");  
             }}%>
 
-		<%
+	<%
                 if(request.getParameter("submit")!=null){
                     
                     rs4=con.SelectData("select typeDescription from exam_master,examtype_master where exam_master.examtypeID=examtype_master.examtypeID and examID="+request.getParameter("examid2")+";");
@@ -241,10 +227,12 @@ table input {
                                 if(con.Ins_Upd_Del("insert into marks_obtained_master(enrollmentno,questionID,obtainedMarks,calcObtainedMarks,nCalcObtainedMarks) values("+rs3.getString("enrollmentno")+","+rs2.getInt("questionID")+","+obtMarks+","+calcObtMarks+","+nCalcObtMarks+");")){
                                     if(x2==nOfStudents && x==nOfQue){
                                         out.println("<script>$('.container').prepend('<div class=\"uk-alert-success\" uk-alert><a class=\"uk-alert-close\" uk-close></a>Marks Inserted Successfully.</div>')</script>");        
+                                        con.commitData();
                                     }
                                 }
                                 else{
-                                    out.println("<script>$('.container').prepend('<div class=\"uk-alert-danger\" uk-alert><a class=\"uk-alert-close\" uk-close></a>ERROR : @"+request.getParameter("enroll"+x2)+" FOR QUESTION "+x+"</div>')</script>");
+                                    out.println("<script>$('.container').prepend('<div class=\"uk-alert-danger\" uk-alert><a class=\"uk-alert-close\" uk-close></a>ERROR : @"+request.getParameter("enroll"+x2)+" FOR QUESTION "+x+": Please Insert All the Marks Again.</div>')</script>");
+                                    con.rollbackData();
                                 }
                                 x++;
                             }
@@ -262,29 +250,33 @@ table input {
                         x=1;
                         while(x<=nOfQue && rs2.next()){
                             //out.println("It reach inside Second loop");
-                            float nFact = rs2.getFloat("calcQuesMaxMarks")/rs2.getFloat("queMaxMarks");
-                            float wFact = rs2.getFloat("nCalcQuesMaxMarks")/rs2.getFloat("queMaxMarks");
-                            float calcObtMarks = Float.parseFloat(request.getParameter(x2+"que"+x))*nFact;
-                            float nCalcObtMarks = Float.parseFloat(request.getParameter(x2+"que"+x))*wFact;
-                            //float obtWeighMarks = Float.parseFloat(request.getParameter(x2+"que"+x))*wFact;
-                            //float obtNormMarks = Float.parseFloat(request.getParameter(x2+"que"+x))*nFact;
-                            //out.println("<br><br>n w oN oW"+"-"+nFact+"-"+wFact+"-"+obtNormMarks+"-"+obtWeighMarks+"<br><br>");
-                            if(con.Ins_Upd_Del("insert into marks_obtained_master(enrollmentno,questionID,obtainedMarks,calcObtainedMarks,nCalcObtainedMarks) values("+rs3.getString("enrollmentno")+","+rs2.getInt("questionID")+","+Float.parseFloat(request.getParameter(x2+"que"+x))+","+calcObtMarks+","+nCalcObtMarks+");")){
-                                if(x2==nOfStudents && x==nOfQue){
-                                    out.println("<script>$('.container').prepend('<div class=\"uk-alert-success uk-alert\" ><a class=\"uk-alert-close uk-close\" ></a>Marks Inserted Successfully.</div>')</script>");        
+                            if(request.getParameter(x2+"que"+x)==""){
+                                float nFact = rs2.getFloat("calcQuesMaxMarks")/rs2.getFloat("queMaxMarks");
+                                float wFact = rs2.getFloat("nCalcQuesMaxMarks")/rs2.getFloat("queMaxMarks");
+                                float calcObtMarks = Float.parseFloat(request.getParameter(x2+"que"+x))*nFact;
+                                float nCalcObtMarks = Float.parseFloat(request.getParameter(x2+"que"+x))*wFact;
+                                //float obtWeighMarks = Float.parseFloat(request.getParameter(x2+"que"+x))*wFact;
+                                //float obtNormMarks = Float.parseFloat(request.getParameter(x2+"que"+x))*nFact;
+                                //out.println("<br><br>n w oN oW"+"-"+nFact+"-"+wFact+"-"+obtNormMarks+"-"+obtWeighMarks+"<br><br>");
+                                if(con.Ins_Upd_Del("insert into marks_obtained_master(enrollmentno,questionID,obtainedMarks,calcObtainedMarks,nCalcObtainedMarks) values("+rs3.getString("enrollmentno")+","+rs2.getInt("questionID")+","+Float.parseFloat(request.getParameter(x2+"que"+x))+","+calcObtMarks+","+nCalcObtMarks+");")){
+                                    if(x2==nOfStudents && x==nOfQue){
+                                        out.println("<script>$('.container').prepend('<div class=\"uk-alert-success uk-alert\" ><a class=\"uk-alert-close uk-close\" ></a>Marks Inserted Successfully.</div>')</script>");       
+                                        con.commitData();
+                                    }
                                 }
                             }
                             else{
                                 out.println("<script>$('.container').prepend('<div class=\"uk-alert-danger uk-alert\" ><a class=\"uk-alert-close uk-close\" ></a>ERROR : @"+request.getParameter("enroll"+x2)+" FOR QUESTION "+x+"</div>')</script>");
+                                con.rollbackData();
+                                break;
                             }
                             x++;
+
                         }
                         x2++;
                     }
                     }
                 }
-              %>
-		<script type="text/javascript">
     }
             %>
 	<script type="text/javascript">
@@ -367,12 +359,20 @@ table input {
             alert("Please upload a valid CSV file.");
         }
     }
+    $(document).on("change","table > input", function(){
+        if($(this).value>=0){
+            $('#submit').removeAttr('disabled');
+        }
+        else{
+            $('#submit').attr('disabled','true');
+        }
+    });
     $(document).on("change","#exam_id",function(){
         var id = this.value;
-        if(id>0)
-            $("#addMarks").removeAttr("disabled");
-        else
-            $("#addMarks").attr("disabled","true");
+        if(id>0){
+            $("#addMarks").removeAttr("disabled");}
+        else{
+            $("#addMarks").attr("disabled","true");}
     });
     $(document).on("click","#import",function(){
         var state=this.value;
@@ -387,11 +387,11 @@ table input {
         }
     });
     </script>
-		<%@include file="/footer.jsp"%>
-  <%
+<%@include file="/footer.jsp"%>
+<%
   }
   else{
 		out.println("<script>alert('SESSION INVALID!!! PLEASE LOGIN AGAIN!!!!!');</script>");
 		response.sendRedirect("login.jsp");
 	}
-  %>
+%>

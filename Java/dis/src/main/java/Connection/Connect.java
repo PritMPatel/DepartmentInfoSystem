@@ -26,6 +26,7 @@ public class Connect {
 	public boolean Ins_Upd_Del(String str) {
 		try {
 			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/finalyearproject?user=root&password=root");
+			con.setAutoCommit(false);
 			Statement st = con.createStatement();
 			st.executeUpdate(str);
 			st.close();
@@ -55,7 +56,6 @@ public class Connect {
 		} catch (SQLException ex) {
 			Logger.getLogger(Connect.class.getName()).log(Level.SEVERE, null, ex);
 		}
-
 	}
 
 	public boolean CheckData(String str) {
@@ -69,5 +69,37 @@ public class Connect {
 			Logger.getLogger(Connect.class.getName()).log(Level.SEVERE, null, ex);
 		}
 		return b;
+	}
+
+	public void noAutoCommit(){
+		try {
+			con.setAutoCommit(false);
+		} catch (SQLException ex) {
+			Logger.getLogger(Connect.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+
+	public void autoCommit(){
+		try {
+			con.setAutoCommit(true);
+		} catch (SQLException ex) {
+			Logger.getLogger(Connect.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+
+	public void commitData(){
+		try {
+			con.commit();
+		} catch (SQLException ex) {
+			Logger.getLogger(Connect.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+
+	public void rollbackData(){
+		try {
+			con.rollback();
+		} catch (SQLException ex) {
+			Logger.getLogger(Connect.class.getName()).log(Level.SEVERE, null, ex);
+		}
 	}
 }

@@ -12,9 +12,8 @@
 	<div class="form-row">
 		<div class="col-sm"></div>
 		<div class="col-sm">
-			<label for="subjectID">Subject:</label> <select class="uk-select"
-				name="subjectid" id="subjectid">
-				<option value=0 disabled selected>SELECT SUBJECT</option>
+			<label for="subjectID">Subject:</label> <select class="uk-select" name="subjectid" id="subjectid" required>
+				<option value=0 disabled selected>Select Subject</option>
 				<%
 							if (session.getAttribute("facultyDepartment") != null) {
 								userDept = (String) session.getAttribute("facultyDepartment");
@@ -31,9 +30,8 @@
 	<div class="form-row">
 		<div class="col-sm"></div>
 		<div class="col-sm">
-			<label for="batch">Batch:</label> <select class="uk-select"
-				name="batch1" id="batch1">
-				<option value=0 disabled selected>SELECT BATCH</option>
+			<label for="batch">Batch:</label> <select class="uk-select" name="batch1" id="batch1" required>
+				<option value=0 disabled selected>Select Batch</option>
 				<%
 							rsBatch=con.SelectData("select distinct batch from student_master");
 							while(rsBatch.next()){

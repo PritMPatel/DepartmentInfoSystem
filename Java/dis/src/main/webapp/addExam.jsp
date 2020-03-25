@@ -64,13 +64,13 @@
 			<div class="col-sm">
 				<label for="examName">Exam Name:</label> <input type="text"
 					class="uk-input" id="exam_name" name="exam_name"
-					placeholder="EXAM NAME" />
+					placeholder="Exam Name" required/>
 			</div>
 			
 			<div class="col-sm">
 					<label for="examTypeID">Category of Exam:</label>
-					<select class="uk-select" name="exam_type" id="exam_type">
-						<option value=0 disabled selected>SELECT CATEGORY OF EXAM</option>
+					<select class="uk-select" name="exam_type" id="exam_type" required>
+						<option value=0 disabled selected>Select Category of Exam</option>
 						<%
 							rsExamType=con.SelectData("select * from examtype_master;");
 							while(rsExamType.next()){
@@ -84,8 +84,8 @@
 		<div class="form-row">
 			<div class="col-sm">
 					<label for="subjectID">Subject:</label>
-					<select class="uk-select" name="subject_id" id="subject_id">
-						<option value=0 disabled selected>SELECT SUBJECT</option>
+					<select class="uk-select" name="subject_id" id="subject_id" required>
+						<option value=0 disabled selected>Select Subject</option>
 						<%
 							rsAllSubject=con.SelectData("select * from subject_master where subjectID in(select distinct subjectID from co_master where facultyID="+session.getAttribute("facultyID")+");");
 							while(rsAllSubject.next()){
@@ -98,21 +98,21 @@
 			<div class="col-sm">
 				<label for="totalMarks">Total Marks:</label> <input type="number"
 					class="uk-input" id="total_max_marks" name="total_max_marks"
-					placeholder="Total Marks" />
+					placeholder="Total Marks" required/>
 			</div>
 		</div>
 		<div class="form-row">
 			<div class="col-sm">
 				<label for="weightage">Weightage:</label> <input type="number"
 					class="uk-input" id="weightage" name="weightage"
-					placeholder="Weightage" />
+					placeholder="Weightage" required/>
 			</div>
 			<!-- MaxWeightMarks:<input type="text" name="max_weighted_marks"/><br/>:::Calculated Based on Type Of Exam::: -->
 
 			
 			<div class="col-sm">
 				<label for="batch">Batch: </label> <input type="number"
-					class="uk-input" id="batch" name="batch" placeholder="Batch" />
+					class="uk-input" id="batch" name="batch" placeholder="Batch" required/>
 			</div>
 
 		</div>
@@ -132,10 +132,14 @@
 										+ request.getParameter("exam_name") + "'," + request.getParameter("batch") + ","
 										+ request.getParameter("total_max_marks") + "," + request.getParameter("weightage")
 										+ "," + request.getParameter("subject_id") + "," + i + ","
-										+ session.getAttribute("facultyID") + ");"))
-							out.println("<script>alert('Record inserted......');</script>");
-						else
-							out.println("<script>alert('Record was not inserted......');</script>");
+										+ session.getAttribute("facultyID") + ");")){
+											out.println("<script>$('.container').prepend('<div class=\"uk-alert-success\" uk-alert><a class=\"uk-alert-close\" uk-close></a>Exam Inserted Successfully.</div>')</script>");        
+											con.commitData();
+										}
+						else{
+								out.println("<script>$('.container').prepend('<div class=\"uk-alert-danger\" uk-alert><a cl-ass=\"uk-alert-close\" uk-close></a>ERROR: Please Insert Exam Again.</div>')</script>");
+								con.rollbackData();
+							}
 					}
 				
 			%>

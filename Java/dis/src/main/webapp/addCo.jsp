@@ -67,7 +67,7 @@
 			<div class="col-sm">
 					<label for="subjectID">Subject:</label>
 					<select class="uk-select" name="subject_id" id="subject_id">
-						<option value=0 disabled selected>SELECT SUBJECT</option>
+						<option value=0 disabled selected>Select Subject</option>
 						<%
 							if (session.getAttribute("facultyDepartment") != null) {
 								userDept = (String) session.getAttribute("facultyDepartment");
@@ -86,10 +86,10 @@
 			<div class="col-sm"></div>
 			<div class="col-sm">
 
-				<label for="facultyID">Faculty Name: </label><input type="number" value='<%=session.getAttribute("fscultyID")%>' name="faculty_id" id="faculty_id" hidden> <input type="text"
+				<label for="facultyID">Faculty Name: </label><input type="number" value='<%=session.getAttribute("facultyID")%>' name="faculty_id" id="faculty_id" hidden> <input type="text"
 					value='<%=session.getAttribute("getfacultyName")%>'
 					class="uk-input" id="facultyName" name="facultyName"
-					placeholder="FACULTY NAME" readonly />
+					placeholder="Faculty Name" readonly />
 			</div>
 			<div class="col-sm"></div>
 		</div>
@@ -100,7 +100,7 @@
 
 				<label for="noCO">No of CO:</label> <input type="number"
 					class="uk-input" name="cono" id="cono"
-					placeholder="ADD THE NUMBER OF COs" />
+					placeholder="Add No of COs" />
 			</div>
 			<div class="col-sm"></div>
 		</div>
@@ -114,7 +114,7 @@
 				var n = 1;
 				$("#cos").text('');
                 while(n<=cono){
-                    $('#cos').append('<div class="form-row"><label for="coStmt">CO Statement '+n+' :</label><input type="text" class="uk-input" name="co'+(n)+'" placeholder="COURSE OUTCOME STATEMENT"></div>');
+                    $('#cos').append('<div class="form-row"><label for="coStmt">CO Statement '+n+' :</label><input type="text" class="uk-input" name="co'+(n)+'" placeholder="Course Outcome Statement" required></div>');
                     n++;
 				}
 				if(cono>0)
@@ -130,13 +130,17 @@
 						int conos = Integer.parseInt(request.getParameter("cono"));
 						int x = 1;
 						while (x <= conos) {
-							if (con.Ins_Upd_Del("insert into co_master(coID,coStatement,subjectID,facultyID) VALUES(" + x
+							if (con.Ins_Upd_Del("insert into co_master(coSrNo,coStatement,subjectID,facultyID) VALUES(" + x
 									+ ",'" + request.getParameter("co" + x) + "'," + request.getParameter("subject_id")
 									+ "," + request.getParameter("faculty_id") + ");")){
-								out.println("<script>alert('CO " + x + " inserted......');</script>");
+								if(x==conos){
+									out.println("<script>$('.container').prepend('<div class=\"uk-alert-success\" uk-alert><a class=\"uk-alert-close\" uk-close></a>CO Inserted Successfully.</div>')</script>");        
+									con.commitData();
+								}	
 							}
 							else{
-								out.println("<script>alert('CO was not inserted......');</script>");
+								out.println("<script>$('.container').prepend('<div class=\"uk-alert-danger\" uk-alert><a cl-ass=\"uk-alert-close\" uk-close></a>ERROR: @CO "+x+": Please Insert All CO Again.</div>')</script>");
+								con.rollbackData();
 							}
 							x++;
 						}
