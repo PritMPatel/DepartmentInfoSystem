@@ -147,8 +147,8 @@ input[type=checkbox]:checked~#menu {
 .show-menu {
     font: "Lato", sans-serif;
     text-decoration: none;
-    color: black;
-    background-color: darkgray;
+    color: #031424;
+    background-color: #cf6766;
     text-align: center;
     padding: 10px 0;
     display: none;
