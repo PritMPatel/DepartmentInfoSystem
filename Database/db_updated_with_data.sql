@@ -1,10 +1,10 @@
-CREATE DATABASE  IF NOT EXISTS `finalyearproject` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+CREATE DATABASE  IF NOT EXISTS `finalyearproject` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */;
 USE `finalyearproject`;
--- MySQL dump 10.13  Distrib 8.0.16, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.15, for Win64 (x86_64)
 --
--- Host: localhost    Database: finalyearproject
+-- Host: 127.0.0.1    Database: finalyearproject
 -- ------------------------------------------------------
--- Server version	8.0.16
+-- Server version	8.0.15
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -16,6 +16,34 @@ USE `finalyearproject`;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `admin_master`
+--
+
+DROP TABLE IF EXISTS `admin_master`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `admin_master` (
+  `adminID` int(11) NOT NULL AUTO_INCREMENT,
+  `adminName` varchar(50) NOT NULL,
+  `adminEmail` varchar(100) NOT NULL,
+  `adminPassword` varchar(256) NOT NULL,
+  `adminDepartment` varchar(45) NOT NULL,
+  PRIMARY KEY (`adminID`),
+  UNIQUE KEY `adminUsername_UNIQUE` (`adminEmail`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `admin_master`
+--
+
+LOCK TABLES `admin_master` WRITE;
+/*!40000 ALTER TABLE `admin_master` DISABLE KEYS */;
+INSERT INTO `admin_master` VALUES (1,'Prof. V. D. Patel','adminit@gmail.com','f3e79bfac8805b8c637d0f66b39b186e','Information Technology');
+/*!40000 ALTER TABLE `admin_master` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `attainment_co`
@@ -199,7 +227,7 @@ CREATE TABLE `faculty_master` (
 
 LOCK TABLES `faculty_master` WRITE;
 /*!40000 ALTER TABLE `faculty_master` DISABLE KEYS */;
-INSERT INTO `faculty_master` VALUES (1,'SJM','sjm@gmail.com','SJM','Information Technology');
+INSERT INTO `faculty_master` VALUES (1,'Prof. S. J. Molia','sjm@gmail.com','2431dd378df9c754e0245efd8fbf2aab','Information Technology');
 /*!40000 ALTER TABLE `faculty_master` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -348,4 +376,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-03-23 11:40:10
+-- Dump completed on 2020-03-26 16:33:53
