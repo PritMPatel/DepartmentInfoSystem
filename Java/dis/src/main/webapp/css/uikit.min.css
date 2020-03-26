@@ -322,7 +322,7 @@ pre code {
 }
 
 ::selection {
-    background: #b9a079;
+    background: #031424;
     color: #fff;
     text-shadow: none
 }
@@ -715,12 +715,12 @@ a.uk-link-reset:hover {
 
 .uk-table-hover tbody tr:hover,
 .uk-table-hover>tr:hover {
-    background: #e5dccd
+    background: #edc6c5
 }
 
 .uk-table tbody tr.uk-active,
 .uk-table>tr.uk-active {
-    background: #e5dccd
+    background: #edc6c5
 }
 
 .uk-table-small td,
@@ -1098,7 +1098,7 @@ button.uk-icon:not(:disabled) {
     outline: 0;
     background-color: #fff;
     color: #666;
-    border-color: #b9a079;
+    border-color: #cf6766;
 }
 
 .uk-input:disabled,
@@ -1247,14 +1247,14 @@ select.uk-form-width-xsmall {
 .uk-checkbox:checked,
 .uk-checkbox:indeterminate,
 .uk-radio:checked {
-    background-color: #cab89b;
+    background-color: #cf6766;
     border-color: transparent
 }
 
 .uk-checkbox:checked:focus,
 .uk-checkbox:indeterminate:focus,
 .uk-radio:checked:focus {
-    background-color: #b9a079
+    background-color: #cf6766
 }
 
 .uk-radio:checked {

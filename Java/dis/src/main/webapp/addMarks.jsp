@@ -22,7 +22,7 @@ td{
     padding: 0px !important;
 }
 th{
-    background-color: #cab89b !important;
+    background-color: #cf6766 !important;
     color: black !important;
 }
 table input{

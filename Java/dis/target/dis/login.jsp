@@ -15,6 +15,7 @@
 <%@page import="java.sql.ResultSet"%>
 <%@page import="java.io.*"%>
 <%@page import="Connection.Connect"%>
+<%@page import="Connection.Md5"%>
 <title>Login</title>
 <jsp:include page="header.jsp" />
 
@@ -79,12 +80,27 @@
 							</div>
 							<%
 								Connect con = new Connect();
+								Md5 md = new Md5();
 									String role = request.getParameter("roleSelect");
 									if (request.getParameter("btnLogin") != null && role.equals("Admin")) {
 										if (con.CheckData("select * from admin_master where adminEmail='" + request.getParameter("email")
-												+ "' and adminPassword='" + request.getParameter("password") + "'")) {
+												+ "' and adminPassword='" + md.getMd5(request.getParameter("password")) + "'")) {
+											ResultSet rs = con.SelectData("select adminID,adminName,adminDepartment from admin_master where adminEmail='"
+													+ request.getParameter("email") + "';");
 											String Uname = request.getParameter("email");
+											String Name = null;
+											String dept = null;
+											int id=0;
+											if (rs.next()) {
+												Name = rs.getString("adminName");
+												dept = rs.getString("adminDepartment");
+												id = rs.getInt("adminID");
+
+											}
+											session.setAttribute("getadminName", Name);
+											session.setAttribute("adminID",id);
 											session.setAttribute("adminUsername", Uname);
+											session.setAttribute("adminDepartment", dept);
 											session.setAttribute("role", "admin");
 											response.sendRedirect("adminHome.jsp");
 										} else {
@@ -93,10 +109,9 @@
 									} else if (request.getParameter("btnLogin") != null && role.equals("Faculty")) {
 										if (con.CheckData(
 												"select * from faculty_master where facultyEmail='" + request.getParameter("email")
-														+ "' and facultyPassword='" + request.getParameter("password") + "'")) {
+														+ "' and facultyPassword='" + md.getMd5(request.getParameter("password")) + "'")) {
 											ResultSet rs = con.SelectData("select facultyID,facultyName,facultyDepartment from faculty_master where facultyEmail='"
-													+ request.getParameter("email") + "' and facultyPassword='"
-													+ request.getParameter("password") + "'");
+													+ request.getParameter("email") + "';");
 											String Uname = request.getParameter("email");
 											String Name = null;
 											String dept = null;

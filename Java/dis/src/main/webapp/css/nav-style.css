@@ -3,7 +3,7 @@
 .navigation {
     width: 100%;
     min-height: 50px;
-    background: black;
+    background: #031424;
     padding-left: 0px;
     padding-right: 0px;
     /*margin-top: 15px;*/
@@ -12,8 +12,8 @@
 }
 
 #navbar a.active {
-    background-color: darkgrey;
-    color: black;
+    background-color: #cf6766;
+    color: #031424;
 }
 
 .sticky {
@@ -51,16 +51,25 @@
     line-height: 50px;
     font: "Lato", sans-serif;
     color: #fff;
-    background: black;
+    background: #031424;
     text-decoration: none;
+    /* display: block;
+    min-width: 180px;
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+    font: "Lato", sans-serif;
+    color: #fff;
+    background: black;
+    text-decoration: none; */
 }
 
 
 /* Hover state for top level links */
 
 .navigation li:hover a {
-    background: darkgrey;
-    color: black;
+    background: #cf6766;
+    color: #031424;
     transition: 0.5s background;
     transition-delay: 0.5s color;
 }

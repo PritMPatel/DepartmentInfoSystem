@@ -46,7 +46,7 @@
 				class="img-responsive my-img mt-3 mr-3 ml-3 mb-3"
 				style="height: 60px; width: 60px; margin-left: 15px;">
 			<!-- <div class="col-sm"> -->
-			<p class="h4" style="margin-top: 20px; padding-top: 10px;">DEPARTMENT
+			<p class="h4" style="margin-top: 20px; padding-top: 10px; color: #031424;">DEPARTMENT
 				INFORMATION SYSTEM</p>
 			<!-- div>
 </div>-->
