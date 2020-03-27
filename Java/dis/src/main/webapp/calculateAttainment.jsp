@@ -1,4 +1,3 @@
-
 <%
 	String userRole = new String("SUPERSTAR");
 
@@ -39,12 +38,17 @@
 	padding-left: 30px !important;
 	padding-right: 30px !important;
 }
-td{
-    padding: 0px !important;
+.uk-table th{
+    padding: 5px !important;
+	border: 1px solid black;
+	color: black;
+	vertical-align: middle;
 }
-th{
-    background-color: #cf6766 !important;
-    color: black !important;
+.uk-table td{
+	padding: 5px !important;
+	font-size: .875rem !important;
+	border: 1px solid black;
+	vertical-align: middle;
 }
 table input{
     border: 0px !important;
@@ -156,10 +160,11 @@ table input{
 								"<button class='btn' type='button' onclick='printDiv();' style='margin:30px;'>Print</button>"+
 							"</center>");
 
-				out.println("<div id='attainment'><table id='attainCalculation'>");
-				out.println("<tr><th bgcolor='#e1e19b'><center><b>Subject</b></center></th><th colspan='4'><center><b>"+rsSubject.getString("subjectName")+"</b></center></th></tr>");
-            	out.println("<tr><th bgcolor='#e1e19b'><center><b>Batch</b></center></th><th colspan='4'><center><b>"+request.getParameter("batch")+"</b></center></th></tr>");
-				out.println("<tr><th bgcolor='#e1e19b'><center><b>CO</b></center></th><th colspan='4'><center><b>"+request.getParameter("co_id")+"</b></center></th></tr>");
+				out.println("<div id='attainment' class='uk-overflow-auto'><table id='attainCalculation' class='uk-table'>");
+				out.println("<tr><th bgcolor='#e1e19b'><center><b>Subject</b></center></th><th colspan='8'><center><b>"+rsSubject.getString("subjectName")+"</b></center></th></tr>");
+            	out.println("<tr><th bgcolor='#e1e19b'><center><b>Batch</b></center></th><th colspan='8'><center><b>"+request.getParameter("batch")+"</b></center></th></tr>");
+				out.println("<tr><th bgcolor='#e1e19b'><center><b>CO</b></center></th><th colspan='8'><center><b>"+rsCo.getInt("coSrNo")+"</b></center></th></tr>");
+				out.println("<tr><th bgcolor='#e1e19b'><center><b>Statement</b></center></th><th colspan='8'><center><b>"+rsCo.getString("coStatement")+"</b></center></th></tr>");
 				out.println("<tr><td></td></tr>");
 				out.println("<tr><th rowspan='5' bgcolor='#e1e19b'><center><b>Enrollment</b></center></th>");
 				rs0=con.SelectData("select count(typeDescription)*2 as colspan from (select distinctrow typeDescription,examName,queDesc from marks_obtained_master,question_master,exam_master,examtype_master where question_master.examID=exam_master.examID and exam_master.examtypeID=examtype_master.examtypeID and question_master.questionID=marks_obtained_master.questionID and marks_obtained_master.questionID in (select question_master.questionID from question_master,exam_master,examtype_master where (select coID from co_master where coID="+request.getParameter("co_id")+") IN (coID1,coID2,coID3,coID4,coID5,coID6,coID7) and question_master.examID=exam_master.examID and exam_master.examTypeID=examtype_master.examTypeID and exam_master.batch="+request.getParameter("batch")+" and exam_master.subjectID="+request.getParameter("subject_id")+") order by enrollmentno,typeDescription,examName,QueDesc) as t;");
