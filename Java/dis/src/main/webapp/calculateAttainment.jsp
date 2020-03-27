@@ -1,13 +1,21 @@
+
+<%
+	String userRole = new String("SUPERSTAR");
+
+	if (session.getAttribute("role") != null) {
+		userRole = (String) session.getAttribute("role");
+	}
+	//if (!userRole.equals("faculty")){
+	//	response.sendRedirect("/dis/login.jsp");
+	//}
+	if (userRole.equals("faculty")) {
+%>
 <%@page import="java.sql.ResultSet"%>
 <%@page import="java.io.*"%>
 <%@page import="Connection.Connect"%>
 <%@page import="java.sql.ResultSetMetaData"%>
-<html>
-	<head>
-		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-		<title>ATTAINMENT</title>
-		<script src="js/jquery-3.2.1.min.js"></script>
-		<script src="js/jquery.table2excel.js"></script>
+<%@include file="/headerFaculty.jsp"%>
+	<title>CALCULATE ATTAINMENT</title>
 		<style type="text/css" media="print">
 			.page
 			{
@@ -15,9 +23,7 @@
 			-moz-transform:rotate(-90deg);
 			filter:progid:DXImageTransform.Microsoft.BasicImage(rotation=2);
 			}
-		</style>
-		<style>
-		table{
+			table{
 			border-collapse: collapse;
 		}
 		th,td{
@@ -27,15 +33,65 @@
 			vertical-align: center;
 			padding: 2px 5px;
 		}
-		</style>
-	</head>
-	<body>
-		<a href="addCo.jsp">Add CO</a><br/>
+.col-sm{
+	padding-left: 30px !important;
+	padding-right: 30px !important;
+}
+td{
+    padding: 0px !important;
+}
+th{
+    background-color: #cf6766 !important;
+    color: black !important;
+}
+table input{
+    border: 0px !important;
+}
+.form-row .col-sm .form-row{
+    padding:0px !important;
+    display: inline !important;
+    margin: 0px !important;
+}
+.uk-table{
+    width: auto !important;
+}
+/* Chrome, Safari, Edge, Opera */
+		input::-webkit-outer-spin-button,
+		input::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+		}
+/* Firefox */
+		input[type=number] {
+		-moz-appearance: textfield;
+		}
+</style>
+<div class="navigation" id="navbar">
+	<div class="dropdown">
+		<!-- navigation STARTS here -->
+		<label for="show-menu" class="show-menu" style="margin-bottom: 0px"><i
+			class="fa fa-bars mr-3"></i>Show Menu</label> <input type="checkbox" id="show-menu" role="button">
+		<ul id="menu">
+			<li><a href="facultyHome.jsp" class="main-link">HOME</a></li>
+			<li><a href="addCo.jsp" class="main-link">ADD CO</a></li>
+			<li><a href="addExam.jsp" class="main-link">ADD EXAM</a></li>
+			<li><a href="addQue.jsp" class="main-link">ADD QUESTION</a></li>
+			<li><a href="addMarks.jsp" class="main-link">ADD
+					MARKS</a></li>
+			<li><a href="calculateAttainment.jsp" class="active main-link">VIEW
+					ATTAINMENT</a></li>
+			<li><a href="logout.jsp" class="main-link">LOGOUT</a></li>
+		</ul>
+	</div>
+</div>
+<!-- navigation ENDS here -->
+</div>
+		<%-- <a href="addCo.jsp">Add CO</a><br/>
 		<a href="addExam.jsp">Add Exam</a><br/>
 		<a href="addQue.jsp">Add Question</a><br/>
 		<a href="addMarks.jsp">Add Marks</a><br/>
 		<a href="calculateAttainment.jsp">Calculate Attainment</a><br/>
-		<br/><br/>
+		<br/><br/> --%>
 		<%
 			Connect con=null;
 			ResultSet rs0=null;
@@ -198,4 +254,12 @@
 		});
 	});
 	</script>
+	<%@include file="/footer.jsp"%>
+<%
+  }
+  else{
+		out.println("<script>alert('SESSION INVALID!!! PLEASE LOGIN AGAIN!!!!!');</script>");
+		response.sendRedirect("login.jsp");
+	}
+%>
 </html>
