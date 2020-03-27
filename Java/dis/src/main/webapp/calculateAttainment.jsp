@@ -268,4 +268,3 @@ table input{
 		response.sendRedirect("login.jsp");
 	}
 %>
-</html>
