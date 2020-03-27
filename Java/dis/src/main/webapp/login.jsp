@@ -17,6 +17,15 @@
 <%@page import="Connection.Connect"%>
 <%@page import="Connection.Md5"%>
 <title>LOGIN</title>
+<style type="text/css">
+a{
+	color: inherit !important;
+}
+a:hover{
+	color: #cf6766 !important;
+	text-decoration: none !important;
+}
+</style>
 <jsp:include page="headerFaculty.jsp" />
 <div class="navigation">
 </div>
@@ -56,13 +65,13 @@
 			<div class="col-sm"></div>
 			<div class="col-sm">
 				<center class="mt-3">
-					<button type="submit" class="btn" id="submitLink" value="submit" name="btnLogin" style="background-color: #cf6766; color: white;">Sign in</button>
+					<button type="submit" class="btn" id="submitLink" value="submit" name="btnLogin" style="background-color: #cf6766; color: white;">SIGN IN</button>
 				</center>
 			</div>
 			<div class="col-sm"></div>
 		</div>
 		<div class="text-center text-muted">
-							Don't have account yet? <a href="./registerUser.jsp">Sign up</a>
+							Don't have account yet? <a href="./registerUser.jsp">SIGN UP</a>
 						</div>
 	</form>
 	<%-- <div class="page">

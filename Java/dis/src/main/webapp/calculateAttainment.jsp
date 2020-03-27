@@ -33,6 +33,8 @@
 			vertical-align: center;
 			padding: 2px 5px;
 		}
+		</style>
+<style type="text/css">
 .col-sm{
 	padding-left: 30px !important;
 	padding-right: 30px !important;
@@ -86,6 +88,11 @@ table input{
 </div>
 <!-- navigation ENDS here -->
 </div>
+<div class="container" style="width: 80%; margin-bottom: 100px">
+	<div id="head"></div>
+	<h3 style="text-align: center; padding-bottom: 10px;">VIEW ATTAINMENT</h3>
+	<form method="POST">
+
 		<%-- <a href="addCo.jsp">Add CO</a><br/>
 		<a href="addExam.jsp">Add Exam</a><br/>
 		<a href="addQue.jsp">Add Question</a><br/>
@@ -103,7 +110,7 @@ table input{
 			ResultSet rs6=null;
 			ResultSet rs7=null;
 			ResultSetMetaData mtdt=null;
-			ResultSet rsBatch=null;
+			
 			ResultSet rsTotalCalcMax=null;
 			ResultSet rsTotalNCalcMax=null;
 			ResultSet rsCo=null;
@@ -112,48 +119,42 @@ table input{
 			int coCounter=0;
 			int i=1;
 			con=new Connect();
-		%>
-		<form method="POST">
-		<div id="selectco">
-            SubjectID:<input type="number" name="subjectid"/><br/> 
-            Batch:<select name="batch1" id="batch1"><option value=0 disabled selected>Select Batch</option>
-			<%
-				rsBatch=con.SelectData("select distinct batch from student_master");
-				while(rsBatch.next()){
-					out.println("<option value="+rsBatch.getInt("batch")+">"+rsBatch.getInt("batch")+"</option>");
-				}
-			%>
-			</select><br/>
-            <button id="coselect" name="coselect" value="coselect">Select CO</button><br/>
-    	</div>
-
-		<%
-		if(request.getParameter("coselect")!=null){
+		
+		if(request.getParameter("next")==null && request.getParameter("viewattain")==null){%>
+			<%@include file="subjectBatchForm.jsp"%>
+		<%}
+		if(request.getParameter("next")!=null){
                         rsCo=con.SelectData("select * from co_master where coID not in(SELECT coID FROM attainment_co,student_master where attainment_co.enrollmentno=student_master.enrollmentno and subjectID="+request.getParameter("subject1")+" and batch="+request.getParameter("batch1")+");");
-                        out.println("SubjectID:<input type='number' name='subject_id' value='"+request.getParameter("subjectid")+"'/><br/> ");
-                        out.println("Batch:<input type='number' name='batch' value='"+request.getParameter("batch1")+"'/><br/> ");
-                        out.println("CO:<select name='co_id'><option disabled selected>Select CO</option>");
-						out.println("<script type='text/javascript'>$(document).change(function(){$('#subjectid #batch1').attr('disabled','true');}); </script>");
+                        rsSubject=con.SelectData("select subjectName from subject_master where subjectID="+request.getParameter("subjectid")+";");
+						rsSubject.next();
+						out.println("<div class='form-row'><div class='col-sm'><label for='subjectID'>Subject:</label><input type='number' class='uk-input' id='subject_id' name='subject_id' value='"+request.getParameter("subjectid")+"' hidden/><input type='text' class='uk-input' id='subjectName' name='subjectName' value='"+ rsSubject.getString("subjectName")+"' readonly/></div>");
+						out.println("<div class='col-sm'><label for='batch'>Batch:</label><input type='number' name='batch' class='uk-input' id='batch1' value='"
+										+ request.getParameter("batch1") + "' readonly/></div></div> ");
+						out.println("<div class='form-row'><div class='col-sm'><label for='examID'>Exam:</label><select class='uk-select' id='co_id' name='co_id' required><option value='' selected disabled>Select CO</option>");
                         while(rsCo.next()){
                             out.println("<option value='"+rsCo.getInt("coID")+"'>"+rsCo.getInt("coSrNo")+" - "+rsCo.getString("coStatement")+"</option>");
                         }
                         out.println("</select></br>");
-						out.println("<button name='viewattain' value='viewattain'>View Attainment</button><br/>");
-						out.println("<a href='calculateAttainment.jsp'><button type='button'>Reset</button></a><br/>");
+						out.println("<center class=\"mt-3\">"+
+								"<button type=\"submit\" class=\"btn\" name=\"viewattain\" value=\"viewattain\" style='margin:30px;'>Submit</button>"+
+								"<a href='calculateAttainment.jsp'><button class='btn' type='button' style='margin:30px;'>Reset</button></a>"+
+							"</center>");
                     }
 		if(request.getParameter("viewattain")!=null){
-				out.println("SubjectID:<input type='number' name='subject_id' value='"+request.getParameter("subject_id")+"' disabled/><br/> ");
-            	out.println("Batch:<input type='number' name='batch' value='"+request.getParameter("batch")+"' disabled/><br/> ");
-				out.println("CO:<input type='number' name='coid' value='"+request.getParameter("co_id")+"' disabled/><br/>");
+				out.println("<input type='number' name='subject_id' value='"+request.getParameter("subject_id")+"' readonly hidden/>");
+            	out.println("<input type='number' name='batch' value='"+request.getParameter("batch")+"' readonly hidden/>");
+				out.println("<input type='number' name='coid' value='"+request.getParameter("co_id")+"' readonly hidden/>");
 		%>
-		<a href='calculateAttainment.jsp'><button type='button'>Reset</button></a><br/>
 		<%
-				rsCo=con.SelectData("select * from co_master where coID not in(SELECT coID FROM attainment_co,student_master where attainment_co.enrollmentno=student_master.enrollmentno and subjectID="+request.getParameter("subject_id")+" and batch="+request.getParameter("batch")+") and coID="+request.getParameter("co_id")+";");
+		rsCo=con.SelectData("select * from co_master where coID not in(SELECT coID FROM attainment_co,student_master where attainment_co.enrollmentno=student_master.enrollmentno and subjectID="+request.getParameter("subject_id")+" and batch="+request.getParameter("batch")+") and coID="+request.getParameter("co_id")+";");
 				rsCo.next();
 				rsSubject=con.SelectData("select subjectName from subject_master where subjectID="+request.getParameter("subject_id")+";");
 				rsSubject.next();
-				out.println("<button type='button' id='exportExcel' value='"+rsSubject.getString("subjectName")+"-CO"+rsCo.getInt("coSrNo")+"-B"+request.getParameter("batch")+"'>Export to Excel</button><br/><br/>");
-				out.println("<button type='button' onclick='printDiv();'>Print</button>");
+		out.println("<center class=\"mt-3\">"+
+								"<a href='calculateAttainment.jsp'><button class='btn' type='button' style='margin:30px;'>Reset</button></a>"+
+								"<button type='button' class='btn' id='exportExcel' value='"+rsSubject.getString("subjectName")+"-CO"+rsCo.getInt("coSrNo")+"-B"+request.getParameter("batch")+"' style='margin:30px;'>Export to Excel</button>"+
+								"<button class='btn' type='button' onclick='printDiv();' style='margin:30px;'>Print</button>"+
+							"</center>");
 
 				out.println("<div id='attainment'><table id='attainCalculation'>");
 				out.println("<tr><th bgcolor='#e1e19b'><center><b>Subject</b></center></th><th colspan='4'><center><b>"+rsSubject.getString("subjectName")+"</b></center></th></tr>");
