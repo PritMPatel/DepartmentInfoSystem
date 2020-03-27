@@ -79,6 +79,10 @@ html {
     min-height: 100%;
 }
 
+a:hover{
+    color: #cf6766;
+}
+
 .footer {
     position: fixed;
     bottom: 0;
