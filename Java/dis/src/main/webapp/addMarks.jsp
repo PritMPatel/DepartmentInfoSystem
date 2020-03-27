@@ -73,7 +73,8 @@ table input{
         <a href="addMarks.jsp">Add Marks</a><br/>
         <a href="calculateAttainment.jsp">Calculate Attainment</a><br/> --%>
 <div class="container" style="width: 80%; margin-bottom: 100px">
-	<h3 id="head" style="text-align: center; padding-bottom: 10px;">ADD
+    <div id="head"></div>
+	<h3 style="text-align: center; padding-bottom: 10px;">ADD
 		MARKS</h3>
 	<form method="POST">
 		<%-- <div class="form-row">
@@ -101,6 +102,7 @@ table input{
                 ResultSet rs4=null;
                 ResultSet rs5=null;
                 ResultSet rsSubject=null;
+                ResultSet rsnull=null;
                 ResultSetMetaData mtdt=null;
                 String s = "ESE";
                 int nOfQue=0;
@@ -181,7 +183,7 @@ table input{
                 out.println("</tr>");
                 rs2.beforeFirst();
                 x=1;
-                rs3=con.SelectData("select enrollmentno from student_master where batch in (select batch from exam_master where examID="+request.getParameter("exam_id")+");");
+                rs3=con.SelectData("select enrollmentno from student_master where batch in (select batch from exam_master where examID="+request.getParameter("exam_id")+") and studentDepartment="+(int)session.getAttribute("facultyDepartment")+" order by enrollmentno;");
                 rs3.last();
                 nOfStudents=rs3.getRow();
                 rs3.beforeFirst();
@@ -206,18 +208,13 @@ table input{
                     rs2=con.SelectData("SELECT questionID,queDesc,queMaxMarks,calcQuesMaxMarks,nCalcQuesMaxMarks FROM question_master qm where examID="+request.getParameter("examid2")+" order by questionID;");
                     rs2.last();
                     nOfQue = rs2.getRow();
-                    //out.println(nOfQue);
-                    rs3=con.SelectData("select enrollmentno from student_master where batch in (select batch from exam_master where examID="+request.getParameter("examid2")+") order by enrollmentno;");
+                    rs3=con.SelectData("select enrollmentno from student_master where batch in (select batch from exam_master where examID="+request.getParameter("examid2")+") and studentDepartment="+(int)session.getAttribute("facultyDepartment")+" order by enrollmentno;");
                     rs3.last();
                     nOfStudents = rs3.getRow();
                     //out.println(nOfStudents);
+                    String value="";
                     if(s.equals(rs4.getString("typeDescription"))){
-                        rs2=con.SelectData("SELECT questionID,queDesc,queMaxMarks,calcQuesMaxMarks,nCalcQuesMaxMarks FROM question_master qm where examID="+request.getParameter("examid2")+" order by questionID;");
-                        rs2.last();
-                        nOfQue = rs2.getRow();
-                        rs3=con.SelectData("select enrollmentno from student_master where batch in (select batch from exam_master where examID="+request.getParameter("examid2")+") order by enrollmentno;");
-                        rs3.last();
-                        nOfStudents = rs3.getRow();
+                        
                         x=1;
                         x2=1;
                         rs3.beforeFirst();
@@ -234,20 +231,36 @@ table input{
                                 float obtMarks = marks*rs2.getFloat("queMaxMarks")/examMaxMarks;
                                 float calcObtMarks = obtMarks*nFact;
                                 float nCalcObtMarks = obtMarks*wFact;
-                                if(con.Ins_Upd_Del("insert into marks_obtained_master(enrollmentno,questionID,obtainedMarks,calcObtainedMarks,nCalcObtainedMarks) values("+rs3.getString("enrollmentno")+","+rs2.getInt("questionID")+","+obtMarks+","+calcObtMarks+","+nCalcObtMarks+");")){
-                                    if(x2==nOfStudents && x==nOfQue){
-                                        out.println("<script>$('.container').prepend('<div class=\"uk-alert-success\" uk-alert><a class=\"uk-alert-close\" uk-close></a>Marks Inserted Successfully.</div>')</script>");        
-                                        con.commitData();
-                                    }
+                                value += "("+rs3.getString("enrollmentno")+","+rs2.getInt("questionID")+","+obtMarks+","+calcObtMarks+","+nCalcObtMarks+")";
+                                if(x2!=nOfStudents || x!=nOfQue){
+                                    value += ",";
                                 }
                                 else{
-                                    out.println("<script>$('.container').prepend('<div class=\"uk-alert-danger\" uk-alert><a class=\"uk-alert-close\" uk-close></a>ERROR : @"+request.getParameter("enroll"+x2)+" FOR QUESTION "+x+": Please Insert All the Marks Again.</div>')</script>");
-                                    con.rollbackData();
+                                    value += ";";
                                 }
+                                //if(con.Ins_Upd_Del("insert into marks_obtained_master(enrollmentno,questionID,obtainedMarks,calcObtainedMarks,nCalcObtainedMarks) values("+rs3.getString("enrollmentno")+","+rs2.getInt("questionID")+","+obtMarks+","+calcObtMarks+","+nCalcObtMarks+");")){
+                                //    if(x2==nOfStudents && x==nOfQue){
+                                //        out.println("<script>$('#head').prepend('<div class=\"uk-alert-success\" uk-alert><a class=\"uk-alert-close\" uk-close></a><b>Marks Inserted Successfully.</b></div>')</script>");        
+                                //       con.commitData();
+                                //    }
+                                //}
+                                //else{
+                                //   out.println("<script>$('#head').prepend('<div class=\"uk-alert-danger\" uk-alert><a class=\"uk-alert-close\" uk-close></a><b>ERROR</b>: @"+request.getParameter("enroll"+x2)+" : Please Insert Marks Again.</div>')</script>");
+                                //    con.rollbackData();
+                                //}
                                 x++;
                             }
                             x2++;    
                         }
+                        if(con.Ins_Upd_Del("insert into marks_obtained_master(enrollmentno,questionID,obtainedMarks,calcObtainedMarks,nCalcObtainedMarks) values "+value)){
+                            out.println("<script>$('#head').prepend('<div class=\"uk-alert-success\" uk-alert><a class=\"uk-alert-close\" uk-close></a><b>Marks Inserted Successfully.</b></div>')</script>");        
+                            con.commitData();
+                        }
+                        else{
+                            out.println("<script>$('#head').prepend('<div class=\"uk-alert-danger\" uk-alert><a class=\"uk-alert-close\" uk-close></a><b>ERROR</b>: Please Insert Marks Again.</div>')</script>");
+                            con.rollbackData();
+                        }
+                        
                     
                     }
                     else{
@@ -260,31 +273,46 @@ table input{
                         x=1;
                         while(x<=nOfQue && rs2.next()){
                             //out.println("It reach inside Second loop");
-                            if(request.getParameter(x2+"que"+x)==""){
-                                float nFact = rs2.getFloat("calcQuesMaxMarks")/rs2.getFloat("queMaxMarks");
-                                float wFact = rs2.getFloat("nCalcQuesMaxMarks")/rs2.getFloat("queMaxMarks");
-                                float calcObtMarks = Float.parseFloat(request.getParameter(x2+"que"+x))*nFact;
-                                float nCalcObtMarks = Float.parseFloat(request.getParameter(x2+"que"+x))*wFact;
-                                //float obtWeighMarks = Float.parseFloat(request.getParameter(x2+"que"+x))*wFact;
-                                //float obtNormMarks = Float.parseFloat(request.getParameter(x2+"que"+x))*nFact;
-                                //out.println("<br><br>n w oN oW"+"-"+nFact+"-"+wFact+"-"+obtNormMarks+"-"+obtWeighMarks+"<br><br>");
-                                if(con.Ins_Upd_Del("insert into marks_obtained_master(enrollmentno,questionID,obtainedMarks,calcObtainedMarks,nCalcObtainedMarks) values("+rs3.getString("enrollmentno")+","+rs2.getInt("questionID")+","+Float.parseFloat(request.getParameter(x2+"que"+x))+","+calcObtMarks+","+nCalcObtMarks+");")){
-                                    if(x2==nOfStudents && x==nOfQue){
-                                        out.println("<script>$('.container').prepend('<div class=\"uk-alert-success uk-alert\" ><a class=\"uk-alert-close uk-close\" ></a>Marks Inserted Successfully.</div>')</script>");       
-                                        con.commitData();
-                                    }
-                                }
+                            
+                            float nFact = rs2.getFloat("calcQuesMaxMarks")/rs2.getFloat("queMaxMarks");
+                            float wFact = rs2.getFloat("nCalcQuesMaxMarks")/rs2.getFloat("queMaxMarks");
+                            float calcObtMarks = Float.parseFloat(request.getParameter(x2+"que"+x))*nFact;
+                            float nCalcObtMarks = Float.parseFloat(request.getParameter(x2+"que"+x))*wFact;
+                            //float obtWeighMarks = Float.parseFloat(request.getParameter(x2+"que"+x))*wFact;
+                            //float obtNormMarks = Float.parseFloat(request.getParameter(x2+"que"+x))*nFact;
+                            //out.println("<br><br>n w oN oW"+"-"+nFact+"-"+wFact+"-"+obtNormMarks+"-"+obtWeighMarks+"<br><br>");
+
+                            value += "("+rs3.getString("enrollmentno")+","+rs2.getInt("questionID")+","+Float.parseFloat(request.getParameter(x2+"que"+x))+","+calcObtMarks+","+nCalcObtMarks+")";
+                            if(x2!=nOfStudents || x!=nOfQue){
+                                value += ",";
                             }
                             else{
-                                out.println("<script>$('.container').prepend('<div class=\"uk-alert-danger uk-alert\" ><a class=\"uk-alert-close uk-close\" ></a>ERROR : @"+request.getParameter("enroll"+x2)+" FOR QUESTION "+x+"</div>')</script>");
-                                con.rollbackData();
-                                break;
+                                value += ";";
                             }
+//                            if(con.Ins_Upd_Del("insert into marks_obtained_master(enrollmentno,questionID,obtainedMarks,calcObtainedMarks,nCalcObtainedMarks) values("+rs3.getString("enrollmentno")+","+rs2.getInt("questionID")+","+Float.parseFloat(request.getParameter(x2+"que"+x))+","+calcObtMarks+","+nCalcObtMarks+");")){
+//                                if(x2==nOfStudents && x==nOfQue){
+//                                    out.println("<script>$('#head').prepend('<div class=\"uk-alert-success uk-alert\" uk-alert><a class=\"uk-alert-close uk-close\" uk-close></a><b>Marks Inserted Successfully.</b></div>')</script>");       
+//                                    rsnull=con.SelectData("commit;");
+//                                }
+//                            }
+//                            else{
+//                                out.println("<script>$('#head').prepend('<div class=\"uk-alert-danger uk-alert\" uk-alert><a class=\"uk-alert-close uk-close\" uk-close></a><b>ERROR</b>: @"+request.getParameter("enroll"+x2)+" FOR QUESTION "+x+" : Please Insert All Marks Again.</div>')</script>");
+//                                con.rollbackData();
+//                                break;
+//                            }
                             x++;
 
                         }
                         x2++;
                     }
+                    if(con.Ins_Upd_Del("insert into marks_obtained_master(enrollmentno,questionID,obtainedMarks,calcObtainedMarks,nCalcObtainedMarks) values "+value)){
+                            out.println("<script>$('#head').prepend('<div class=\"uk-alert-success\" uk-alert><a class=\"uk-alert-close\" uk-close></a><b>Marks Inserted Successfully.</b></div>')</script>");        
+                            con.commitData();
+                        }
+                        else{
+                            out.println("<script>$('#head').prepend('<div class=\"uk-alert-danger\" uk-alert><a class=\"uk-alert-close\" uk-close></a><b>ERROR</b>: Please Insert Marks Again.</div>')</script>");
+                            con.rollbackData();
+                        }
                     }
                 }
             %>

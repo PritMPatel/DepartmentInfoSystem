@@ -4,7 +4,7 @@
 <%
 	ResultSet rsBatch=null;
 	ResultSet rsAllSubject=null;
-	String userDept=null;
+	int userDept=0;
 	con=new Connect();
 %>
 <div id="subjectBatch">
@@ -16,7 +16,7 @@
 				<option value="" disabled selected>Select Subject</option>
 				<%
 							if (session.getAttribute("facultyDepartment") != null) {
-								userDept = (String) session.getAttribute("facultyDepartment");
+								userDept = (int) session.getAttribute("facultyDepartment");
 							}
 							rsAllSubject=con.SelectData("select * from subject_master where subjectID in(select distinct subjectID from exam_master where facultyID="+session.getAttribute("facultyID")+");");
 							while(rsAllSubject.next()){
@@ -33,7 +33,7 @@
 			<label for="batch">Batch:</label> <select class="uk-select" name="batch1" id="batch1" required>
 				<option value="" disabled selected>Select Batch</option>
 				<%
-							rsBatch=con.SelectData("select distinct batch from student_master");
+							rsBatch=con.SelectData("select distinct batch from student_master where studentDepartment="+session.getAttribute("facultyDepartment")+";");
 							while(rsBatch.next()){
 								out.println("<option value="+rsBatch.getInt("batch")+">"+rsBatch.getInt("batch")+"</option>");
 							}

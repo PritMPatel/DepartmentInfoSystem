@@ -20,6 +20,7 @@
 	ResultSet rs = null;
 	ResultSetMetaData mtdt = null;
 	con = new Connect();
+	ResultSet rsBatch = null;
 	ResultSet rsAllSubject = null;
 	ResultSet rsExamType = null;
 %>
@@ -67,7 +68,8 @@
         <a href="calculateAttainment.jsp">Calculate Attainment</a><br/>--%>
 
 <div class="container" style="width: 80%; margin-bottom: 100px">
-	<h3 id="head" style="text-align: center; padding-bottom: 10px;">ADD
+	<div id="head"></div>
+	<h3 style="text-align: center; padding-bottom: 10px;">ADD
 		AN EXAMINATION</h3>
 	<form method="POST">
 		<%-- ExamID:        <input type="number" name="exam_id"/><br/> --%>
@@ -109,21 +111,28 @@
 			<div class="col-sm">
 				<label for="totalMarks">Total Marks:</label> <input type="number"
 					class="uk-input" id="total_max_marks" name="total_max_marks"
-					placeholder="Total Marks" required/>
+					placeholder="Total Marks" min="1" required/>
 			</div>
 		</div>
 		<div class="form-row">
 			<div class="col-sm">
 				<label for="weightage">Weightage:</label> <input type="number"
 					class="uk-input" id="weightage" name="weightage"
-					placeholder="Weightage" required/>
+					placeholder="Weightage" min="1" required/>
 			</div>
 			<!-- MaxWeightMarks:<input type="text" name="max_weighted_marks"/><br/>:::Calculated Based on Type Of Exam::: -->
 
 			
 			<div class="col-sm">
-				<label for="batch">Batch: </label> <input type="number"
-					class="uk-input" id="batch" name="batch" placeholder="Batch" required/>
+				<label for="batch">Batch:</label> <select class="uk-select" name="batch" id="batch" required>
+					<option value="" disabled selected>Select Batch</option>
+					<%
+								rsBatch=con.SelectData("select distinct batch from student_master where studentDepartment="+session.getAttribute("facultyDepartment")+";");
+								while(rsBatch.next()){
+									out.println("<option value="+rsBatch.getInt("batch")+">"+rsBatch.getInt("batch")+"</option>");
+								}
+							%>
+				</select>
 			</div>
 
 		</div>
@@ -144,11 +153,11 @@
 										+ request.getParameter("total_max_marks") + "," + request.getParameter("weightage")
 										+ "," + request.getParameter("subject_id") + "," + i + ","
 										+ session.getAttribute("facultyID") + ");")){
-											out.println("<script>$('.container').prepend('<div class=\"uk-alert-success\" uk-alert><a class=\"uk-alert-close\" uk-close></a>Exam Inserted Successfully.</div>')</script>");        
+											out.println("<script>$('#head').prepend('<div class=\"uk-alert-success\" uk-alert><a class=\"uk-alert-close\" uk-close></a><b>Exam Inserted Successfully</b>.</div>')</script>");        
 											con.commitData();
 										}
 						else{
-								out.println("<script>$('.container').prepend('<div class=\"uk-alert-danger\" uk-alert><a cl-ass=\"uk-alert-close\" uk-close></a>ERROR: Please Insert Exam Again.</div>')</script>");
+								out.println("<script>$('#head').prepend('<div class=\"uk-alert-danger\" uk-alert><a class=\"uk-alert-close\" uk-close></a><b>ERROR</b>: Same Exam Name Exist for Selected Subject and Batch.</div>')</script>");
 								con.rollbackData();
 							}
 					}

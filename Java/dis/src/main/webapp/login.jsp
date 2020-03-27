@@ -89,11 +89,11 @@
 													+ request.getParameter("email") + "';");
 											String Uname = request.getParameter("email");
 											String Name = null;
-											String dept = null;
+											int dept = 0;
 											int id=0;
 											if (rs.next()) {
 												Name = rs.getString("adminName");
-												dept = rs.getString("adminDepartment");
+												dept = rs.getInt("adminDepartment");
 												id = rs.getInt("adminID");
 
 											}
@@ -114,11 +114,11 @@
 													+ request.getParameter("email") + "';");
 											String Uname = request.getParameter("email");
 											String Name = null;
-											String dept = null;
+											int dept = 0;
 											int id=0;
 											if (rs.next()) {
 												Name = rs.getString("facultyName");
-												dept = rs.getString("facultyDepartment");
+												dept = rs.getInt("facultyDepartment");
 												id = rs.getInt("facultyID");
 
 											}

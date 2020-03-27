@@ -19,9 +19,10 @@
 	Connect con = null;
 	ResultSet rs = null;
 	ResultSet rsAllSubject=null;
+	ResultSet rsBatch=null;
 	ResultSetMetaData mtdt = null;
 	con = new Connect();
-	String userDept = "";
+	int userDept = 0;
 %>
 <style>
 /* Chrome, Safari, Edge, Opera */
@@ -72,9 +73,11 @@
         <a href="calculateAttainment.jsp">Calculate Attainment</a><br/> --%>
 
 <div class="container" style="width: 80%; margin-bottom: 100px">
-	<h3 id="head" style="text-align: center; padding-bottom: 10px;">ADD
+	<div id="head"></div>
+	<h3 style="text-align: center; padding-bottom: 10px;">ADD
 		COURSE OUTCOME</h3>
 	<form method="POST">
+	<span uk-toggle=".my-class"></span>
 		<div class="form-row">
 			<div class="col-sm"></div>
 			<div class="col-sm">
@@ -83,9 +86,9 @@
 						<option value="" disabled selected>Select Subject</option>
 						<%
 							if (session.getAttribute("facultyDepartment") != null) {
-								userDept = (String) session.getAttribute("facultyDepartment");
+								userDept = (int)session.getAttribute("facultyDepartment");
 							}
-							rsAllSubject=con.SelectData("select * from subject_master where branch='"+userDept+"';");
+							rsAllSubject=con.SelectData("select * from subject_master where subjectDepartment='"+userDept+"';");
 							while(rsAllSubject.next()){
 								out.println("<option value="+rsAllSubject.getInt("subjectID")+">"+rsAllSubject.getString("subjectName")+"</option>");
 							}
@@ -94,7 +97,21 @@
 				</div>
 			<div class="col-sm"></div>
 		</div>
-
+		<div class="form-row">
+			<div class="col-sm"></div>
+			<div class="col-sm">
+				<label for="batch">Batch:</label> <select class="uk-select" name="batch" id="batch" required>
+					<option value="" disabled selected>Select Batch</option>
+					<%
+								rsBatch=con.SelectData("select distinct batch from student_master where studentDepartment="+session.getAttribute("facultyDepartment")+";");
+								while(rsBatch.next()){
+									out.println("<option value="+rsBatch.getInt("batch")+">"+rsBatch.getInt("batch")+"</option>");
+								}
+							%>
+				</select>
+			</div>
+			<div class="col-sm"></div>
+		</div>
 		<div class="form-row">
 			<div class="col-sm"></div>
 			<div class="col-sm">
@@ -143,16 +160,16 @@
 						int conos = Integer.parseInt(request.getParameter("cono"));
 						int x = 1;
 						while (x <= conos) {
-							if (con.Ins_Upd_Del("insert into co_master(coSrNo,coStatement,subjectID,facultyID) VALUES(" + x
+							if (con.Ins_Upd_Del("insert into co_master(coSrNo,coStatement,subjectID,facultyID,batch) VALUES(" + x
 									+ ",'" + request.getParameter("co" + x) + "'," + request.getParameter("subject_id")
-									+ "," + request.getParameter("faculty_id") + ");")){
+									+ "," + request.getParameter("faculty_id") + ","+ request.getParameter("batch") +");")){
 								if(x==conos){
-									out.println("<script>$('.container').prepend('<div class=\"uk-alert-success\" uk-alert><a class=\"uk-alert-close\" uk-close></a>CO Inserted Successfully.</div>')</script>");        
+									out.println("<script>$('#head').prepend('<div class=\"uk-alert-success uk-alert\" uk-alert><a class=\"uk-alert-close uk-close\" uk-close></a><b>COs Inserted Successfully</b>.</div>');</script>");
 									con.commitData();
 								}	
 							}
 							else{
-								out.println("<script>$('.container').prepend('<div class=\"uk-alert-danger\" uk-alert><a cl-ass=\"uk-alert-close\" uk-close></a>ERROR: @CO "+x+": Please Insert All CO Again.</div>')</script>");
+								out.println("<script>$('#head').prepend('<div class=\"uk-alert-danger uk-alert\" uk-alert><a class=\"uk-alert-close uk-close\" uk-close></a><b>ERROR</b>: COs of this Subject & Batch Already Exist.</div>');</script>");
 								con.rollbackData();
 							}
 							x++;
