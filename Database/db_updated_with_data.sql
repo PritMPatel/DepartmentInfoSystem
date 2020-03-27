@@ -29,7 +29,7 @@ CREATE TABLE `admin_master` (
   `adminName` varchar(50) NOT NULL,
   `adminEmail` varchar(100) NOT NULL,
   `adminPassword` varchar(256) NOT NULL,
-  `adminDepartment` varchar(45) NOT NULL,
+  `adminDepartment` int(11) NOT NULL,
   PRIMARY KEY (`adminID`),
   UNIQUE KEY `adminUsername_UNIQUE` (`adminEmail`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -41,7 +41,7 @@ CREATE TABLE `admin_master` (
 
 LOCK TABLES `admin_master` WRITE;
 /*!40000 ALTER TABLE `admin_master` DISABLE KEYS */;
-INSERT INTO `admin_master` VALUES (1,'Prof. V. D. Patel','adminit@gmail.com','f3e79bfac8805b8c637d0f66b39b186e','Information Technology');
+INSERT INTO `admin_master` VALUES (1,'Prof. V. D. Patel','adminit@gmail.com','f3e79bfac8805b8c637d0f66b39b186e',16);
 /*!40000 ALTER TABLE `admin_master` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -120,12 +120,14 @@ CREATE TABLE `co_master` (
   `coStatement` varchar(512) NOT NULL,
   `subjectID` int(11) NOT NULL,
   `facultyID` int(11) NOT NULL,
+  `batch` int(11) NOT NULL,
   PRIMARY KEY (`coID`),
+  UNIQUE KEY `u_sr_sub_batch` (`coSrNo`,`subjectID`,`batch`),
   KEY `subjectID` (`subjectID`),
   KEY `co_master_ibfk_2_idx` (`facultyID`),
   CONSTRAINT `co_master_ibfk_1` FOREIGN KEY (`subjectID`) REFERENCES `subject_master` (`subjectID`),
   CONSTRAINT `co_master_ibfk_2` FOREIGN KEY (`facultyID`) REFERENCES `faculty_master` (`facultyID`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -134,7 +136,7 @@ CREATE TABLE `co_master` (
 
 LOCK TABLES `co_master` WRITE;
 /*!40000 ALTER TABLE `co_master` DISABLE KEYS */;
-INSERT INTO `co_master` VALUES (1,1,'This is CO1',1,1),(2,2,'This is CO2',1,1),(3,3,'This is CO3',1,1),(4,4,'This is CO4',1,1),(5,5,'This is CO5',1,1);
+INSERT INTO `co_master` VALUES (1,1,'This is CO1',1,1,2017),(2,2,'This is CO2',1,1,2017),(3,3,'This is CO3',1,1,2017),(4,4,'This is CO4',1,1,2017),(5,5,'This is CO5',1,1,2017);
 /*!40000 ALTER TABLE `co_master` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -155,13 +157,14 @@ CREATE TABLE `exam_master` (
   `examTypeID` int(11) NOT NULL,
   `facultyID` int(11) NOT NULL,
   PRIMARY KEY (`examID`),
+  UNIQUE KEY `u_exam_sub_batch` (`examName`,`subjectID`,`batch`),
   KEY `subjectID` (`subjectID`),
   KEY `examTypeID` (`examTypeID`),
   KEY `exam_master_ibfk_3_idx` (`facultyID`),
   CONSTRAINT `exam_master_ibfk_1` FOREIGN KEY (`subjectID`) REFERENCES `subject_master` (`subjectID`),
   CONSTRAINT `exam_master_ibfk_2` FOREIGN KEY (`examTypeID`) REFERENCES `examtype_master` (`examTypeID`),
   CONSTRAINT `exam_master_ibfk_3` FOREIGN KEY (`facultyID`) REFERENCES `faculty_master` (`facultyID`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -215,7 +218,7 @@ CREATE TABLE `faculty_master` (
   `facultyName` varchar(25) NOT NULL,
   `facultyEmail` varchar(50) NOT NULL,
   `facultyPassword` varchar(256) NOT NULL,
-  `facultyDepartment` varchar(25) NOT NULL,
+  `facultyDepartment` int(11) NOT NULL,
   PRIMARY KEY (`facultyID`),
   UNIQUE KEY `facultyEmail_UNIQUE` (`facultyEmail`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -227,7 +230,7 @@ CREATE TABLE `faculty_master` (
 
 LOCK TABLES `faculty_master` WRITE;
 /*!40000 ALTER TABLE `faculty_master` DISABLE KEYS */;
-INSERT INTO `faculty_master` VALUES (1,'Prof. S. J. Molia','sjm@gmail.com','2431dd378df9c754e0245efd8fbf2aab','Information Technology');
+INSERT INTO `faculty_master` VALUES (1,'Prof. S. J. Molia','sjm@gmail.com','2431dd378df9c754e0245efd8fbf2aab',16);
 /*!40000 ALTER TABLE `faculty_master` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -325,6 +328,7 @@ DROP TABLE IF EXISTS `student_master`;
 CREATE TABLE `student_master` (
   `enrollmentno` varchar(12) NOT NULL,
   `batch` int(11) NOT NULL,
+  `studentDepartment` int(11) NOT NULL,
   PRIMARY KEY (`enrollmentno`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -335,7 +339,7 @@ CREATE TABLE `student_master` (
 
 LOCK TABLES `student_master` WRITE;
 /*!40000 ALTER TABLE `student_master` DISABLE KEYS */;
-INSERT INTO `student_master` VALUES ('170170116001',2017),('170170116002',2017),('170170116003',2017),('170170116004',2017),('170170116005',2017),('170170116007',2017),('170170116008',2017),('170170116009',2017),('170170116010',2017),('170170116011',2017);
+INSERT INTO `student_master` VALUES ('170170116001',2017,16),('170170116002',2017,16),('170170116003',2017,16),('170170116004',2017,16),('170170116005',2017,16),('170170116007',2017,16),('170170116008',2017,16),('170170116009',2017,16),('170170116010',2017,16),('170170116011',2017,16);
 /*!40000 ALTER TABLE `student_master` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -351,7 +355,7 @@ CREATE TABLE `subject_master` (
   `subjectName` varchar(50) NOT NULL,
   `subjectCode` decimal(7,0) NOT NULL,
   `semester` int(11) NOT NULL,
-  `branch` varchar(50) NOT NULL,
+  `subjectDepartment` int(11) NOT NULL,
   PRIMARY KEY (`subjectID`),
   UNIQUE KEY `subjectCode` (`subjectCode`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -363,7 +367,7 @@ CREATE TABLE `subject_master` (
 
 LOCK TABLES `subject_master` WRITE;
 /*!40000 ALTER TABLE `subject_master` DISABLE KEYS */;
-INSERT INTO `subject_master` VALUES (1,'DBMS',2130703,3,'Information Technology');
+INSERT INTO `subject_master` VALUES (1,'DBMS',2130703,3,16);
 /*!40000 ALTER TABLE `subject_master` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -376,4 +380,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-03-26 16:33:53
+-- Dump completed on 2020-03-27 18:28:33
