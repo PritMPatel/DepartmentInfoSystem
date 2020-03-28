@@ -16,14 +16,9 @@
 <%@include file="/headerFaculty.jsp"%>
 	<title>CALCULATE ATTAINMENT</title>
 		<style type="text/css" media="print">
-			.page
-			{
-			-webkit-transform: rotate(-90deg); 
-			-moz-transform:rotate(-90deg);
-			filter:progid:DXImageTransform.Microsoft.BasicImage(rotation=2);
-			}
-			table{
-			border-collapse: collapse;
+		@page { size: landscape;}
+		table{
+		border-collapse: collapse;
 		}
 		th,td{
 			border: 1px solid black;
@@ -77,7 +72,7 @@
 </div>
 <!-- navigation ENDS here -->
 </div>
-<div class="container" style="width: 80%; margin-bottom: 100px">
+	<div class="container" style="width: 80%; margin-bottom: 0px">
 	<div id="head"></div>
 	<h3 style="text-align: center; padding-bottom: 10px;">VIEW ATTAINMENT</h3>
 	<form method="POST">
@@ -113,7 +108,12 @@
 			<%@include file="subjectBatchForm.jsp"%>
 		<%}
 		if(request.getParameter("next")!=null){
-                        rsCo=con.SelectData("select * from co_master where coID not in(SELECT coID FROM attainment_co,student_master where attainment_co.enrollmentno=student_master.enrollmentno and subjectID="+request.getParameter("subject1")+" and batch="+request.getParameter("batch1")+");");
+                        rsCo=con.SelectData("select * from co_master where coID not in(SELECT coID FROM attainment_co,student_master where attainment_co.enrollmentno=student_master.enrollmentno) and subjectID="+request.getParameter("subjectid")+" and batch="+request.getParameter("batch1")+" and facultyID="+(int)session.getAttribute("facultyID")+";");
+						if(!rsCo.next()){
+							out.println("<script>$('#head').prepend('<div class=\"uk-alert-danger\" uk-alert><a class=\"uk-alert-close\" uk-close></a><b>ACCESS DENIED</b>: You can't Access requested Data.'.</div>')</script>");
+							response.sendRedirect("dis/calculateAttainment.jsp");
+						}
+						rsCo.beforeFirst();
                         rsSubject=con.SelectData("select subjectName from subject_master where subjectID="+request.getParameter("subjectid")+";");
 						rsSubject.next();
 						out.println("<div class='form-row'><div class='col-sm'><label for='subjectID'>Subject:</label><input type='number' class='uk-input' id='subject_id' name='subject_id' value='"+request.getParameter("subjectid")+"' hidden/><input type='text' class='uk-input' id='subjectName' name='subjectName' value='"+ rsSubject.getString("subjectName")+"' readonly/></div>");
@@ -133,18 +133,30 @@
 				out.println("<input type='number' name='subject_id' value='"+request.getParameter("subject_id")+"' readonly hidden/>");
             	out.println("<input type='number' name='batch' value='"+request.getParameter("batch")+"' readonly hidden/>");
 				out.println("<input type='number' name='coid' value='"+request.getParameter("co_id")+"' readonly hidden/>");
-		%>
-		<%
-		rsCo=con.SelectData("select * from co_master where coID not in(SELECT coID FROM attainment_co,student_master where attainment_co.enrollmentno=student_master.enrollmentno and subjectID="+request.getParameter("subject_id")+" and batch="+request.getParameter("batch")+") and coID="+request.getParameter("co_id")+";");
+				%>
+				<%
+				//rsCo=con.SelectData("select * from co_master where coID not in(SELECT coID FROM attainment_co,student_master where attainment_co.enrollmentno=student_master.enrollmentno and subjectID="+request.getParameter("subject_id")+" and batch="+request.getParameter("batch")+") and coID="+request.getParameter("co_id")+";");
+				rsCo=con.SelectData("select * from co_master where coID="+request.getParameter("co_id")+";");
 				rsCo.next();
 				rsSubject=con.SelectData("select subjectName from subject_master where subjectID="+request.getParameter("subject_id")+";");
 				rsSubject.next();
-		out.println("<center class=\"mt-3\">"+
-								"<a href='calculateAttainment.jsp'><button class='btn' type='button' style='margin:30px;'>Reset</button></a>"+
-								"<button type='button' class='btn' id='exportExcel' value='"+rsSubject.getString("subjectName")+"-CO"+rsCo.getInt("coSrNo")+"-B"+request.getParameter("batch")+"' style='margin:30px;'>Export to Excel</button>"+
-								"<button class='btn' type='button' onclick='printDiv();' style='margin:30px;'>Print</button>"+
-							"</center>");
-
+				out.println("<div class='form-row'><div class='col-sm'><center class=\"mt-3\">"+
+					"<a href='calculateAttainment.jsp'><button class='btn' type='button' style='margin:30px;'>Reset</button></a>"+
+				"</center></div>");
+				out.println("<div class='col-sm'><center class=\"mt-3\">"+
+					"<button type='button' class='btn' id='exportExcel' value='"+rsSubject.getString("subjectName")+"-CO"+rsCo.getInt("coSrNo")+"-B"+request.getParameter("batch")+"' style='margin:30px;'>Export to Excel</button>"+
+				"</center></div>");				
+				out.println("<div class='col-sm'><center class=\"mt-3\">"+
+					"<button class='btn' type='button' onclick='printDiv();' style='margin:30px;'>Print</button>"+
+				"</center></div></div>");
+				
+				if(!checkData("select distinct coID from attainment_co where coID="+request.getParameter("co_id")+";")){
+					out.println("<div class='form-row'><div class='col-sm'></div><div class='col-sm'><center>"+
+						"<button class='btn' type='submit' value='submit' style='margin:30px; margin-top: 0px; background-color: #cf6766; color: white;'>Save</button>"+
+						"</center></div><div class='col-sm'></div></div></div>");
+				}
+				
+				out.println("<div class=\"container\" style=\"width: 100%; margin-bottom: 100px; max-width: 90vw;margin-top:0px;\">");
 				
 				rs0=con.SelectData("select count(typeDescription)*2 as colspan from (select distinctrow typeDescription,examName,queDesc from marks_obtained_master,question_master,exam_master,examtype_master where question_master.examID=exam_master.examID and exam_master.examtypeID=examtype_master.examtypeID and question_master.questionID=marks_obtained_master.questionID and marks_obtained_master.questionID in (select question_master.questionID from question_master,exam_master,examtype_master where (select coID from co_master where coID="+request.getParameter("co_id")+") IN (coID1,coID2,coID3,coID4,coID5,coID6,coID7) and question_master.examID=exam_master.examID and exam_master.examTypeID=examtype_master.examTypeID and exam_master.batch="+request.getParameter("batch")+" and exam_master.subjectID="+request.getParameter("subject_id")+") order by enrollmentno,typeDescription,examName,QueDesc) as t;");
 				int cls=0;
@@ -209,17 +221,19 @@
 					if(rs6.next()){
 						out.println("<td colspan=1 bgcolor='peachpuff'><center>"+rs6.getFloat("totalCalcObt")+"</center></td>");
 						out.println("<td colspan=1 bgcolor='peachpuff'><center>"+rs6.getFloat("totalNCalcObt")+"</center></td>");
-						out.println("<td colspan=1 bgcolor='lightsalmon'><center>"+rs6.getFloat("attainPercent")+"</center></td>");
+						out.println("<td colspan=1 ><center><input type='number' id='atTable' class='uk-input uk-form-blank uk-form-small uk-width-xsmall' step='0.01' value='"+rs6.getFloat("attainPercent")+"' readonly/></center></td>");
 						float percent=rs6.getFloat("attainPercent");
-						out.println("<td colspan=1 bgcolor='thistle'><center>");
+						int lvl=0;
 						if(percent>=70)
-							out.println("3");
+							lvl=3;
 						else if(percent>=55)
-							out.println("2");
+							lvl=2;
 						else if(percent>=40)
-							out.println("1");
+							lvl=1;
 						else
-							out.println("0");
+							lvl=0;
+						out.println("<td colspan=1 ><center><input type='number' id='atTable' class='uk-input uk-form-blank uk-form-small uk-width-xsmall' value='"+lvl+"' readonly/>");
+						
 						out.println("</center></td>");
 					}
 					out.println("</tr>");
