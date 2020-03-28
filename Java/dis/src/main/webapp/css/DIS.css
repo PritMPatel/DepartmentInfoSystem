@@ -486,6 +486,10 @@ label:hover:before {
     padding-right: 20px;
 }
 
+.uk-form-small {
+    text-align: center;
+    height: 1rem !important;
+}
 
 /****************************************************************************************/
 
