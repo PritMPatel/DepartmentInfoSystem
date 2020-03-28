@@ -1,10 +1,10 @@
-CREATE DATABASE  IF NOT EXISTS `finalyearproject` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */;
+CREATE DATABASE  IF NOT EXISTS `finalyearproject` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `finalyearproject`;
--- MySQL dump 10.13  Distrib 8.0.15, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.16, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: finalyearproject
+-- Host: localhost    Database: finalyearproject
 -- ------------------------------------------------------
--- Server version	8.0.15
+-- Server version	8.0.16
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -243,7 +243,7 @@ DROP TABLE IF EXISTS `marks_obtained_master`;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `marks_obtained_master` (
   `marksID` int(11) NOT NULL AUTO_INCREMENT,
-  `obtainedMarks` int(11) NOT NULL,
+  `obtainedMarks` float NOT NULL,
   `calcObtainedMarks` float NOT NULL,
   `nCalcObtainedMarks` float NOT NULL DEFAULT '0',
   `enrollmentno` varchar(12) NOT NULL,
@@ -380,4 +380,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-03-27 18:28:33
+-- Dump completed on 2020-03-28 23:45:51
