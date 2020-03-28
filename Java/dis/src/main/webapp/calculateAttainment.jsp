@@ -16,8 +16,8 @@
 <%@include file="/headerFaculty.jsp"%>
 	<title>CALCULATE ATTAINMENT</title>
 	<script src="js/jquery.table2excel.js"></script>
-		<style type="text/css" media="print">
-		@page { size: landscape;}
+		<style type="text/css">
+		@media print {@page { size: landscape;}}
 		table{
 		border-collapse: collapse;
 		}
