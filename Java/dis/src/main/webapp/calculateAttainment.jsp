@@ -38,21 +38,6 @@
 	padding-left: 30px !important;
 	padding-right: 30px !important;
 }
-.uk-table th{
-    padding: 5px !important;
-	border: 1px solid black;
-	color: black;
-	vertical-align: middle;
-}
-.uk-table td{
-	padding: 5px !important;
-	font-size: .875rem !important;
-	border: 1px solid black;
-	vertical-align: middle;
-}
-table input{
-    border: 0px !important;
-}
 .form-row .col-sm .form-row{
     padding:0px !important;
     display: inline !important;
@@ -160,17 +145,28 @@ table input{
 								"<button class='btn' type='button' onclick='printDiv();' style='margin:30px;'>Print</button>"+
 							"</center>");
 
-				out.println("<div id='attainment' class='uk-overflow-auto'><table id='attainCalculation' class='uk-table'>");
-				out.println("<tr><th bgcolor='#e1e19b'><center><b>Subject</b></center></th><th colspan='8'><center><b>"+rsSubject.getString("subjectName")+"</b></center></th></tr>");
-            	out.println("<tr><th bgcolor='#e1e19b'><center><b>Batch</b></center></th><th colspan='8'><center><b>"+request.getParameter("batch")+"</b></center></th></tr>");
-				out.println("<tr><th bgcolor='#e1e19b'><center><b>CO</b></center></th><th colspan='8'><center><b>"+rsCo.getInt("coSrNo")+"</b></center></th></tr>");
-				out.println("<tr><th bgcolor='#e1e19b'><center><b>Statement</b></center></th><th colspan='8'><center><b>"+rsCo.getString("coStatement")+"</b></center></th></tr>");
+				
+				rs0=con.SelectData("select count(typeDescription)*2 as colspan from (select distinctrow typeDescription,examName,queDesc from marks_obtained_master,question_master,exam_master,examtype_master where question_master.examID=exam_master.examID and exam_master.examtypeID=examtype_master.examtypeID and question_master.questionID=marks_obtained_master.questionID and marks_obtained_master.questionID in (select question_master.questionID from question_master,exam_master,examtype_master where (select coID from co_master where coID="+request.getParameter("co_id")+") IN (coID1,coID2,coID3,coID4,coID5,coID6,coID7) and question_master.examID=exam_master.examID and exam_master.examTypeID=examtype_master.examTypeID and exam_master.batch="+request.getParameter("batch")+" and exam_master.subjectID="+request.getParameter("subject_id")+") order by enrollmentno,typeDescription,examName,QueDesc) as t;");
+				int cls=0;
+				int tps=0;
+				if(rs0.next()){
+					cls = rs0.getInt("colspan");
+				}
+				if(cls+4>14){
+					tps=14;
+				}
+				else{
+					tps=cls+4;
+				}
+				out.println("<div id='attainment' class='uk-overflow-auto' align='center'><table id='attainCalculation' class='uk-table'>");
+				out.println("<tr><th bgcolor='#e1e19b'><center><b>Subject</b></center></th><th colspan='"+tps+"'><center><b>"+rsSubject.getString("subjectName")+"</b></center></th></tr>");
+            	out.println("<tr><th bgcolor='#e1e19b'><center><b>Batch</b></center></th><th colspan='"+tps+"'><center><b>"+request.getParameter("batch")+"</b></center></th></tr>");
+				out.println("<tr><th bgcolor='#e1e19b'><center><b>Faculty</b></center></th><th colspan='"+tps+"'><center><b>"+session.getAttribute("getfacultyName")+"</b></center></th></tr>");
+				out.println("<tr><th bgcolor='#e1e19b'><center><b>CO</b></center></th><th colspan='"+tps+"'><center><b>"+rsCo.getInt("coSrNo")+"</b></center></th></tr>");
+				out.println("<tr><th bgcolor='#e1e19b'><center><b>Statement</b></center></th><th colspan='"+tps+"'><center><b>"+rsCo.getString("coStatement")+"</b></center></th></tr>");
 				out.println("<tr><td></td></tr>");
 				out.println("<tr><th rowspan='5' bgcolor='#e1e19b'><center><b>Enrollment</b></center></th>");
-				rs0=con.SelectData("select count(typeDescription)*2 as colspan from (select distinctrow typeDescription,examName,queDesc from marks_obtained_master,question_master,exam_master,examtype_master where question_master.examID=exam_master.examID and exam_master.examtypeID=examtype_master.examtypeID and question_master.questionID=marks_obtained_master.questionID and marks_obtained_master.questionID in (select question_master.questionID from question_master,exam_master,examtype_master where (select coID from co_master where coID="+request.getParameter("co_id")+") IN (coID1,coID2,coID3,coID4,coID5,coID6,coID7) and question_master.examID=exam_master.examID and exam_master.examTypeID=examtype_master.examTypeID and exam_master.batch="+request.getParameter("batch")+" and exam_master.subjectID="+request.getParameter("subject_id")+") order by enrollmentno,typeDescription,examName,QueDesc) as t;");
-				if(rs0.next()){
-					out.println("<th colspan='"+rs0.getInt("colspan")+"' bgcolor='lightgrey'><center><b>CO-"+rsCo.getInt("coSrNo")+"</b></center></th>");
-				}
+				out.println("<th colspan='"+cls+"' bgcolor='lightgrey'><center><b>CO-"+rsCo.getInt("coSrNo")+"</b></center></th>");
 				out.println("<th rowspan='4' colspan='2' bgcolor='peachpuff'><center><b>Total</b></center></th>");
 				out.println("<th rowspan='5' colspan='1' bgcolor='lightsalmon'><center><b>Attainment</b></center></th>");
 				out.println("<th rowspan='5' colspan='1' bgcolor='thistle'><center><b>Attainment Level</b></center></th>");
