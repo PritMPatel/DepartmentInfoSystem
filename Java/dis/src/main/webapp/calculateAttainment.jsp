@@ -109,7 +109,7 @@
 			<%@include file="subjectBatchForm.jsp"%>
 		<%}
 		if(request.getParameter("next")!=null){
-                        rsCo=con.SelectData("select * from co_master where coID not in(SELECT coID FROM attainment_co,student_master where attainment_co.enrollmentno=student_master.enrollmentno) and subjectID="+request.getParameter("subjectid")+" and batch="+request.getParameter("batch1")+" and facultyID="+(int)session.getAttribute("facultyID")+";");
+                        rsCo=con.SelectData("select * from co_master where subjectID="+request.getParameter("subjectid")+" and batch="+request.getParameter("batch1")+" and facultyID="+(int)session.getAttribute("facultyID")+";");
 						if(!rsCo.next()){
 							out.println("<script>$('#head').prepend('<div class=\"uk-alert-danger\" uk-alert><a class=\"uk-alert-close\" uk-close></a><b>ACCESS DENIED</b>: You can't Access requested Data.'.</div>')</script>");
 							response.sendRedirect("dis/calculateAttainment.jsp");
@@ -120,7 +120,7 @@
 						out.println("<div class='form-row'><div class='col-sm'><label for='subjectID'>Subject:</label><input type='number' class='uk-input' id='subject_id' name='subject_id' value='"+request.getParameter("subjectid")+"' hidden/><input type='text' class='uk-input' id='subjectName' name='subjectName' value='"+ rsSubject.getString("subjectName")+"' readonly/></div>");
 						out.println("<div class='col-sm'><label for='batch'>Batch:</label><input type='number' name='batch' class='uk-input' id='batch1' value='"
 										+ request.getParameter("batch1") + "' readonly/></div></div> ");
-						out.println("<div class='form-row'><div class='col-sm'><label for='examID'>Exam:</label><select class='uk-select' id='co_id' name='co_id' required><option value='' selected disabled>Select CO</option>");
+						out.println("<div class='form-row'><div class='col-sm'><label for='coID'>Course Outcome:</label><select class='uk-select' id='co_id' name='co_id' required><option value='' selected disabled>Select CO</option>");
                         while(rsCo.next()){
                             out.println("<option value='"+rsCo.getInt("coID")+"'>"+rsCo.getInt("coSrNo")+" - "+rsCo.getString("coStatement")+"</option>");
                         }
@@ -222,7 +222,7 @@
 					if(rs6.next()){
 						out.println("<td colspan=1 bgcolor='peachpuff'><center>"+rs6.getFloat("totalCalcObt")+"</center></td>");
 						out.println("<td colspan=1 bgcolor='peachpuff'><center>"+rs6.getFloat("totalNCalcObt")+"</center></td>");
-						out.println("<td colspan=1 ><center><input type='number' id='atTable' class='uk-input uk-form-blank uk-form-small uk-width-xsmall' step='0.01' value='"+rs6.getFloat("attainPercent")+"' readonly/></center></td>");
+						out.println("<td colspan=1 bgcolor='lightsalmon' ><center><input type='number' id='atTable' class='uk-input uk-form-blank uk-form-small uk-width-xsmall' step='0.01' value='"+rs6.getFloat("attainPercent")+"' readonly/></center></td>");
 						float percent=rs6.getFloat("attainPercent");
 						int lvl=0;
 						if(percent>=70)
@@ -233,7 +233,7 @@
 							lvl=1;
 						else
 							lvl=0;
-						out.println("<td colspan=1 ><center><input type='number' id='atTable' class='uk-input uk-form-blank uk-form-small uk-width-xsmall' value='"+lvl+"' readonly/>");
+						out.println("<td colspan=1 bgcolor='thistle'><center><input type='number' id='atTable' class='uk-input uk-form-blank uk-form-small uk-width-xsmall' value='"+lvl+"' readonly/>");
 						
 						out.println("</center></td>");
 					}
