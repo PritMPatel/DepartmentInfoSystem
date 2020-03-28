@@ -210,7 +210,7 @@
 				out.println("<th rowspan='1' bgcolor='peachpuff'><center><b>"+rsTotalCalcMax.getFloat("calcTotal")+"</b></center></th>");
 				out.println("<th rowspan='1' bgcolor='peachpuff'><center><b>"+rsTotalNCalcMax.getFloat("nCalcTotal")+"</b></center></th>");
 				out.println("</tr>");
-				rs4=con.SelectData("select enrollmentno from student_master where batch="+request.getParameter("batch")+";");
+				rs4=con.SelectData("select enrollmentno from student_master where batch="+request.getParameter("batch")+" and studentDepartment="+(int)session.getAttribute("facultyDepartment")+";");
 				while(rs4.next()){
 					out.println("<tr>");
 					out.println("<td bgcolor='#e1e19b'><center><b>"+rs4.getString("enrollmentno")+"</b></center></td>");
