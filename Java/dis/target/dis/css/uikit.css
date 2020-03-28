@@ -1160,14 +1160,16 @@ a.uk-link-reset:hover,
  */
 
 .uk-table th {
-    padding: 16px 12px;
+    padding: 5px;
     text-align: left;
     vertical-align: bottom;
     /* 1 */
     font-size: 0.875rem;
     font-weight: normal;
-    color: #999;
     text-transform: uppercase;
+    border: 1px solid black;
+	color: black;
+	vertical-align: middle;
 }
 
 
@@ -1175,8 +1177,11 @@ a.uk-link-reset:hover,
  ========================================================================== */
 
 .uk-table td {
-    padding: 16px 12px;
+    padding: 5px;
     vertical-align: top;
+    font-size: .875rem !important;
+	border: 1px solid black;
+	vertical-align: middle;
 }
 
 

@@ -151,7 +151,7 @@
 					"<button class='btn' type='button' onclick='printDiv();' style='margin:30px;'>Print</button>"+
 				"</center></div></div>");
 				
-				if(!checkData("select distinct coID from attainment_co where coID="+request.getParameter("co_id")+";")){
+				if(!con.CheckData("select distinct coID from attainment_co where coID="+request.getParameter("co_id")+";")){
 					out.println("<div class='form-row'><div class='col-sm'></div><div class='col-sm'><center>"+
 						"<button class='btn' type='submit' value='submit' style='margin:30px; margin-top: 0px; background-color: #cf6766; color: white;'>Save</button>"+
 						"</center></div><div class='col-sm'></div></div></div>");

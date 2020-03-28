@@ -61,7 +61,8 @@
         <a href="calculateAttainment.jsp">Calculate Attainment</a><br/> --%>
 
 <div class="container" style="width: 80%; margin-bottom: 100px">
-	<h3 id="head" style="text-align: center; padding-bottom: 10px;">ADD
+	<div id="head"></div>
+	<h3 style="text-align: center; padding-bottom: 10px;">ADD
 		QUESTION</h3>
 	<form method="POST">
 
@@ -99,7 +100,8 @@
 						rsSubject=con.SelectData("select subjectName from subject_master where subjectID="+request.getParameter("subjectid")+";");
 						rsSubject.next();
 						rs = con.SelectData("select * from exam_master where subjectID=" + request.getParameter("subjectid")
-								+ " and batch=" + request.getParameter("batch1") + ";");
+								+ " and batch=" + request.getParameter("batch1") + " and examID not in (select examID from question_master where subjectID=" + request.getParameter("subjectid")
+								+ " and batch=" + request.getParameter("batch1") + ");");
 						out.println(
 								"<div class='form-row'><div class='col-sm'><label for='subjectID'>Subject:</label><input type='number' class='uk-input' id='subject_id' name='subject_id' value='"+request.getParameter("subjectid")+"' hidden/><input type='text' class='uk-input' id='subjectName' name='subjectName' value='"+ rsSubject.getString("subjectName")+"' readonly/></div>");
 						out.println(
@@ -133,6 +135,7 @@
 						ResultSet rs3 = con.SelectData(
 								"SELECT em.examID,em.examTypeID, em.weightage, em.totalMaxMarks, etm.percentWeight FROM exam_master em, examtype_master etm where em.examTypeID=etm.examTypeID and examID="
 										+ request.getParameter("exam_id") + ";");
+						
 						float fetchWeight = 0;
 						float fetchTotalMarks = 0;
 						int examTypeID = 0;
@@ -145,6 +148,7 @@
 							examTypeID = rs3.getInt("examTypeID");
 							percentWeight = rs3.getFloat("percentWeight");
 						}
+						String value="";
 						int x = 1;
 						while (x <= qunos) {
 							String coVal = "";
@@ -155,31 +159,27 @@
 							calcQuesMaxMarks = a / b;
 							nCalcQuesMaxMarks = calcQuesMaxMarks * percentWeight;
 
-							for (int i = 1; i <= m; i++) {
-								coHead = coHead + "coID" + Integer.toString(i);
-								coVal = coVal + request.getParameter("qmap" + x + "co" + i);
-								if (i < m) {
-									coHead += ',';
+							for (int i = 1; i <= 7; i++){
+								if (i <= m) {
+									coVal = coVal + request.getParameter("qmap" + x + "co" + i);
+								}
+								else{
+									coVal += "NULL";
+								}
+								if(i!=7){
 									coVal += ',';
 								}
 							}
-
-							if (con.Ins_Upd_Del(
-									"insert into question_master(queDesc,queMaxMarks,multipleMap,calcQuesMaxMarks,nCalcQuesMaxMarks,examID,"
-											+ coHead + ") values('" + request.getParameter("q" + x) + "',"
-											+ request.getParameter("qMarks" + x) + "," + request.getParameter("map" + x)
-											+ "," + calcQuesMaxMarks + "," + nCalcQuesMaxMarks + ","
-											+ request.getParameter("exam_id") + "," + coVal + ");")) {
-												if(x==qunos){
-													out.println("<script>$('.container').prepend('<div class=\"uk-alert-success\" uk-alert><a class=\"uk-alert-close\" uk-close></a>Questions Inserted Successfully.</div>')</script>");        
-													con.commitData();
-												}
-							} else {
-								out.println("<script>$('.container').prepend('<div class=\"uk-alert-danger\" uk-alert><a cl-ass=\"uk-alert-close\" uk-close></a>ERROR: @Question "+x+": Please Insert All Questions Again.</div>')</script>");
-								con.rollbackData();
-							}
+							value += "('"+request.getParameter("q"+x)+"',"+request.getParameter("qMarks"+x)+","+request.getParameter("map"+x)+","+calcQuesMaxMarks+","+nCalcQuesMaxMarks+","+request.getParameter("exam_id")+","+coVal+")";	
 							x++;
 						}
+						if (con.Ins_Upd_Del("insert into question_master(queDesc,queMaxMarks,multipleMap,calcQuesMaxMarks,nCalcQuesMaxMarks,examID,coID1,coID2,coID3,coID4,coID5,coID6,coID7) values "+value)) {
+													out.println("<script>$('#head').prepend('<div class=\"uk-alert-success\" uk-alert><a class=\"uk-alert-close\" uk-close></a><b>Questions Inserted Successfully.</b></div>')</script>");        
+													con.commitData();
+							} else {
+								out.println("<script>$('#head').prepend('<div class=\"uk-alert-danger\" uk-alert><a class=\"uk-alert-close\" uk-close></a><b>ERROR</b>: Please Insert All Questions Again.</div>')</script>");
+								con.rollbackData();
+							}
 				
 				}
 			%>
@@ -190,7 +190,7 @@
 	<script type="text/javascript">
         var st = '<%if (request.getParameter("next") != null) {
 					rs2 = con.SelectData(
-							"select * from co_master where subjectID=" + request.getParameter("subjectid") + ";");
+							"select * from co_master where subjectID=" + request.getParameter("subjectid") +" and batch=" + request.getParameter("batch1") + ";");
 					while (rs2.next()) {
 						s = s + "<option value=\"" + rs2.getInt("coID") + "\">CO " + rs2.getInt("coSrNo") + " - "
 								+ rs2.getString("coStatement") + "</option>";
@@ -214,7 +214,7 @@
 					<div class="form-row" style="padding-bottom:0px !important;"><label style="padding-left:30px !important;">Question '+n+'</lable></div>\
                     <div class="form-row" style="padding-top:0px !important;"><div class="col-sm"><label for="questionDesc">Description:</label><input type="text" class="uk-input" id="q'+n+'" name="q'+n+'" required></div>\
                     <div class="col-sm"><div class="form-row" style="padding:0px; margin:0px;"><div class="col-sm" style="padding:0px !important;"><label for="questionMarks">Marks:</label><input type="number" class="uk-input" id="qMarks'+(n)+'" name="qMarks'+(n)+'" required></div><div class="col-sm-1"></div>\
-                        <div class="col-sm" style="padding: 0px !important;"><label for="multiMap">Multiple Mapping:</label><input class="uk-input multiMap" type="number" id="map'+n+'" name="map'+n+'" required></div></div></div></div>\
+                        <div class="col-sm" style="padding: 0px !important;"><label for="multiMap">Multiple Mapping:</label><input class="uk-input multiMap" type="number" min="1" id="map'+n+'" name="map'+n+'" required></div></div></div></div>\
                         \
                         <div class="form-row" id="map'+n+'Co" style="padding-bottom:0px;">\
                         </div></div><br/>');

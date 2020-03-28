@@ -16,19 +16,65 @@
 <%@page import="java.io.*"%>
 <%@page import="Connection.Connect"%>
 <%@page import="Connection.Md5"%>
-<title>Login</title>
-<jsp:include page="header.jsp" />
-
-<body style="height: -webkit-fill-available; min-height: 50vh;">
-
-	<div class="header" style="width: 100%; z-index: 980;" uk-sticky="">
-		<h1 class="uk-heading-divider"></h1>
-		<h1 class="uk-heading-line uk-text-center">
-			<span>Department Information System</span>
-		</h1>
-		<h1 class="uk-heading-divider"></h1>
-	</div>
-	<div class="page">
+<title>LOGIN</title>
+<style type="text/css">
+a{
+	color: inherit !important;
+}
+a:hover{
+	color: #cf6766 !important;
+	text-decoration: none !important;
+}
+</style>
+<jsp:include page="headerFaculty.jsp" />
+<div class="navigation">
+</div>
+</div>
+<div class="container" style="width: 80%; border: 1px solid #cf6766; margin-top:18px;margin-bottom: 50px;">
+	<div id="head"></div>
+	<h3 style="text-align: center; padding-bottom: 10px;">LOGIN</h3>
+	<form method="POST">
+		<div class="form-row">
+			<div class="col-sm"></div>
+			<div class="col-sm">
+			<label for="roleSelect">You are:</label>
+					<select class="uk-select" name="roleSelect" id="roleSelect" required>
+						<option value="Faculty" selected>Faculty</option>
+						<option value="Admin">Admin</option>
+					</select>
+			</div>
+			<div class="col-sm"></div>
+		</div>
+		<div class="form-row">
+			<div class="col-sm"></div>
+			<div class="col-sm">
+			<label for="email">Email:</label>
+			<input type="email" class="uk-input" name="email" placeholder="Enter Email">
+			</div>
+			<div class="col-sm"></div>
+		</div>
+		<div class="form-row">
+			<div class="col-sm"></div>
+			<div class="col-sm">
+			<label for="password">Password:</label>
+			<input type="password" class="uk-input" name="password" placeholder="Enter Password">
+			</div>
+			<div class="col-sm"></div>
+		</div>
+		<div class="form-row">
+			<div class="col-sm"></div>
+			<div class="col-sm">
+				<center class="mt-3">
+					<button type="submit" class="btn" id="submitLink" value="submit" name="btnLogin" style="background-color: #cf6766; color: white;">SIGN IN</button>
+				</center>
+			</div>
+			<div class="col-sm"></div>
+		</div>
+		<div class="text-center text-muted">
+							Don't have account yet? <a href="./registerUser.jsp">SIGN UP</a>
+						</div>
+	</form>
+	<%-- <div class="page">
 		<div class="page-single" style="width: 100%;">
 			<div class="container">
 				<div class="row">
@@ -52,14 +98,14 @@
                                         </label>
                                     </div>
                                 </div>
-								<%-- <div class="form-group">
+								<div class="form-group">
 									<label class="form-label">You are</label> <select
 										class="form-control custom-select" id="roleSelect"
 										name="roleSelect">
 										<option value="Admin">Admin</option>
 										<option value="Faculty">Faculty</option>
 									</select>
-								</div> --%>
+								</div>
 								<div class="form-group">
 									<label class="form-label">Email</label> <input type="email"
 										name="email" class="form-control" id="InputEmail1"
@@ -77,7 +123,7 @@
 										id="submitLink" value="submit" name="btnLogin"
 										style="color: white;">Sign in</button>
 								</div>
-							</div>
+							</div> --%>
 							<%
 								Connect con = new Connect();
 								Md5 md = new Md5();
@@ -89,11 +135,11 @@
 													+ request.getParameter("email") + "';");
 											String Uname = request.getParameter("email");
 											String Name = null;
-											String dept = null;
+											int dept = 0;
 											int id=0;
 											if (rs.next()) {
 												Name = rs.getString("adminName");
-												dept = rs.getString("adminDepartment");
+												dept = rs.getInt("adminDepartment");
 												id = rs.getInt("adminID");
 
 											}
@@ -114,11 +160,11 @@
 													+ request.getParameter("email") + "';");
 											String Uname = request.getParameter("email");
 											String Name = null;
-											String dept = null;
+											int dept = 0;
 											int id=0;
 											if (rs.next()) {
 												Name = rs.getString("facultyName");
-												dept = rs.getString("facultyDepartment");
+												dept = rs.getInt("facultyDepartment");
 												id = rs.getInt("facultyID");
 
 											}
@@ -134,7 +180,7 @@
 										}
 									}
 							%>
-						</form>
+						<%-- </form>
 						<div class="text-center text-muted">
 							Don't have account yet? <a href="./registerUser.jsp">Sign up</a>
 						</div>
@@ -142,11 +188,8 @@
 				</div>
 			</div>
 		</div>
-	</div>
-</body>
-
-</html>
-
+	</div> --%>
+<jsp:include page="footer.jsp" />
 <%
 	}
 %>
