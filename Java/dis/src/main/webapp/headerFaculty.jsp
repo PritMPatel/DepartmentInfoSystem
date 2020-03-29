@@ -35,9 +35,9 @@
 	}
 	input[type=number] {	
 		-moz-appearance: textfield;
-		padding:0px;
+		/* padding:0px;
 		border: 0px;
-		text-align: center;
+		text-align: center; */
 	}
 </style>
 
