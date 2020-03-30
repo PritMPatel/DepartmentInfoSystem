@@ -245,7 +245,7 @@
 						value+=",";
 					}
 				}
-				if(con.Ins_Upd_Del("insert into attainment_co (enrollmentno,weighMarksPercent,coAttainmentLevel,subjectID,coID) values "+values+";")){
+				if(con.Ins_Upd_Del("insert into attainment_co (enrollmentno,weighMarksPercent,coAttainmentLevel,subjectID,coID) values "+value+";")){
 					out.println("<script>$('#head').prepend('<div class=\"uk-alert-success\" uk-alert><a class=\"uk-alert-close\" uk-close></a><b>Data Saved Successfully.</b></div>')</script>");        
 					con.commitData();
 				}
