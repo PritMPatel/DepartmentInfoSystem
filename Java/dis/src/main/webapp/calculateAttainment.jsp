@@ -118,7 +118,7 @@
 							"</center>");
                     }
 		if(request.getParameter("viewattain")!=null){
-				out.println("<input type='number' name='subject_id' value='"+request.getParameter("subject_id")+"' readonly hidden/>");
+				out.println("<form method='POST'><input type='number' name='subject_id' value='"+request.getParameter("subject_id")+"' readonly hidden/>");
             	out.println("<input type='number' name='batch' value='"+request.getParameter("batch")+"' readonly hidden/>");
 				out.println("<input type='number' name='coid' value='"+request.getParameter("co_id")+"' readonly hidden/>");
 				%>
@@ -197,7 +197,8 @@
 				out.println("<th rowspan='1' bgcolor='peachpuff'><center><b>"+rsTotalCalcMax.getFloat("calcTotal")+"</b></center></th>");
 				out.println("<th rowspan='1' bgcolor='peachpuff'><center><b>"+rsTotalNCalcMax.getFloat("nCalcTotal")+"</b></center></th>");
 				out.println("</tr>");
-				rs4=con.SelectData("select enrollmentno from student_master where batch="+request.getParameter("batch")+" and studentDepartment="+(int)session.getAttribute("facultyDepartment")+";");
+				rs4=con.SelectData("select enrollmentno from student_master where batch="+request.getParameter("batch")+" and studentDepartment="+(int)session.getAttribute("facultyDepartment")+" order by enrollmentno;");
+				int x=1;
 				while(rs4.next()){
 					out.println("<tr>");
 					out.println("<td bgcolor='#e1e19b'><center><b>"+rs4.getString("enrollmentno")+"</b></center></td>");
@@ -209,7 +210,7 @@
 					if(rs6.next()){
 						out.println("<td colspan=1 bgcolor='peachpuff'><center>"+rs6.getFloat("totalCalcObt")+"</center></td>");
 						out.println("<td colspan=1 bgcolor='peachpuff'><center>"+rs6.getFloat("totalNCalcObt")+"</center></td>");
-						out.println("<td colspan=1 bgcolor='lightsalmon' ><center>"+rs6.getFloat("attainPercent")+"<input type='number' id='atTable' class='uk-input uk-form-blank uk-form-small uk-width-xsmall' step='0.01' value='"+rs6.getFloat("attainPercent")+"' readonly hidden/></center></td>");
+						out.println("<td colspan=1 bgcolor='lightsalmon' ><center>"+rs6.getFloat("attainPercent")+"<input type='number' id='atTable' name='attMarks"+x+"' class='uk-input uk-form-blank uk-form-small uk-width-xsmall' step='0.01' value='"+rs6.getFloat("attainPercent")+"' readonly hidden/></center></td>");
 						float percent=rs6.getFloat("attainPercent");
 						int lvl=0;
 						if(percent>=70)
@@ -220,14 +221,38 @@
 							lvl=1;
 						else
 							lvl=0;
-						out.println("<td colspan=1 bgcolor='thistle'><center>"+lvl+"<input type='number' id='atTable' class='uk-input uk-form-blank uk-form-small uk-width-xsmall' value='"+lvl+"' hidden readonly/>");
+						out.println("<td colspan=1 bgcolor='thistle'><center>"+lvl+"<input type='number' name='attLvl"+x+"' id='atTable' class='uk-input uk-form-blank uk-form-small uk-width-xsmall' value='"+lvl+"' hidden readonly/>");
 						
 						out.println("</center></td>");
 					}
 					out.println("</tr>");
+					x++;
 				}
 
-				out.println("</table></div>");
+				out.println("</table></div></form>");
+			}
+
+			if(request.getParameter("submit")!=null){
+				rs4=con.SelectData("select enrollmentno from student_master where batch="+request.getParameter("batch")+" and studentDepartment="+(int)session.getAttribute("facultyDepartment")+" order by enrollmentno;");
+				rs4.last();
+				int nOfStudent=rs4.getRow();
+				rs4.beforeFirst();
+				String value = "";
+				int x=1;
+				while(x<=nOfStudent){
+					value += "('"+rs4.getString("enrollmentno")+"',"+request.getParameter("attMarks"+x)+","+request.getParameter("attLvl"+x)+","+request.getParameter("subject_id")+","+request.getParameter("co_id")+")";
+					if(x!=nOfStudent){
+						value+=",";
+					}
+				}
+				if(con.Ins_Upd_Del("insert into attainment_co (enrollmentno,weighMarksPercent,coAttainmentLevel,subjectID,coID) values "+values+";")){
+					out.println("<script>$('#head').prepend('<div class=\"uk-alert-success\" uk-alert><a class=\"uk-alert-close\" uk-close></a><b>Data Saved Successfully.</b></div>')</script>");        
+					con.commitData();
+				}
+				else{
+					out.println("<script>$('#head').prepend('<div class=\"uk-alert-danger\" uk-alert><a class=\"uk-alert-close\" uk-close></a><b>ERROR</b>: Please Try Again Later.</div>')</script>");
+					con.rollbackData();
+				}
 			}
 		%>
 
