@@ -1,10 +1,10 @@
-CREATE DATABASE  IF NOT EXISTS `finalyearproject` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+CREATE DATABASE  IF NOT EXISTS `finalyearproject` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */;
 USE `finalyearproject`;
--- MySQL dump 10.13  Distrib 8.0.16, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.15, for Win64 (x86_64)
 --
--- Host: localhost    Database: finalyearproject
+-- Host: 127.0.0.1    Database: finalyearproject
 -- ------------------------------------------------------
--- Server version	8.0.16
+-- Server version	8.0.15
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -54,19 +54,20 @@ DROP TABLE IF EXISTS `attainment_co`;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `attainment_co` (
   `attainCoID` int(11) NOT NULL AUTO_INCREMENT,
-  `weighMarks` float NOT NULL,
-  `attainmentCo` float NOT NULL,
+  `weighMarksPercent` float NOT NULL,
+  `coAttainmentLevel` int(11) NOT NULL,
   `enrollmentno` varchar(12) NOT NULL,
   `subjectID` int(11) NOT NULL,
   `coID` int(11) NOT NULL,
   PRIMARY KEY (`attainCoID`),
+  UNIQUE KEY `uc_e_co_sub` (`enrollmentno`,`subjectID`,`coID`),
   KEY `enrollmentno` (`enrollmentno`),
   KEY `subjectID` (`subjectID`),
   KEY `coID` (`coID`),
   CONSTRAINT `attainment_co_ibfk_1` FOREIGN KEY (`enrollmentno`) REFERENCES `student_master` (`enrollmentno`),
   CONSTRAINT `attainment_co_ibfk_2` FOREIGN KEY (`subjectID`) REFERENCES `subject_master` (`subjectID`),
   CONSTRAINT `attainment_co_ibfk_3` FOREIGN KEY (`coID`) REFERENCES `co_master` (`coID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -91,6 +92,7 @@ CREATE TABLE `attainment_overall` (
   `enrollmentno` varchar(12) NOT NULL,
   `subjectID` int(11) NOT NULL,
   PRIMARY KEY (`attainOverallID`),
+  UNIQUE KEY `uc_en_sub` (`enrollmentno`,`subjectID`),
   KEY `enrollmentno` (`enrollmentno`),
   KEY `subjectID` (`subjectID`),
   CONSTRAINT `attainment_overall_ibfk_1` FOREIGN KEY (`enrollmentno`) REFERENCES `student_master` (`enrollmentno`),
@@ -230,7 +232,7 @@ CREATE TABLE `faculty_master` (
 
 LOCK TABLES `faculty_master` WRITE;
 /*!40000 ALTER TABLE `faculty_master` DISABLE KEYS */;
-INSERT INTO `faculty_master` VALUES (1,'Prof. S. J. Molia','sjm@gmail.com','2431dd378df9c754e0245efd8fbf2aab',16);
+INSERT INTO `faculty_master` VALUES (1,'SJM','sjm@gmail.com','2431dd378df9c754e0245efd8fbf2aab',16);
 /*!40000 ALTER TABLE `faculty_master` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -243,7 +245,7 @@ DROP TABLE IF EXISTS `marks_obtained_master`;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `marks_obtained_master` (
   `marksID` int(11) NOT NULL AUTO_INCREMENT,
-  `obtainedMarks` float NOT NULL,
+  `obtainedMarks` int(11) NOT NULL,
   `calcObtainedMarks` float NOT NULL,
   `nCalcObtainedMarks` float NOT NULL DEFAULT '0',
   `enrollmentno` varchar(12) NOT NULL,
@@ -380,4 +382,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-03-28 23:45:51
+-- Dump completed on 2020-03-30  0:59:47
