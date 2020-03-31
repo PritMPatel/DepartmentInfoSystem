@@ -103,11 +103,12 @@
     con=new Connect();
     %>
     <%
-    if(request.getParameter("submitOverall")==null && request.getParameter("submit")==null){
+    if(request.getParameter("submitOverall")==null && request.getParameter("submitOverallAttain")==null){
 			response.sendRedirect("calculateAttainment.jsp");
 	}
     if(request.getParameter("submitOverall")!=null){
-        out.println("<form method='POST'><input type='number' name='subject_id' value='"+request.getParameter("subject_id")+"' readonly hidden/>");
+        out.println("<form method='POST' action='dis/calculateAttainment.jsp'><input type='number' name='subject_id' value='"+request.getParameter("subject_id")+"' readonly hidden/>");
+		out.println("<input type='number' name='batch' value='"+request.getParameter("batch")+"' readonly hidden/>");	
 
 		rsCo=con.SelectData("select * from co_master where subjectID="+request.getParameter("subject_id")+" and batch="+request.getParameter("batch")+" and facultyID="+(int)session.getAttribute("facultyID")+" order by coID;");
 	
@@ -159,7 +160,7 @@
 		
 		if(!con.CheckData("select distinct subjectID from attainment_overall,student_master where attainment_overall.enrollmentno=student_master.enrollmentno and subjectID="+request.getParameter("subject_id")+" and batch="+request.getParameter("batch")+";")){
 					out.println("<div class='form-row'><div class='col-sm'></div><div class='col-sm'><center>"+
-						"<button class='btn' type='submit' name='submit' value='submit' style='margin:30px; margin-top: 0px; background-color: #cf6766; color: white;'>Save</button>"+
+						"<button class='btn' type='submit' name='submitOverallAttain' id='submitOverallAttain' value='submitOverallAttain' formaction='/dis/calculateAttainment.jsp' style='margin:30px; margin-top: 0px; background-color: #cf6766; color: white;'>Save</button>"+
 						"</center></div><div class='col-sm'></div></div>");
 				}
 
@@ -205,28 +206,28 @@
 		}
         out.println("</table></div></form>");
     }
-	if(request.getParameter("submit")!=null){
-		rsEnrollments=con.SelectData("select enrollmentno from student_master where batch="+request.getParameter("batch")+" and studentDepartment="+(int)session.getAttribute("facultyDepartment")+" order by enrollmentno;");
-		rsEnrollments.last();
-		int nOfStudent=rsEnrollments.getRow();
-		String value = "";
-		x1=1;
-		while(x1<=nOfStudent){
-			value += "('"+request.getParameter("enroll"+x1)+"',"+request.getParameter("oAtt"+x1)+","+request.getParameter("subject_id")+")";
-			if(x1!=nOfStudent){
-				value+=",";
+	if(request.getParameter("submitOverallAttain")!=null){
+				rsEnrollments=con.SelectData("select enrollmentno from student_master where batch="+request.getParameter("batch")+" and studentDepartment="+(int)session.getAttribute("facultyDepartment")+" order by enrollmentno;");
+				rsEnrollments.last();
+				int nOfStudent=rsEnrollments.getRow();
+				String value = "";
+				x1=1;
+				while(x1<=nOfStudent){
+					value += "('"+request.getParameter("enroll"+x1)+"',"+request.getParameter("oAtt"+x1)+","+request.getParameter("subject_id")+")";
+					if(x1!=nOfStudent){
+						value+=",";
+					}
+					x1++;
+				}
+				if(con.Ins_Upd_Del("insert into attainment_overall (enrollmentno,attainmentOverall,subjectID) values "+value+";")){
+					out.println("<script>$('#head').prepend('<div class=\"uk-alert-success\" uk-alert><a class=\"uk-alert-close\" uk-close></a><b>Data Saved Successfully.</b></div>')</script>");        
+					con.commitData();
+				}
+				else{
+					out.println("<script>$('#head').prepend('<div class=\"uk-alert-danger\" uk-alert><a class=\"uk-alert-close\" uk-close></a><b>ERROR</b>: Please Try Again Later.</div>')</script>");
+					con.rollbackData();
+				}
 			}
-			x1++;
-		}
-		if(con.Ins_Upd_Del("insert into attainment_overall (enrollmentno,attainmentOverall,subjectID) values "+value+";")){
-			out.println("<script>$('#head').prepend('<div class=\"uk-alert-success\" uk-alert><a class=\"uk-alert-close\" uk-close></a><b>Data Saved Successfully.</b></div>')</script>");        
-			con.commitData();
-		}
-		else{
-			out.println("<script>$('#head').prepend('<div class=\"uk-alert-danger\" uk-alert><a class=\"uk-alert-close\" uk-close></a><b>ERROR</b>: Please Try Again Later.</div>')</script>");
-			con.rollbackData();
-		}
-	}
     %>
     <%-- <th bgcolor='#e1e19b' colspan='"+nOfCo+"'><center><b>Attainment Level</center></b></th></tr><tr> --%>
     <script type="text/javascript">
