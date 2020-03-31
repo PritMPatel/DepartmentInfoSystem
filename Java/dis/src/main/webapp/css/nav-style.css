@@ -78,8 +78,8 @@
 /*style for dropdown links*/
 
 .navigation li:hover ul li a {
-    background: darkgray;
-    color: #031017;
+    background: #031017;
+    color: #fff;
     height: 40px;
     line-height: 40px;
     transition: 0.25s background;
@@ -90,8 +90,8 @@
 /*hover state for dropdown links*/
 
 .navigation li:hover ul li a:hover {
-    color: black;
-    background: darkgrey;
+    color: #031017;
+    background: #cf6766;
     transition: 0.25s background;
     transition-delay: 0.25s color;
 }
