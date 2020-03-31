@@ -111,7 +111,7 @@
 		rsCoTotal=con.SelectData("select sum(t.coWeighTotal) as total from ("+coMarksQuery+") as t;");
 		rsCoTotal.next();
 
-		String attainmentOverallQuery = "select enrollmentno,sum(c) as overallAttainment from (select enrollmentno,(coAttainmentLevel*coWeighTotal) as c from attainment_co,("+coMarksQuery+") as t where t.coID=attainment_co.coID) as t1 group by enrollmentno order by enrollmentno;";
+		String attainmentOverallQuery = "select enrollmentno,round(sum(c)/"+rsCoTotal.getFloat("total")+",2) as overallAttainment from (select enrollmentno,(coAttainmentLevel*coWeighTotal) as c from attainment_co,("+coMarksQuery+") as t where t.coID=attainment_co.coID) as t1 group by enrollmentno order by enrollmentno;";
 		rsOverall = con.SelectData(attainmentOverallQuery);
 
 		rsCoAttain = con.SelectData("select enrollmentno,coAttainmentLevel from attainment_co where coID in (select coID from co_master where subjectID="+request.getParameter("subject_id")+" and batch="+request.getParameter("batch")+") order by enrollmentno,coID;");
@@ -141,25 +141,44 @@
 		out.println("<tr><th bgcolor='#e1e19b'><center><b>Subject</b></center></th><th colspan='"+(nOfCo+1)+"'><center><b>"+rsSubject.getString("subjectName")+"</b></center></th></tr>");
 		out.println("<tr><th bgcolor='#e1e19b'><center><b>Batch</b></center></th><th colspan='"+(nOfCo+1)+"'><center><b>"+request.getParameter("batch")+"</b></center></th></tr>");
 		out.println("<tr><th bgcolor='#e1e19b'><center><b>Faculty</b></center></th><th colspan='"+(nOfCo+1)+"'><center><b>"+session.getAttribute("getfacultyName")+"</b></center></th></tr>");
-		out.println("<tr><td></td></tr>");
-		out.println("<tr><th colspan='"+(nOfCo+2)+"'><center><b>OVERALL SUBJECT ATTAINMENT</b></center></th></tr>");
+		out.println("<tr><td colspan='"+(nOfCo+2)+"' bgcolor='#cf6766'></td></tr>");
+		
 		out.println("<tr><th bgcolor='#e1e19b'><center><b>CO</b></center></th>");
 		while(rsCo.next()){
-			out.println("<th><center>"+rsCo.getInt("coSrNo")+"</center></th>");
+			out.println("<th bgcolor='silver'><center><b>"+rsCo.getInt("coSrNo")+"</b></center></th>");
 		}
-		out.println("<th><center>Total</center></th></tr>");
+		out.println("<th bgcolor='silver'><center><b>Total</b></center></th></tr>");
 		out.println("<tr><th bgcolor='#e1e19b'><center><b>Max Marks</b></center></th>");
 		while(rsCoWiseMax.next()){
-			out.println("<th><center>"+rsCoWiseMax.getFloat("coWeighTotal")+"</center></th>");
+			out.println("<th><center><b>"+rsCoWiseMax.getFloat("coWeighTotal")+"</b></center></th>");
 		}
-		out.println("<th><center>"+rsCoTotal.getFloat("total")+"</center></th></tr>");
+		out.println("<th><center><b>"+rsCoTotal.getFloat("total")+"</b></center></th></tr>");
+		out.println("<tr><td colspan='"+(nOfCo+2)+"' bgcolor='#cf6766'></td></tr>");
+		out.println("<tr style='border-top: 2px solid; border-bottom: 2px solid;'><th colspan='"+(nOfCo+2)+"' bgcolor='silver'><center><b>Overall Subject Attainment</b></center></th></tr>");
+		out.println("<tr style='border-top: 2px solid; border-bottom: 2px solid;'><th bgcolor='#e1e19b' rowspan='1'><center><b>Enrollment</b></center></th>");
+		rsCo.beforeFirst();
+		while(rsCo.next()){
+			out.println("<th bgcolor='silver' rowspan='1'><center><b>CO-"+rsCo.getInt("coSrNo")+"</b></center></th>");
+		}
+		out.println("<th rowspan='1' bgcolor='#e1e19b'><center><b>Overall Attainment</center></b></th></tr>");
 		out.println("<tr></tr>");
-
-
+		
+		while(rsEnrollments.next() && rsOverall.next()){
+			x=1;
+			out.println("<tr>");
+			out.println("<td><input type='text' value='"+rsEnrollments.getString("enrollmentno")+"' readonly hidden><center><b>"+rsEnrollments.getString("enrollmentno")+"</b></center></td>");
+			while(x<=nOfCo && rsCoAttain.next()){
+				out.println("<td><center>"+rsCoAttain.getInt("coAttainmentLevel")+"</center></td>");
+				x++;
+			}
+			out.println("<td><input type='number' step='0.01' value='"+rsOverall.getFloat("overallAttainment")+"' readonly hidden><center>"+rsOverall.getFloat("overallAttainment")+"</center></td>");
+			out.println("</tr>");
+		}
+		
         out.println("</table></div>");
     }
     %>
-       
+    <%-- <th bgcolor='#e1e19b' colspan='"+nOfCo+"'><center><b>Attainment Level</center></b></th></tr><tr> --%>
     <script type="text/javascript">
 	function printDiv() {
                     var divName= "attainment";
