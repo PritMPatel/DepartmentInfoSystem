@@ -125,14 +125,17 @@
 		
 		//BUTTONS
 		
-		out.println("<div class='form-row'><div class='col-sm'><center class=\"mt-3\">"+
-					"<a href='calculateAttainment.jsp'><button class='btn' type='button' style='margin:30px;'>Reset</button></a>"+
+		out.println("<div class='form-row'><div class='col-sm'><center class=\"mt-4\">"+
+					"<button type='button' class='btn' onclick='goBack()'>Go Back</button>"+
 					"</center></div>");
-		out.println("<div class='col-sm'><center class=\"mt-3\">"+
-					"<button type='button' class='btn' id='exportExcel' value='OVERALL-"+rsSubject.getString("subjectName")+"-B"+request.getParameter("batch")+"' style='margin:30px;'>Export to Excel</button>"+
+		out.println("<div class='col-sm'><center class=\"mt-4\">"+
+					"<a href='calculateAttainment.jsp'><button class='btn' type='button'>Reset</button></a>"+
+					"</center></div>");	
+		out.println("<div class='col-sm'><center class=\"mt-4\">"+
+					"<button type='button' class='btn' id='exportExcel' value='OVERALL-"+rsSubject.getString("subjectName")+"-B"+request.getParameter("batch")+"' >Export to Excel</button>"+
 					"</center></div>");				
-		out.println("<div class='col-sm'><center class=\"mt-3\">"+
-					"<button class='btn' type='button' onclick='printDiv();' style='margin:30px;'>Print</button>"+
+		out.println("<div class='col-sm'><center class=\"mt-4 mb-5\">"+
+					"<button class='btn' type='button' onclick='printDiv();'>Print</button>"+
 					"</center></div></div>");
 		
 		if(!con.CheckData("select distinct subjectID from attainment_overall,student_master where attainment_overall.enrollmentno=student_master.enrollmentno and subjectID="+request.getParameter("subject_id")+" and batch="+request.getParameter("batch")+";")){
@@ -220,6 +223,7 @@
 
                     document.body.innerHTML = originalContents;
                 }
+	function goBack(){window.history.back()}
 	$(function() {
 				$("#exportExcel").click(function(){
 				var name= $("#exportExcel").val();
