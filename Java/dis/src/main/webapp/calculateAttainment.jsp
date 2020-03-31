@@ -266,6 +266,29 @@
 					con.rollbackData();
 				}
 			}
+			if(request.getParameter("submitOverallAttain")!=null){
+				ResultSet rsEnrollments=con.SelectData("select enrollmentno from student_master where batch="+request.getParameter("batch")+" and studentDepartment="+(int)session.getAttribute("facultyDepartment")+" order by enrollmentno;");
+				rsEnrollments.last();
+				int nOfStudent=rsEnrollments.getRow();
+				String value = "";
+				int x1=1;
+				while(x1<=nOfStudent){
+					value += "('"+request.getParameter("enroll"+x1)+"',"+request.getParameter("oAtt"+x1)+","+request.getParameter("subject_id")+")";
+					if(x1!=nOfStudent){
+						value+=",";
+					}
+					x1++;
+				}
+				if(con.Ins_Upd_Del("insert into attainment_overall (enrollmentno,attainmentOverall,subjectID) values "+value+";")){
+					out.println("<script>$('#head').prepend('<div class=\"uk-alert-success\" uk-alert><a class=\"uk-alert-close\" uk-close></a><b>Data Saved Successfully.</b></div>')</script>");        
+					con.commitData();
+					response.sendRedirect("overallAttainment.jsp?submitOverall=1&subject_id="+request.getParameter("subject_id")+"&batch="+request.getParameter("batch"));
+				}
+				else{
+					out.println("<script>$('#head').prepend('<div class=\"uk-alert-danger\" uk-alert><a class=\"uk-alert-close\" uk-close></a><b>ERROR</b>: Please Try Again Later.</div>')</script>");
+					con.rollbackData();
+				}
+			}
 		%>
 
 		</form>
