@@ -87,6 +87,7 @@
 			ResultSet rsTotalNCalcMax=null;
 			ResultSet rsCo=null;
 			ResultSet rsSubject=null;
+			ResultSet rsPendingCoAttain=null;
 			String s = "";
 			int coCounter=0;
 			int i=1;
@@ -99,7 +100,7 @@
                         rsCo=con.SelectData("select * from co_master where subjectID="+request.getParameter("subjectid")+" and batch="+request.getParameter("batch1")+" and facultyID="+(int)session.getAttribute("facultyID")+";");
 						if(!rsCo.next()){
 							out.println("<script>$('#head').prepend('<div class=\"uk-alert-danger\" uk-alert><a class=\"uk-alert-close\" uk-close></a><b>ACCESS DENIED</b>: You can't Access requested Data.</div>')</script>");
-							response.sendRedirect("dis/calculateAttainment.jsp");
+							response.sendRedirect("/calculateAttainment.jsp");
 						}
 						rsCo.beforeFirst();
                         rsSubject=con.SelectData("select subjectName from subject_master where subjectID="+request.getParameter("subjectid")+";");
@@ -140,10 +141,20 @@
 				
 				if(!con.CheckData("select distinct coID from attainment_co where coID="+request.getParameter("co_id")+";")){
 					out.println("<div class='form-row'><div class='col-sm'></div><div class='col-sm'><center>"+
-						"<button class='btn' type='submit' value='submit' style='margin:30px; margin-top: 0px; background-color: #cf6766; color: white;'>Save</button>"+
+						"<button class='btn' type='submit' name='submit' value='submit' style='margin:30px; margin-top: 0px; background-color: #cf6766; color: white;'>Save</button>"+
 						"</center></div><div class='col-sm'></div></div></div>");
 				}
 				
+				rsPendingCoAttain=con.SelectData("select coID,coSrNo from co_master where coID not in (select distinct coID from attainment_co) and subjectID="+request.getParameter("subject_id")+" and batch="+request.getParameter("batch")+";");
+				
+				if(!rsPendingCoAttain.next()){
+					out.println("<form method='POST' action='dis/overallAttainment.jsp'><input type='number' name='subject_id' value='"+request.getParameter("subject_id")+"' readonly hidden/>");
+            		out.println("<input type='number' name='batch' value='"+request.getParameter("batch")+"' readonly hidden/>");	
+					out.println("<div class='form-row'><div class='col-sm'></div><div class='col-sm'><center>"+//"<a class=\"uk-button uk-button-default\" href=\"overallAttainment.jsp\">Link</a>"+
+						"<button class='btn' type='submit' id='submitOverall' name='submitOverall' formaction='/dis/overallAttainment.jsp' value='submitOverall' style='margin:30px; margin-top: 0px; background-color: #cf6766; color: white;'>View Overall Attainment</button>"+
+						"</center></div><div class='col-sm'></div></div></div></form>");
+				}
+
 				out.println("<div class=\"container\" style=\"width: 100%; margin-bottom: 100px; max-width: 90vw;margin-top:0px;\">");
 				
 				rs0=con.SelectData("select count(typeDescription)*2 as colspan from (select distinctrow typeDescription,examName,queDesc from marks_obtained_master,question_master,exam_master,examtype_master where question_master.examID=exam_master.examID and exam_master.examtypeID=examtype_master.examtypeID and question_master.questionID=marks_obtained_master.questionID and marks_obtained_master.questionID in (select question_master.questionID from question_master,exam_master,examtype_master where (select coID from co_master where coID="+request.getParameter("co_id")+") IN (coID1,coID2,coID3,coID4,coID5,coID6,coID7) and question_master.examID=exam_master.examID and exam_master.examTypeID=examtype_master.examTypeID and exam_master.batch="+request.getParameter("batch")+" and exam_master.subjectID="+request.getParameter("subject_id")+") order by enrollmentno,typeDescription,examName,QueDesc) as t;");
@@ -239,11 +250,12 @@
 				rs4.beforeFirst();
 				String value = "";
 				int x=1;
-				while(x<=nOfStudent){
-					value += "('"+rs4.getString("enrollmentno")+"',"+request.getParameter("attMarks"+x)+","+request.getParameter("attLvl"+x)+","+request.getParameter("subject_id")+","+request.getParameter("co_id")+")";
+				while(x<=nOfStudent && rs4.next()){
+					value += "('"+rs4.getString("enrollmentno")+"',"+request.getParameter("attMarks"+x)+","+request.getParameter("attLvl"+x)+","+request.getParameter("subject_id")+","+request.getParameter("coid")+")";
 					if(x!=nOfStudent){
 						value+=",";
 					}
+					x++;
 				}
 				if(con.Ins_Upd_Del("insert into attainment_co (enrollmentno,weighMarksPercent,coAttainmentLevel,subjectID,coID) values "+value+";")){
 					out.println("<script>$('#head').prepend('<div class=\"uk-alert-success\" uk-alert><a class=\"uk-alert-close\" uk-close></a><b>Data Saved Successfully.</b></div>')</script>");        
