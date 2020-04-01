@@ -83,7 +83,7 @@ table input{
 			<div class="col-sm"></div>
 			<div class="col-sm">
 				<label for="batch">Batch:</label>
-				<input type="number" class="uk-input" name="batch" min="2000" max="2030" placeholder="Enter Batch" required>
+				<input type="number" class="uk-input" name="batch" min="2000" max="2030" placeholder="Enter Batch">
 			</div>
 			<div class="col-sm"></div>
 		</div>
@@ -122,7 +122,7 @@ table input{
 			<div class="form-row" >
 				<div class="col-sm"></div>
 				<div class="col-sm">
-					<label for="noStudents">No of Students:</label>
+					<label for="batch">No of Students:</label>
 					<input type="number" class="uk-input" name="nOfStudent" id="nOfStudent" min="1" placeholder="Enter No of Students">
 				</div>
 				<div class="col-sm"></div>
@@ -130,33 +130,8 @@ table input{
 			<div id="studentData">
 			</div>
 		</div>
-		<center class="mt-3"><button class='btn' type='submit' id='addStudentbtn' name='addStudentbtn' value='submit' style='display:none; background-color:#cf6766;'><b>Submit</b></button></center>
-		<%
-		Connect con = null;
-		//ResultSet rs = null;
-		ResultSetMetaData mtdt = null;
-	con = new Connect();
-	
-	int x=1;
-	ResultSet rs=con.SelectData("select adminDepartment from admin_master where adminID="+session.getAttribute("id")+";");
-	rs.last();
-	int dept=rs.getRow();
-		if (request.getParameter("addStudentbtn") != null) {
-			int noofStud=Integer.parseInt(request.getParameter("nOfStudent"));
-			while(x=noofStud){
-						if (con.Ins_Upd_Del(
-								"insert into student_master (enrollmentno, batch, studentDepartment) values ('"+request.getParameter("enroll"+x+"")+"',"+request.getParameter("batch")+","+dept+");")){
-											out.println("<script>$('#head').prepend('<div class=\"uk-alert-success\" uk-alert><a class=\"uk-alert-close\" uk-close></a><b>Student Inserted Successfully</b>.</div>')</script>");        
-											con.commitData();
-										}
-						else{
-								out.println("<script>$('#head').prepend('<div class=\"uk-alert-danger\" uk-alert><a class=\"uk-alert-close\" uk-close></a><b>ERROR</b>: Same Enrollment Exist for Selected Batch.</div>')</script>");
-								con.rollbackData();
-							}
-		}
-		x++;
-					}
-		%>	
+		<center class="mt-3"><button class='btn' type='submit' id='submit' name='submit' value='submit' style='display:none; background-color:#cf6766;'>Submit</button></center>
+
 	<script type="text/javascript">
     function Upload() {
         var fileUpload = document.getElementById("fileUpload");
@@ -177,7 +152,7 @@ table input{
                             for (var j = 0; j < 1; j++) {
                                 var cell = row.insertCell(-1);
 								var studentData = document.getElementById("studentData");
-								$('#studentData').append('<div class="col-md-3"><input type="text" class="uk-input" name="enroll'+cells[j]+'" value="'+cells[j]+'" required></div>');				
+								$('#studentData').append('<div class="col-md-3"><input type="text" class="uk-input" value="'+cells[j]+'" required></div>');				
 								x++;
                             }
                         }}
@@ -212,7 +187,7 @@ table input{
 		var x=1;
 		$('#studentData').text('');
 		while(x<=no){
-			$('#studentData').append('<div class="col-md-3"><input type="text" class="uk-input" name="enroll'+x+'" placeholder="Enrollment No. '+x+'" required></div>')
+			$('#studentData').append('<div class="col-md-3"><input type="text" class="uk-input" placeholder="Enrollment No. '+x+'" required></div>')
 			x++;
 		}
 		$('#submit').show();
