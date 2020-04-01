@@ -8,7 +8,7 @@
 	//if (!userRole.equals("faculty")){
 	//	response.sendRedirect("/dis/login.jsp");
 	//}
-	if (userRole.equals("faculty")) {
+	if (userRole.equals("admin")) {
 %>
 <%@page import="java.sql.ResultSet"%>
 <%@page import="java.io.*"%>
@@ -24,29 +24,9 @@
 					Menu</label> <input type="checkbox" id="show-menu" role="button">
 				<ul id="menu">
 					<li><a href="facultyHome.jsp" class="active main-link">HOME</a></li>
-					<li><a href="#" class="main-link">INSERT &nbsp;<i
-							class="fa fa-caret-down"></i></a>
-						<ul class="hidden">
-					<li><a href="facultyAddCo.jsp" class="main-link">ADD CO</a></li>
-					<li><a href="facultyAddExam.jsp" class="main-link">ADD
-							EXAM</a></li>
-					<li><a href="facultyAddQue.jsp" class="main-link">ADD
-							QUESTION</a></li>
-					<li><a href="facultyAddMarks.jsp" class="main-link">ADD
-							MARKS</a></li>
-							</ul></li>
-					<li><a href="#" class="main-link">UPDATE &nbsp;<i
-							class="fa fa-caret-down"></i></a>
-						<ul class="hidden">
-					<li><a href="#" class="main-link">UPDATE CO</a></li>
-					<li><a href="#" class="main-link">UPDATE
-							EXAM</a></li>
-					<li><a href="#" class="main-link">UPDATE
-							QUESTION</a></li>
-					<li><a href="#" class="main-link">UPDATE
-							MARKS</a></li>
-							</ul></li>
-					<li><a href="viewMarks.jsp" class="main-link">VIEW
+					<li><a href="viewMarks.jsp" class="main-link">ADD STUDENT</a></li>
+                    <li><a href="viewMarks.jsp" class="main-link">APPROVE FACULTY</a></li>
+                    <li><a href="calculateAttainment.jsp" class="main-link">VIEW
 							MARKS</a></li>
 					<li><a href="calculateAttainment.jsp" class="main-link">VIEW
 							ATTAINMENT</a></li>
