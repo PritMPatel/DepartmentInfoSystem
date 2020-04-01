@@ -187,7 +187,7 @@ table input{
 		var x=1;
 		$('#studentData').text('');
 		while(x<=no){
-			$('#studentData').append('<div class="col-md-3"><input type="text" class="uk-input" required></div>')
+			$('#studentData').append('<div class="col-md-3"><input type="text" class="uk-input" placeholder="Enrollment No. '+x+'" required></div>')
 			x++;
 		}
 		$('#submit').show();
