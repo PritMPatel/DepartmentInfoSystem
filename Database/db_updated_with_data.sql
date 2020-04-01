@@ -1,10 +1,10 @@
-CREATE DATABASE  IF NOT EXISTS `finalyearproject` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+CREATE DATABASE  IF NOT EXISTS `finalyearproject` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */;
 USE `finalyearproject`;
--- MySQL dump 10.13  Distrib 8.0.16, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.15, for Win64 (x86_64)
 --
--- Host: localhost    Database: finalyearproject
+-- Host: 127.0.0.1    Database: finalyearproject
 -- ------------------------------------------------------
--- Server version	8.0.16
+-- Server version	8.0.15
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -30,6 +30,7 @@ CREATE TABLE `admin_master` (
   `adminEmail` varchar(100) NOT NULL,
   `adminPassword` varchar(256) NOT NULL,
   `adminDepartment` int(11) NOT NULL,
+  `isApproved` int(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`adminID`),
   UNIQUE KEY `adminUsername_UNIQUE` (`adminEmail`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -41,7 +42,7 @@ CREATE TABLE `admin_master` (
 
 LOCK TABLES `admin_master` WRITE;
 /*!40000 ALTER TABLE `admin_master` DISABLE KEYS */;
-INSERT INTO `admin_master` VALUES (1,'Prof. V. D. Patel','adminit@gmail.com','f3e79bfac8805b8c637d0f66b39b186e',16);
+INSERT INTO `admin_master` VALUES (1,'Prof. V. D. Patel','adminit@gmail.com','f3e79bfac8805b8c637d0f66b39b186e',16,1);
 /*!40000 ALTER TABLE `admin_master` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -222,6 +223,7 @@ CREATE TABLE `faculty_master` (
   `facultyEmail` varchar(50) NOT NULL,
   `facultyPassword` varchar(256) NOT NULL,
   `facultyDepartment` int(11) NOT NULL,
+  `isApproved` int(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`facultyID`),
   UNIQUE KEY `facultyEmail_UNIQUE` (`facultyEmail`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -233,7 +235,7 @@ CREATE TABLE `faculty_master` (
 
 LOCK TABLES `faculty_master` WRITE;
 /*!40000 ALTER TABLE `faculty_master` DISABLE KEYS */;
-INSERT INTO `faculty_master` VALUES (1,'Prof. S. J. Molia','sjm@gmail.com','2431dd378df9c754e0245efd8fbf2aab',16);
+INSERT INTO `faculty_master` VALUES (1,'Prof. S. J. Molia','sjm@gmail.com','2431dd378df9c754e0245efd8fbf2aab',16,1);
 /*!40000 ALTER TABLE `faculty_master` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -383,4 +385,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-03-31 21:20:49
+-- Dump completed on 2020-04-01  5:19:55

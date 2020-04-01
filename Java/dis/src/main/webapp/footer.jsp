@@ -19,7 +19,7 @@
               if(!menu.checked)
                 head.style.marginTop = "100px";
               else
-                head.style.marginTop = "406px";
+                head.style.marginTop = "355px";
             }
           } else {
             navbar.classList.remove("sticky");
