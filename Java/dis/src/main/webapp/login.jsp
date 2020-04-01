@@ -26,7 +26,7 @@ a:hover{
 	text-decoration: none !important;
 }
 </style>
-<jsp:include page="headerFaculty.jsp" />
+<jsp:include page="header.jsp" />
 <div class="navigation">
 </div>
 </div>
@@ -71,7 +71,7 @@ a:hover{
 			<div class="col-sm"></div>
 		</div>
 		<div class="text-center text-muted">
-							Don't have account yet? <a href="./registerUser.jsp">SIGN UP</a>
+							Don't have account yet? <a href="./registerFaculty.jsp">SIGN UP</a>
 						</div>
 	</form>
 	<%-- <div class="page">

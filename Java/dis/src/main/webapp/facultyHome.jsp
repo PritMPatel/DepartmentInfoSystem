@@ -14,7 +14,7 @@
 <%@page import="java.io.*"%>
 <%@page import="Connection.Connect"%>
 <%@page import="java.sql.ResultSetMetaData"%>
-<%@include file="/headerFaculty.jsp"%>
+<%@include file="/header.jsp"%>
 <title>HOME</title>
 
 		<div class="navigation" id="navbar">

@@ -11,7 +11,7 @@
 <%@page import="java.io.*"%>
 <%@page import="Connection.Connect"%>
 <%@page import="java.sql.ResultSetMetaData"%>
-<%@include file="/headerFaculty.jsp"%>
+<%@include file="/header.jsp"%>
 <title>ADD MARKS</title>
 <style>
 .col-sm{
