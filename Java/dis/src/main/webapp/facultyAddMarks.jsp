@@ -136,7 +136,7 @@ table input{
                 if(request.getParameter("next")!=null){
                     rsSubject=con.SelectData("select subjectName from subject_master where subjectID="+request.getParameter("subjectid")+";");
                     rsSubject.next();
-                    rs=con.SelectData("select * from exam_master where examID in (select distinct examID from question_master where questionID not in (select questionID from marks_obtained_master)) and subjectID="+request.getParameter("subjectid")+" and batch="+request.getParameter("batch1")+";");
+                    rs=con.SelectData("select * from exam_master where examID in (select distinct examID from question_master) and subjectID="+request.getParameter("subjectid")+" and batch="+request.getParameter("batch1")+";");
                     out.println(
                             "<div class='form-row'><div class='col-sm'><label for='subjectID'>Subject:</label><input type='number' class='uk-input' id='subject_id' name='subject_id' value='"+request.getParameter("subjectid")+"' hidden/><input type='text' class='uk-input' id='subjectName' name='subjectName' value='"+ rsSubject.getString("subjectName")+"' readonly/></div>");
                     out.println(
@@ -163,7 +163,7 @@ table input{
                     +"</div><div class=\"form-row\"><div class=\"col-sm\"></div><div class=\"col-sm\"><div class=\"form-row\" style=\"margin:0px !important;\"><div class=\"col-sm\" style='padding:0px !important;'><label><input class=\"uk-radio\" type=\"radio\" id='import' name=\"import\" value='importdata'> Import</label></div><div class=\"col-sm\" style='padding:0px !important;'><label><input class=\"uk-radio\" type=\"radio\" id='import' name=\"import\" value='insertdata'> Insert</label></div></div></div><div class=\"col-sm\"></div></div>");
                     out.println("<div class='form-row' id='importAuto' style='display: none;'><div class='col-sm'><div class='form-row'><b>Instructions for IMPORT:</b></div><div class='form-row'><li>Upload .csv File Only</li></div><div class='form-row'><li>Enrollment should be same as mentioned below.</li></div><div class='form-row'><li>Column Order Should be same as Below</li></div><div class='form-row'><li>First Row will be considered as a HEADING</li></div><div class='form-row'><li>Please <b>VERIFY</b> the Data before SUBMIT</li></div></div><div class='col-sm'><div class='uk-form-custom'><input type=\"file\" id=\"fileUpload\"><button class=\"uk-button uk-button-default\" type=\"button\">SELECT FILE</button></div><button class=\"uk-button uk-button-default\" type=\"button\" id=\"upload\" value=\"Import\" onclick=\"UploadESE()\">Import</button></div></div>");
                     out.println("<div id='insertManual' style='display: none;'><div class=\"form-row\"></div><center><table class='uk-table uk-table-hover uk-table-divider uk-table-small' border='1'><tr><th class='uk-table-small'>Enrollment</th><th class='uk-width-auto'>Obtained Marks</th></tr>");
-                    rs3=con.SelectData("select enrollmentno from student_master where batch in (select batch from exam_master where examID="+request.getParameter("exam_id")+");");
+                    rs3=con.SelectData("select enrollmentno from student_master where batch in (select batch from exam_master where examID="+request.getParameter("exam_id")+") and enrollmentno not in(select enrollmentno from marks_obtained_master where questionID in (select questionID from question_master where examID = "+request.getParameter("exam_id")+")) and studentDepartment="+(int)session.getAttribute("facultyDepartment")+" order by enrollmentno;");
                     rs3.last();
                     nOfStudents=rs3.getRow();
                     rs3.beforeFirst();
@@ -202,7 +202,7 @@ table input{
                 out.println("</tr>");
                 rs2.beforeFirst();
                 x=1;
-                rs3=con.SelectData("select enrollmentno from student_master where batch in (select batch from exam_master where examID="+request.getParameter("exam_id")+") and studentDepartment="+(int)session.getAttribute("facultyDepartment")+" order by enrollmentno;");
+                rs3=con.SelectData("select enrollmentno from student_master where batch in (select batch from exam_master where examID="+request.getParameter("exam_id")+") and enrollmentno not in(select enrollmentno from marks_obtained_master where questionID in (select questionID from question_master where examID = "+request.getParameter("exam_id")+")) and studentDepartment="+(int)session.getAttribute("facultyDepartment")+" order by enrollmentno;");
                 rs3.last();
                 nOfStudents=rs3.getRow();
                 rs3.beforeFirst();
@@ -227,7 +227,7 @@ table input{
                     rs2=con.SelectData("SELECT questionID,queDesc,queMaxMarks,calcQuesMaxMarks,nCalcQuesMaxMarks FROM question_master qm where examID="+request.getParameter("examid2")+" order by questionID;");
                     rs2.last();
                     nOfQue = rs2.getRow();
-                    rs3=con.SelectData("select enrollmentno from student_master where batch in (select batch from exam_master where examID="+request.getParameter("examid2")+") and studentDepartment="+(int)session.getAttribute("facultyDepartment")+" order by enrollmentno;");
+                    rs3=con.SelectData("select enrollmentno from student_master where batch in (select batch from exam_master where examID="+request.getParameter("exam_id")+") and enrollmentno not in(select enrollmentno from marks_obtained_master where questionID in (select questionID from question_master where examID = "+request.getParameter("exam_id")+")) and studentDepartment="+(int)session.getAttribute("facultyDepartment")+" order by enrollmentno;");
                     rs3.last();
                     nOfStudents = rs3.getRow();
                     //out.println(nOfStudents);
@@ -250,7 +250,7 @@ table input{
                                 float obtMarks = marks*rs2.getFloat("queMaxMarks")/examMaxMarks;
                                 float calcObtMarks = obtMarks*nFact;
                                 float nCalcObtMarks = obtMarks*wFact;
-                                value += "("+rs3.getString("enrollmentno")+","+rs2.getInt("questionID")+","+obtMarks+","+calcObtMarks+","+nCalcObtMarks+")";
+                                value += "("+request.getParameter("enroll"+x2)+","+rs2.getInt("questionID")+","+obtMarks+","+calcObtMarks+","+nCalcObtMarks+")";
                                 if(x2!=nOfStudents || x!=nOfQue){
                                     value += ",";
                                 }
@@ -301,7 +301,7 @@ table input{
                             //float obtNormMarks = Float.parseFloat(request.getParameter(x2+"que"+x))*nFact;
                             //out.println("<br><br>n w oN oW"+"-"+nFact+"-"+wFact+"-"+obtNormMarks+"-"+obtWeighMarks+"<br><br>");
 
-                            value += "("+rs3.getString("enrollmentno")+","+rs2.getInt("questionID")+","+Float.parseFloat(request.getParameter(x2+"que"+x))+","+calcObtMarks+","+nCalcObtMarks+")";
+                            value += "("+request.getParameter("enroll"+x2)+","+rs2.getInt("questionID")+","+Float.parseFloat(request.getParameter(x2+"que"+x))+","+calcObtMarks+","+nCalcObtMarks+")";
                             if(x2!=nOfStudents || x!=nOfQue){
                                 value += ",";
                             }
