@@ -48,12 +48,12 @@
 					<li><a href="#" class="main-link">INSERT &nbsp;<i
 							class="fa fa-caret-down"></i></a>
 						<ul class="hidden">
-					<li><a href="addCo.jsp" class="active main-link">ADD CO</a></li>
-					<li><a href="addExam.jsp" class="main-link">ADD
+					<li><a href="facultyAddCo.jsp" class="active main-link">ADD CO</a></li>
+					<li><a href="facultyAddExam.jsp" class="main-link">ADD
 							EXAM</a></li>
-					<li><a href="addQue.jsp" class="main-link">ADD
+					<li><a href="facultyAddQue.jsp" class="main-link">ADD
 							QUESTION</a></li>
-					<li><a href="addMarks.jsp" class="main-link">ADD
+					<li><a href="facultyAddMarks.jsp" class="main-link">ADD
 							MARKS</a></li>
 							</ul></li>
 					<li><a href="#" class="main-link">UPDATE &nbsp;<i
@@ -78,10 +78,10 @@
 <!-- navigation ENDS here -->
 </div>
 
-<%-- <a href="addCo.jsp">Add CO</a><br/>
-        <a href="addExam.jsp">Add Exam</a><br/>
-        <a href="addQue.jsp">Add Question</a><br/>
-        <a href="addMarks.jsp">Add Marks</a><br/>
+<%-- <a href="facultyAddCo.jsp">Add CO</a><br/>
+        <a href="facultyAddExam.jsp">Add Exam</a><br/>
+        <a href="facultyAddQue.jsp">Add Question</a><br/>
+        <a href="facultyAddMarks.jsp">Add Marks</a><br/>
         <a href="calculateAttainment.jsp">Calculate Attainment</a><br/> --%>
 
 <div class="container" style="width: 80%; margin-bottom: 100px">

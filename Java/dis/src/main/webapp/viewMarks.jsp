@@ -63,12 +63,12 @@
 					<li><a href="#" class="main-link">INSERT &nbsp;<i
 							class="fa fa-caret-down"></i></a>
 						<ul class="hidden">
-					<li><a href="addCo.jsp" class="main-link">ADD CO</a></li>
-					<li><a href="addExam.jsp" class="main-link">ADD
+					<li><a href="facultyAddCo.jsp" class="main-link">ADD CO</a></li>
+					<li><a href="facultyAddExam.jsp" class="main-link">ADD
 							EXAM</a></li>
-					<li><a href="addQue.jsp" class="main-link">ADD
+					<li><a href="facultyAddQue.jsp" class="main-link">ADD
 							QUESTION</a></li>
-					<li><a href="addMarks.jsp" class="main-link">ADD
+					<li><a href="facultyAddMarks.jsp" class="main-link">ADD
 							MARKS</a></li>
 							</ul></li>
 					<li><a href="#" class="main-link">UPDATE &nbsp;<i
