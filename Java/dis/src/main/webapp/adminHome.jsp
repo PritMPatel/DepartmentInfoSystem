@@ -30,7 +30,7 @@
 					<li><a href="#" class="main-link">APPROVE &nbsp;<i
 							class="fa fa-caret-down"></i></a>
 						<ul class="hidden">
-					<li><a href="#" class="main-link">APPROVE USER</a></li>
+					<li><a href="approveUser.jsp" class="main-link">APPROVE USER</a></li>
 							</ul></li>
 					<li><a href="#" class="main-link">VIEW
 							ATTAINMENT</a></li>

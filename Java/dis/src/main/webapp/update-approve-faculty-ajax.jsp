@@ -6,5 +6,6 @@ String id = request.getParameter("id");
 
 Connect con = new Connect();
 boolean status = con.Ins_Upd_Del("update faculty_master set isApproved=1 where facultyID = "+id);
-
+con.commitData();
+con.CloseConnection();
 %>

@@ -40,6 +40,7 @@
 		text-align: center; */
 	}
 </style>
+<%-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> --%>
 
 <body style="user-select: none;">
 
@@ -56,7 +57,60 @@
 	<link rel="stylesheet" type="text/javascript" href="JScript/passtest.js">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"	integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"	crossorigin="anonymous">
 	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-
+	<script type="text/javascript">
+		$(document).on("click",".approveAdmin",function () {
+			var id2 = this.id;
+			$.ajax({
+				url: "update-approve-admin-ajax.jsp",
+				type: "post",
+				data: {
+					id: id2,
+				},
+				success: function (data) {
+					location.reload(true);
+				}
+			});
+		});
+		$(document).on("click",".rejectAdmin",function () {
+			var id2 = this.id;
+			$.ajax({
+				url: "update-reject-admin-ajax.jsp",
+				type: "post",
+				data: {
+					id: id2,
+				},
+				success: function (data) {
+					location.reload(true);
+				}
+			});
+		});
+		$(document).on("click",".approveFaculty",function () {
+			var id2 = this.id;
+			$.ajax({
+				url: "update-approve-faculty-ajax.jsp",
+				type: "post",
+				data: {
+					id: id2,
+				},
+				success: function (data) {
+					location.reload(true);
+				}
+			});
+		});
+		$(document).on("click",".rejectFaculty",function () {
+			var id2 = this.id;
+			$.ajax({
+				url: "update-reject-faculty-ajax.jsp",
+				type: "post",
+				data: {
+					id: id2,
+				},
+				success: function (data) {
+					location.reload(true);
+				}
+			});
+		});
+</script>
 	<div class="container-fluid "
 		style="padding-left: 0px; padding-right: 0px;">
 		<div class="row" style="margin-left: 5px;">

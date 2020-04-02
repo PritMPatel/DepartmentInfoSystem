@@ -12,82 +12,26 @@
 <%@page import="java.sql.ResultSetMetaData"%>
 <%@include file="/header.jsp"%>
 <title>APPROVE USERS</title>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script>
-	$(document).ready(function () {
-		$(".approveAdmin").click(function () {
-			var id2 = this.id;
-			$.ajax({
-				url: "update-approve-admin-ajax.jsp",
-				type: "post",
-				data: {
-					id: id2,
-				},
-				success: function (data) {
-					location.reload(true);
-				}
-			});
-		});
-	});
-	$(document).ready(function () {
-		$(".rejectAdmin").click(function () {
-			var id2 = this.id;
-			$.ajax({
-				url: "update-reject-admin-ajax.jsp",
-				type: "post",
-				data: {
-					id: id2,
-				},
-				success: function (data) {
-					location.reload(true);
-				}
-			});
-		});
-	});
-	$(document).ready(function () {
-		$(".approveFaculty").click(function () {
-			var id2 = this.id;
-			$.ajax({
-				url: "update-approve-faculty-ajax.jsp",
-				type: "post",
-				data: {
-					id: id2,
-				},
-				success: function (data) {
-					location.reload(true);
-				}
-			});
-		});
-	});
-	$(document).ready(function () {
-		$(".rejectFaculty").click(function () {
-			var id2 = this.id;
-			$.ajax({
-				url: "update-reject-faculty-ajax.jsp",
-				type: "post",
-				data: {
-					id: id2,
-				},
-				success: function (data) {
-					location.reload(true);
-				}
-			});
-		});
-	});
-</script>
+
 <style>
 .col-sm{
 	padding-left: 30px !important;
 	padding-right: 30px !important;
 }
 td{
-    padding: 0px !important;
+    padding-left: 35px !important;
+	padding-right: 35px !important;
+	margin: 25px !important;
 }
 th{
-    background-color: #cf6766 !important;
+    background-color: #f0f0f0;
     color: black !important;
+	text-align:center !important;
+	font-weight: bold !important;
+	padding: 15px !important;
+	margin: 25px !important;
 }
-table input{
+table{
     border: 0px !important;
 }
 .form-row .col-sm .form-row{
@@ -98,6 +42,26 @@ table input{
 .uk-table{
     width: auto !important;
 }
+
+.uk-table td, .uk-table th{
+	border: 0px !important;
+}
+
+.approve{
+	color: #28a745 !important;
+}
+.approve::before{
+	border-bottom-color: #28a745 !important;
+}
+.reject{
+	color: red !important;
+}
+
+.reject::before{
+	border-bottom-color: red !important;
+}
+
+
 /* Chrome, Safari, Edge, Opera */
 		input::-webkit-outer-spin-button,
 		input::-webkit-inner-spin-button {
@@ -124,7 +88,7 @@ table input{
 					<li><a href="#" class="main-link">APPROVE &nbsp;<i
 							class="fa fa-caret-down"></i></a>
 						<ul class="hidden">
-					<li><a href="#" class="main-link">APPROVE USER</a></li>
+					<li><a href="approveUser.jsp" class="main-link">APPROVE USER</a></li>
 							</ul></li>
 					<li><a href="#" class="main-link">VIEW
 							ATTAINMENT</a></li>
@@ -144,8 +108,17 @@ table input{
     <div id="head"></div>
 	<h3 style="text-align: center; padding-bottom: 10px;">APPROVE
 		USERS</h3>
-	<table class="uk-table uk-table-hover uk-table-divider">
-    <thead>
+<%
+			rsAdmin= con.SelectData("select * from admin_master where isApproved=0;");
+			rsFaculty = con.SelectData("select * from faculty_master where isApproved=0 and facultyDepartment="+(int)session.getAttribute("adminDepartment")+";");
+			if(!rsFaculty.next() && !rsAdmin.next()){
+				out.println("<div class=\"uk-alert text-center\" uk-alert><b>No Pending Request Found</b>.</div>");
+			}
+			else{
+%>			
+		<div class="uk-overflow-auto">
+		<table align="center" class="uk-table uk-table-striped">
+    	<thead>
         <tr>
             <th>Role</th>
             <th>Name</th>
@@ -153,36 +126,48 @@ table input{
 			<th></th>
 			<th></th>
         </tr>
-    </thead>
-    <tbody>
+    	</thead>
+    	<tbody>
 		<%
-			rsAdmin= con.SelectData("select * from admin_master where isApproved=0;");
-			rsFaculty = con.SelectData("select * from faculty_master where isApproved=0 and facultyDepartment="+(int)session.getAttribute("adminDepartment")+";");
-		
+			rsAdmin.beforeFirst();
 			while(rsAdmin.next()){
 		%>
         <tr>
             <td>Admin</td>
             <td><%out.println(rsAdmin.getString("adminName"));%></td>
 			<td><%out.println(rsAdmin.getString("adminEmail"));%></td>
-			<td><a href="" class="uk-icon-button" id="<%=rsAdmin.getInt(1)%>" class="approveAdmin" uk-icon="check"></a></td>
-			<td><a href="" class="uk-icon-button" id="<%=rsAdmin.getInt(1)%>" class="rejectAdmin" uk-icon="close"></a></td>
+			<td>
+			<button type="button" class="uk-button uk-button-text approve approveAdmin" id="<%=rsAdmin.getInt("adminID")%>" style="margin:8px;">Approve</button>
+			</td>
+			<td>
+			<button type="button" class="uk-button uk-button-text reject rejectAdmin" id="<%=rsAdmin.getInt("adminID")%>" style="margin:8px;">Reject</button>
+			</td>
         </tr>
 		<%
 			}
+			rsFaculty.beforeFirst();
 			while(rsFaculty.next()){
 		%>
 		<tr>
             <td>Faculty</td>
             <td><%out.println(rsFaculty.getString("facultyName"));%></td>
 			<td><%out.println(rsFaculty.getString("facultyEmail"));%></td>
-			<td><a href="" class="uk-icon-button" id="<%=rsFaculty.getInt(1)%>" class="approveFaculty" uk-icon="check"></a></td>
-			<td><a href="" class="uk-icon-button" id="<%=rsFaculty.getInt(1)%>" class="rejectFaculty" uk-icon="close"></a></td>
+			<td>
+			<button type="button" class="uk-button uk-button-text approve approveFaculty" id="<%=rsFaculty.getInt("facultyID")%>" style="margin:8px;">Approve</button>
+			</td>
+			<td>
+			<button type="button" class="uk-button uk-button-text reject rejectFaculty" id="<%=rsFaculty.getInt("facultyID")%>" style="margin:8px;">Reject</button>
+			</td>
         </tr>	
 		<%
 			}
+			con.CloseConnection();
 		%>
-	</tbody>
+	</tbody></table></div>
+	<%
+	}
+	%>
+	<%@include file="/footer.jsp"%>
 <%
     }
     else{
