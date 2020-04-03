@@ -145,7 +145,7 @@
 
         out.println("<div class='form-row'><div class='col-sm'></div>"+
                     "<div class='col-sm mt-4 mb-5'>"+
-					"<center><button type='button' class='btn' onclick='goBack()'>Go Back</button></center>"+
+					"<center><a href='adminOverallAttainment.jsp'><button class='btn' type='button'>Reset</button></a></center>"+
 					"</div>");
         out.println("<div class='col-sm mt-4 mb-5'>"+
 					"<center><button align='right' class='btn' type='button' onclick='printDiv();'>Print</button></center>"+
@@ -213,7 +213,6 @@
 
         document.body.innerHTML = originalContents;
     }
-     function goBack(){window.history.back()}
 </script>
 
 
