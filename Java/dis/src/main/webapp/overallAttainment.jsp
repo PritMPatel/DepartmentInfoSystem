@@ -95,6 +95,7 @@
 	ResultSet rsOverall=null;
 	ResultSet rsCoAttain=null;
 	ResultSet rsCoWiseMax=null; 
+	ResultSet rsAvgAttain=null;
 	ResultSet rsCoTotal=null;
 	ResultSet rsPendingCoAttain = null;
 
@@ -165,7 +166,9 @@
 				}
 
 		//TABLE
-		out.println("<div id='attainment' class='uk-overflow-auto' align='center'><table id='attainmentOverall' class='uk-table'>");
+		out.println("<div id='attainment' class='uk-overflow-auto' align='center'>");
+
+		out.println("<table id='attainmentOverall' class='uk-table'>");
 
 		out.println("<tr><th bgcolor='#e1e19b'><center><b>Subject</b></center></th><th colspan='"+(nOfCo+1)+"'><center><b>"+rsSubject.getString("subjectName")+"</b></center></th></tr>");
 		out.println("<tr><th bgcolor='#e1e19b'><center><b>Batch</b></center></th><th colspan='"+(nOfCo+1)+"'><center><b>"+request.getParameter("batch")+"</b></center></th></tr>");
@@ -183,7 +186,7 @@
 		}
 		out.println("<th><center><b>"+rsCoTotal.getFloat("total")+"</b></center></th></tr>");
 		out.println("<tr><td colspan='"+(nOfCo+2)+"' bgcolor='#cf6766'></td></tr>");
-		out.println("<tr style='border-top: 2px solid; border-bottom: 2px solid;'><th colspan='"+(nOfCo+2)+"' bgcolor='silver'><center><b>Overall Subject Attainment</b></center></th></tr>");
+		out.println("<tr style='border-top: 2px solid; border-bottom: 2px solid;'><th colspan='"+(nOfCo+2)+"' bgcolor='silver'><center><b>Overall Subject Attainment</b></center></th></tr>");		
 		out.println("<tr style='border-top: 2px solid; border-bottom: 2px solid;'><th bgcolor='#e1e19b' rowspan='1'><center><b>Enrollment</b></center></th>");
 		rsCo.beforeFirst();
 		while(rsCo.next()){
@@ -203,6 +206,12 @@
 			out.println("<td><input type='number' name='oAtt"+x1+"' step='0.01' value='"+rsOverall.getFloat("overallAttainment")+"' readonly hidden><center>"+rsOverall.getFloat("overallAttainment")+"</center></td>");
 			out.println("</tr>");
 			x1++;
+		}
+		if(con.CheckData("select distinct subjectID from attainment_overall,student_master where attainment_overall.enrollmentno=student_master.enrollmentno and subjectID="+request.getParameter("subject_id")+" and batch="+request.getParameter("batch")+";")){
+			rsAvgAttain=con.SelectData("select avg(attainmentOverall) as averageAttain from attainment_overall,student_master where attainment_overall.enrollmentno=student_master.enrollmentno and subjectID="+request.getParameter("subject_id")+" and batch="+request.getParameter("batch")+" order by student_master.enrollmentno;");
+			rsAvgAttain.next();
+			out.println("<tr><td colspan='"+(nOfCo+2)+"' bgcolor='#cf6766'></td></tr>");
+        	out.println("<tr><th colspan='"+(nOfCo+1)+"' bgcolor='#e1e19b'><center><b>Average Subject Attainment</b></center></th><td><b>"+rsAvgAttain.getFloat("averageAttain")+"</b></td></tr>");
 		}
         out.println("</table></div></form>");
     }

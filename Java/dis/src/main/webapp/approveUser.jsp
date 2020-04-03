@@ -40,7 +40,7 @@ table{
     margin: 0px !important;
 }
 .uk-table{
-    width: auto !important;
+    width: 100% !important;
 }
 
 .uk-table td, .uk-table th{
@@ -84,13 +84,14 @@ table{
 							class="fa fa-caret-down"></i></a>
 						<ul class="hidden">
 					<li><a href="addStudents.jsp" class="main-link">ADD STUDENTS</a></li>
+					<li><a href="addSubject.jsp" class="main-link">ADD SUBJECT</a></li>
 							</ul></li>
 					<li><a href="#" class="main-link">APPROVE &nbsp;<i
 							class="fa fa-caret-down"></i></a>
 						<ul class="hidden">
 					<li><a href="approveUser.jsp" class="main-link">APPROVE USER</a></li>
 							</ul></li>
-					<li><a href="#" class="main-link">VIEW
+					<li><a href="adminOverallAttainment.jsp" class="main-link">VIEW
 							ATTAINMENT</a></li>
 					<li><a href="logout.jsp" class="main-link">LOGOUT</a></li>
 				</ul>
