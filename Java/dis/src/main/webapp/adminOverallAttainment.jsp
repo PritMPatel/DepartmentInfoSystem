@@ -143,9 +143,13 @@
 		rsCoTotal.next();
 
 
-        out.println("<div class='col-sm mt-4 mb-5'>"+
-					"<button align='right' class='btn' type='button' onclick='printDiv();'>Print</button>"+
+        out.println("<div class='form-row'><div class='col-sm'></div>"+
+                    "<div class='col-sm mt-4 mb-5'>"+
+					"<center><button type='button' class='btn' onclick='goBack()'>Go Back</button></center>"+
 					"</div>");
+        out.println("<div class='col-sm mt-4 mb-5'>"+
+					"<center><button align='right' class='btn' type='button' onclick='printDiv();'>Print</button></center>"+
+					"</div><div class='col-sm'></div></div>");
 
         out.println("<div id='attainment' class='uk-overflow-auto' align='center'><table id='attainmentOverall' class='uk-table'>");
 
@@ -209,6 +213,7 @@
 
         document.body.innerHTML = originalContents;
     }
+     function goBack(){window.history.back()}
 </script>
 
 
