@@ -88,7 +88,7 @@ a:hover{
 <div class="container" style="width: 90%; margin-bottom: 100px;">
 	<div id="head"></div>
 	<%
-	rsBatch=con.SelectData("select distinctrow batch from attainment_overall,student_master,subject_master where attainment_overall.enrollmentno=student_master.enrollmentno and attainment_overall.subjectID=subject_master.subjectID and studentDepartment="+userDept+" order by batch asc,semester desc,subject_master.subjectID asc;");
+	rsBatch=con.SelectData("select distinctrow batch from attainment_overall,student_master,subject_master where attainment_overall.enrollmentno=student_master.enrollmentno and attainment_overall.subjectID=subject_master.subjectID and studentDepartment="+userDept+" order by batch desc,semester desc,subject_master.subjectID asc;");
 	rsCount=con.SelectData("select isApproved,count(isApproved) as cnt  from (select adminID as id,isApproved from admin_master where isApproved=0) as t1 UNION ALL (select facultyID as id, isApproved from faculty_master where isApproved=0 and facultyDepartment="+userDept+");");
 	rsCount.next();
 	%>
@@ -105,7 +105,7 @@ a:hover{
     <li>
         <a class="uk-accordion-title" href="javascript:void(0)"><%=rsBatch.getInt("batch")%></a>
 		<%
-		rsSemester=con.SelectData("select distinctrow semester from attainment_overall,student_master,subject_master where attainment_overall.enrollmentno=student_master.enrollmentno and attainment_overall.subjectID=subject_master.subjectID and studentDepartment="+userDept+" and batch="+rsBatch.getInt("batch")+" order by batch asc,semester desc,subject_master.subjectID asc;");
+		rsSemester=con.SelectData("select distinctrow semester from attainment_overall,student_master,subject_master where attainment_overall.enrollmentno=student_master.enrollmentno and attainment_overall.subjectID=subject_master.subjectID and studentDepartment="+userDept+" and batch="+rsBatch.getInt("batch")+" order by batch desc,semester desc,subject_master.subjectID asc;");
 		
 		%>
         <div class="uk-accordion-content">
@@ -118,7 +118,7 @@ a:hover{
 				<div class="uk-accordion-content">
 					<div class="uk-text-center uk-child-width-1-3@s uk-child-width-1-4@m" uk-grid uk-height-match="target: > div > a > .uk-card">
 					<%
-					rsAllSubject=con.SelectData("select distinctrow batch,semester,subject_master.subjectID,subjectName from attainment_overall,student_master,subject_master where attainment_overall.enrollmentno=student_master.enrollmentno and attainment_overall.subjectID=subject_master.subjectID and studentDepartment="+userDept+" and batch="+rsBatch.getInt("batch")+" and semester="+rsSemester.getInt("semester")+" order by batch asc,semester desc,subject_master.subjectID asc;");
+					rsAllSubject=con.SelectData("select distinctrow batch,semester,subject_master.subjectID,subjectName from attainment_overall,student_master,subject_master where attainment_overall.enrollmentno=student_master.enrollmentno and attainment_overall.subjectID=subject_master.subjectID and studentDepartment="+userDept+" and batch="+rsBatch.getInt("batch")+" and semester="+rsSemester.getInt("semester")+" order by batch desc,semester desc,subject_master.subjectID asc;");
 					while(rsAllSubject.next()){
 					%>
 						<div style="border-color: #cf6766;">
@@ -133,14 +133,15 @@ a:hover{
 			</li>
 			<%
 			}
+			rsSemester.close();
 			%>
 			
 			</ul>
         </div>
     </li>
 	<%
-		
 	}
+	rsBatch.close();
 	%>
 	</ul>
 	</div>
