@@ -11,7 +11,7 @@
 <%@page import="Connection.Connect"%>
 <%@page import="java.sql.ResultSetMetaData"%>
 <%@include file="/header.jsp"%>
-<title>APPROVE USERS</title>
+<title>REMOVE USERS</title>
 
 <style>
 .col-sm{
@@ -47,17 +47,11 @@ table{
 	border: 0px !important;
 }
 
-.approve{
-	color: #28a745 !important;
-}
-.approve::before{
-	border-bottom-color: #28a745 !important;
-}
-.reject{
+.remove{
 	color: red !important;
 }
 
-.reject::before{
+.remove::before{
 	border-bottom-color: red !important;
 }
 
@@ -108,16 +102,15 @@ table{
 	%>
 <div class="container" style="width: 80%; margin-bottom: 100px">
     <div id="head"></div>
-	<h3 style="text-align: center; padding-bottom: 10px;">APPROVE
+	<h3 style="text-align: center; padding-bottom: 10px;">REMOVE
 		USERS</h3>
 <%
-			rsAdmin= con.SelectData("select * from admin_master where isApproved=0;");
-			rsFaculty = con.SelectData("select * from faculty_master where isApproved=0 and facultyDepartment="+(int)session.getAttribute("adminDepartment")+";");
-			if(!rsFaculty.next() && !rsAdmin.next()){
-				out.println("<div class=\"uk-alert text-center\" uk-alert><b>No Pending Request Found</b>.</div>");
+			rsFaculty = con.SelectData("select * from faculty_master where isApproved=1 and facultyDepartment="+(int)session.getAttribute("adminDepartment")+";");
+			if(!rsFaculty.next()){
+				out.println("<div class=\"uk-alert text-center\" uk-alert><b>No Faculty Found</b>.</div>");
 			}
 			else{
-%>			
+%>	
 		<div class="uk-overflow-auto">
 		<table align="center" class="uk-table uk-table-striped">
     	<thead>
@@ -126,27 +119,10 @@ table{
             <th>Name</th>
             <th>Email</th>
 			<th></th>
-			<th></th>
         </tr>
     	</thead>
     	<tbody>
 		<%
-			rsAdmin.beforeFirst();
-			while(rsAdmin.next()){
-		%>
-        <tr>
-            <td>Admin</td>
-            <td><%out.println(rsAdmin.getString("adminName"));%></td>
-			<td><%out.println(rsAdmin.getString("adminEmail"));%></td>
-			<td>
-			<button type="button" class="uk-button uk-button-text approve approveAdmin" id="<%=rsAdmin.getInt("adminID")%>" style="margin:8px;">Approve</button>
-			</td>
-			<td>
-			<button type="button" class="uk-button uk-button-text reject rejectAdmin" id="<%=rsAdmin.getInt("adminID")%>" style="margin:8px;">Reject</button>
-			</td>
-        </tr>
-		<%
-			}
 			rsFaculty.beforeFirst();
 			while(rsFaculty.next()){
 		%>
@@ -155,10 +131,7 @@ table{
             <td><%out.println(rsFaculty.getString("facultyName"));%></td>
 			<td><%out.println(rsFaculty.getString("facultyEmail"));%></td>
 			<td>
-			<button type="button" class="uk-button uk-button-text approve approveFaculty" id="<%=rsFaculty.getInt("facultyID")%>" style="margin:8px;">Approve</button>
-			</td>
-			<td>
-			<button type="button" class="uk-button uk-button-text reject rejectFaculty" id="<%=rsFaculty.getInt("facultyID")%>" style="margin:8px;">Reject</button>
+			<button type="button" class="uk-button uk-button-text remove removeFaculty" id="<%=rsFaculty.getInt("facultyID")%>" style="margin:8px;">Remove</button>
 			</td>
         </tr>	
 		<%

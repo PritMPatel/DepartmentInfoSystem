@@ -45,10 +45,11 @@
 					<li><a href="addStudents.jsp" class="main-link">ADD STUDENTS</a></li>
 					<li><a href="addSubject.jsp" class="active main-link">ADD SUBJECT</a></li>
 							</ul></li>
-					<li><a href="#" class="main-link">APPROVE &nbsp;<i
+					<li><a href="#" class="main-link">USERS &nbsp;<i
 							class="fa fa-caret-down"></i></a>
 						<ul class="hidden">
 					<li><a href="approveUser.jsp" class="main-link">APPROVE USER</a></li>
+					<li><a href="removeUser.jsp" class="main-link">REMOVE USER</a></li>
 							</ul></li>
 					<li><a href="adminOverallAttainment.jsp" class="main-link">VIEW
 							ATTAINMENT</a></li>

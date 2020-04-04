@@ -130,7 +130,7 @@ a:hover{
 									String role = request.getParameter("roleSelect");
 									if (request.getParameter("btnLogin") != null && role.equals("Admin")) {
 										if (con.CheckData("select * from admin_master where adminEmail='" + request.getParameter("email")
-												+ "' and adminPassword='" + md.getMd5(request.getParameter("password")) + "'")) {
+												+ "' and adminPassword='" + md.getMd5(request.getParameter("password")) + "' and isApproved=1")) {
 											ResultSet rs = con.SelectData("select adminID,adminName,adminDepartment from admin_master where adminEmail='"
 													+ request.getParameter("email") + "';");
 											String Uname = request.getParameter("email");
@@ -150,12 +150,13 @@ a:hover{
 											session.setAttribute("role", "admin");
 											response.sendRedirect("adminHome.jsp");
 										} else {
-											out.println("<script>alert('Wrong username or password')</script>");
+											//out.println("<script>alert('Wrong username or password')</script>");
+											out.println("<script>UIkit.modal.dialog('<p class=\"uk-modal-body uk-text-center\"><b>ERROR</b>: INCORRECT USERNAME OR PASSWORD</p>');</script>");
 										}
 									} else if (request.getParameter("btnLogin") != null && role.equals("Faculty")) {
 										if (con.CheckData(
 												"select * from faculty_master where facultyEmail='" + request.getParameter("email")
-														+ "' and facultyPassword='" + md.getMd5(request.getParameter("password")) + "'")) {
+														+ "' and facultyPassword='" + md.getMd5(request.getParameter("password")) + "'  and isApproved=1")) {
 											ResultSet rs = con.SelectData("select facultyID,facultyName,facultyDepartment from faculty_master where facultyEmail='"
 													+ request.getParameter("email") + "';");
 											String Uname = request.getParameter("email");
@@ -175,8 +176,9 @@ a:hover{
 											session.setAttribute("facultyDepartment", dept);
 											response.sendRedirect("facultyHome.jsp");
 										} else {
-											out.println("<script>alert('Wrong username or password')</script>");
-		
+											//out.println("<script>alert('Wrong username or password')</script>");
+											//out.println("<script>UIkit.notification({message: '<span uk-icon=\'icon: close\'></span> Incorrect Credentials.', status: 'danger'})</script>");
+											out.println("<script>UIkit.modal.dialog('<p class=\"uk-modal-body uk-text-center\"><b>ERROR</b>: INCORRECT USERNAME OR PASSWORD</p>');</script>");
 										}
 									}
 							%>

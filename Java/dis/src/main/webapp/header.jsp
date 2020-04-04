@@ -110,6 +110,19 @@
 				}
 			});
 		});
+		$(document).on("click",".removeFaculty",function () {
+			var id2 = this.id;
+			$.ajax({
+				url: "update-remove-faculty-ajax.jsp",
+				type: "post",
+				data: {
+					id: id2,
+				},
+				success: function (data) {
+					location.reload(true);
+				}
+			});
+		});
 </script>
 	<div class="container-fluid "
 		style="padding-left: 0px; padding-right: 0px;">
