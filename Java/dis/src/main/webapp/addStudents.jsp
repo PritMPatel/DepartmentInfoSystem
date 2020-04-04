@@ -60,14 +60,13 @@ table input{
 							class="fa fa-caret-down"></i></a>
 						<ul class="hidden">
 					<li><a href="addStudents.jsp" class="main-link">ADD STUDENTS</a></li>
-					<li><a href="addSubject.jsp" class="main-link">ADD SUBJECT</a></li>
 							</ul></li>
 					<li><a href="#" class="main-link">APPROVE &nbsp;<i
 							class="fa fa-caret-down"></i></a>
 						<ul class="hidden">
 					<li><a href="approveUser.jsp" class="main-link">APPROVE USER</a></li>
 							</ul></li>
-					<li><a href="adminOverallAttainment.jsp" class="main-link">VIEW
+					<li><a href="#" class="main-link">VIEW
 							ATTAINMENT</a></li>
 					<li><a href="logout.jsp" class="main-link">LOGOUT</a></li>
 				</ul>
@@ -136,27 +135,27 @@ table input{
 		Connect con = null;
 		//ResultSet rs = null;
 		ResultSetMetaData mtdt = null;
-	con = new Connect();
-	
-	int x=1;
-	ResultSet rs=con.SelectData("select adminDepartment from admin_master where adminID="+session.getAttribute("id")+";");
-	rs.last();
-	int dept=rs.getRow();
+		con = new Connect();
+		String value="";
+		int x=1;
 		if (request.getParameter("addStudentbtn") != null) {
-			int noofStud=Integer.parseInt(request.getParameter("nOfStudent"));
-			while(x=noofStud){
-						if (con.Ins_Upd_Del(
-								"insert into student_master (enrollmentno, batch, studentDepartment) values ('"+request.getParameter("enroll"+x+"")+"',"+request.getParameter("batch")+","+dept+");")){
-											out.println("<script>$('#head').prepend('<div class=\"uk-alert-success\" uk-alert><a class=\"uk-alert-close\" uk-close></a><b>Student Inserted Successfully</b>.</div>')</script>");        
-											con.commitData();
-										}
-						else{
-								out.println("<script>$('#head').prepend('<div class=\"uk-alert-danger\" uk-alert><a class=\"uk-alert-close\" uk-close></a><b>ERROR</b>: Same Enrollment Exist for Selected Batch.</div>')</script>");
-								con.rollbackData();
-							}
+			int nOfStu=Integer.parseInt(request.getParameter("nOfStudent"));
+			while(x<=nOfStu){
+				value += "('"+request.getParameter("enroll"+x)+"',"+request.getParameter("batch")+","+(int)session.getAttribute("adminDepartment")+")";
+				if(x!=nOfStu){
+					value+=",";
+				}
+				x++;
+			}
+			if (con.Ins_Upd_Del("insert into student_master (enrollmentno, batch, studentDepartment) values "+value+";")){
+				out.println("<script>$('#head').prepend('<div class=\"uk-alert-success\" uk-alert><a class=\"uk-alert-close\" uk-close></a><b>Student Inserted Successfully</b>.</div>')</script>");        
+				con.commitData();
+			}
+			else{
+				out.println("<script>$('#head').prepend('<div class=\"uk-alert-danger\" uk-alert><a class=\"uk-alert-close\" uk-close></a><b>ERROR</b>: Same Enrollment Exist for Selected Batch.</div>')</script>");
+				con.rollbackData();
+			}
 		}
-		x++;
-					}
 		%>	
 	<script type="text/javascript">
     function Upload() {
@@ -173,12 +172,12 @@ table input{
                     for (var i = 0; i < rows.length; i++) {
                         if(i!=0){
                         var cells = rows[i].split(",");
-                        if (cells.length > 1) {
+                        if (cells.length >= 1) {
                             var row = table.insertRow(-1);
                             for (var j = 0; j < 1; j++) {
                                 var cell = row.insertCell(-1);
 								var studentData = document.getElementById("studentData");
-								$('#studentData').append('<div class="col-md-3"><input type="text" class="uk-input" name="enroll'+cells[j]+'" value="'+cells[j]+'" required></div>');				
+								$('#studentData').append('<div class="col-md-3"><input type="text" class="uk-input" name="enroll'+i+'" value="'+cells[j]+'" required></div>');				
 								x++;
                             }
                         }}
