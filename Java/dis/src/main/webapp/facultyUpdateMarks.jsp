@@ -18,6 +18,9 @@
 	padding-left: 30px !important;
 	padding-right: 30px !important;
 }
+td:hover,tr:hover{
+    background-color: white !important;
+}
 td{
     padding: 0px !important;
 }
@@ -91,7 +94,7 @@ table input{
     <div id="head"></div>
 	<h3 style="text-align: center; padding-bottom: 10px;">UPDATE
 		MARKS</h3>
-	<form method="POST">
+	<form method="POST" id="main">
     <%
     Connect con=null;
     ResultSet rs=null;
@@ -127,13 +130,16 @@ table input{
                                 + rs.getString("examName") + "</option>");
                     }
                     out.println("</select></div><div class='col-sm'><label for='enrollmentno'>Enrollment No:</label><input type='text' name='enrollmentno' class='uk-input' maxlength='12' size='12' placeholder='Enter Enrollment No'/></div></div>");
-                    out.println("<center class=\"mt-3\"><button class='btn' id='updateMarks' name='updateMarks' value='updateMarks'>Add Marks</button></center></form><br/>");
+                    out.println("<center class=\"mt-3\"><button class='btn' id='updateMarks' name='updateMarks' value='updateMarks'>Update Marks</button></center></form><br/>");
     }
     else if(request.getParameter("updateMarks")!=null){
         rs4=con.SelectData("select typeDescription,examName from exam_master,examtype_master where exam_master.examtypeID=examtype_master.examtypeID and examID="+request.getParameter("exam_id")+";");
         rs4.next();
         if(con.CheckData("select distinct enrollmentno from attainment_co where enrollmentno="+request.getParameter("enrollmentno")+" and subjectID in (select subjectID from exam_master where examID="+request.getParameter("exam_id")+");")){
-            out.println("<script>$('#head').prepend('<div class=\"uk-alert-danger\" uk-alert><a class=\"uk-alert-close\" uk-close></a><b>Can't Update Marks. You alreadysaved CO Attainment Calculations.</b></div>');window.location.reload();</script>");
+            //out.println("<script>$('#head').prepend('<div class=\"uk-alert-danger\" uk-alert><a class=\"uk-alert-close\" uk-close></a><b>Can\\'t Update Marks. You already saved CO Attainment Calculations.</b></div>');window.location.reload();</script>");
+            //out.println("<script>$('#head').prepend('<div class=\"uk-alert-danger\" uk-alert><a class=\"uk-alert-close\" uk-close></a><b>Can't Update Marks. You already saved CO Attainment Calculations.</b></div>');</script>");
+            out.println("<script>UIkit.modal.alert('<p class=\"uk-modal-body uk-text-center\"><b>ERROR</b>: Can\\'t Update Marks. You already saved CO Attainment Calculations.</p>').then(function(){window.history.back();});</script>");
+            //response.sendRedirect("facultyUpdateMarks.jsp");
         }
         else if(con.CheckData("select distinctrow enrollmentno from marks_obtained_master where questionID in (select questionID from question_master where examID = "+request.getParameter("exam_id")+") and enrollmentno="+request.getParameter("enrollmentno")+";")){
             if(s.equals(rs4.getString("typeDescription"))){
@@ -157,6 +163,7 @@ table input{
                 nOfQue = rs2.getRow();
                 rs2.beforeFirst();
                 rsMark=con.SelectData("select enrollmentno, obtainedMarks from marks_obtained_master where questionID in (select questionID from question_master where examID = "+request.getParameter("exam_id")+") and enrollmentno="+request.getParameter("enrollmentno")+" order by questionID;");
+                rsMark.next();
                 x=1;
                 out.println("<form method='POST'><input type='number' name='examid2' value='"+request.getParameter("exam_id")+"' hidden readonly/>");
                         out.println("<div class=\"form-row\">"
@@ -173,7 +180,7 @@ table input{
                 x=1;
                 out.println("<tr><td class='uk-width-small'><input class='uk-input uk-form-blank uk-form-small' type='text' name='enrollment' value='"+rsMark.getString("enrollmentno")+"' readonly></td>");
                 while(x<=nOfQue){
-                    out.println("<td class='uk-width-small'><input class='uk-input uk-form-blank uk-form-small uk-form-width-small' type='number' step='0.01' id='que"+x+"' name='que"+x+"' value='"+rsMark.getFloat("obtainedMarks")+"' required></td>");
+                    out.println("<td class='uk-width-small'><input class='uk-input uk-form-blank uk-form-small uk-form-width-small' type='text' id='que"+x+"' name='que"+x+"' value='"+(float)rsMark.getFloat("obtainedMarks")+"' required></td>");
                     x++;
                 }
                 out.println("</tr>");
@@ -181,7 +188,7 @@ table input{
             }
         }
         else{
-            out.println("<script>$('#head').prepend('<div class=\"uk-alert-danger\" uk-alert><a class=\"uk-alert-close\" uk-close></a><b>Enrollment No. Not Found.</b></div>');window.location.reload();</script>");
+            out.println("<script>UIkit.modal.alert('<p class=\"uk-modal-body uk-text-center\"><b>ERROR</b>: Enrollment No. Not Found.</p>').then(function(){window.history.back();});</script>");
         }
     }
     else if(request.getParameter("submit")!=null){
@@ -190,6 +197,7 @@ table input{
         rs2=con.SelectData("SELECT questionID,queDesc,queMaxMarks,calcQuesMaxMarks,nCalcQuesMaxMarks FROM question_master qm where examID="+request.getParameter("examid2")+" order by questionID;");
         rs2.last();
         nOfQue = rs2.getRow();
+        rs2.beforeFirst();
         String value="";
         if(s.equals(rs4.getString("typeDescription"))){
             x=1;
@@ -205,12 +213,12 @@ table input{
                 float calcObtMarks = obtMarks*nFact;
                 float nCalcObtMarks = obtMarks*wFact;
                 value += "('"+request.getParameter("enrollment")+"',"+rs2.getInt("questionID")+","+obtMarks+","+calcObtMarks+","+nCalcObtMarks+")";
-                if("x!=nOfQue"){
+                if(x!=nOfQue){
                     value+=",";
                 }
                 x++;
             }
-            if(con.Ins_Upd_Del("delete from marks_obtained_master where enrollmentno='"+request.getParameter("enrollment")+"' and questionID in (select questionID from question_master where examID="+request.getParameter("examid2")+");insert into marks_obtained_master(enrollmentno,questionID,obtainedMarks,calcObtainedMarks,nCalcObtainedMarks) values "+value+";")){
+            if(con.Ins_Upd_Del("delete from marks_obtained_master where enrollmentno='"+request.getParameter("enrollment")+"' and questionID in (select questionID from question_master where examID="+request.getParameter("examid2")+");") && con.Ins_Upd_Del("insert into marks_obtained_master(enrollmentno,questionID,obtainedMarks,calcObtainedMarks,nCalcObtainedMarks) values "+value+";")){
                 out.println("<script>$('#head').prepend('<div class=\"uk-alert-success\" uk-alert><a class=\"uk-alert-close\" uk-close></a><b>Marks updateed Successfully.</b></div>')</script>");        
                 con.commitData();
             }
@@ -224,16 +232,16 @@ table input{
             while(x<=nOfQue && rs2.next()){
                 float nFact = rs2.getFloat("calcQuesMaxMarks")/rs2.getFloat("queMaxMarks");
                 float wFact = rs2.getFloat("nCalcQuesMaxMarks")/rs2.getFloat("queMaxMarks");                               
-                float obtMarks = Float.parseFloat(request.getParameter("que"+x))
+                float obtMarks = Float.parseFloat(request.getParameter("que"+x));
                 float calcObtMarks = obtMarks*nFact;
                 float nCalcObtMarks = obtMarks*wFact;
                 value += "('"+request.getParameter("enrollment")+"',"+rs2.getInt("questionID")+","+obtMarks+","+calcObtMarks+","+nCalcObtMarks+")";
-                if("x!=nOfQue"){
+                if(x!=nOfQue){
                     value+=",";
                 }
                 x++;
             }
-            if(con.Ins_Upd_Del("delete from marks_obtained_master where enrollmentno='"+request.getParameter("enrollment")+"' and questionID in (select questionID from question_master where examID="+request.getParameter("examid2")+");insert into marks_obtained_master(enrollmentno,questionID,obtainedMarks,calcObtainedMarks,nCalcObtainedMarks) values "+value+";")){
+            if(con.Ins_Upd_Del("delete from marks_obtained_master where enrollmentno='"+request.getParameter("enrollment")+"' and questionID in (select questionID from question_master where examID="+request.getParameter("examid2")+");") && con.Ins_Upd_Del("insert into marks_obtained_master(enrollmentno,questionID,obtainedMarks,calcObtainedMarks,nCalcObtainedMarks) values "+value+";")){
                 out.println("<script>$('#head').prepend('<div class=\"uk-alert-success\" uk-alert><a class=\"uk-alert-close\" uk-close></a><b>Marks Updated Successfully.</b></div>')</script>");        
                 con.commitData();
             }

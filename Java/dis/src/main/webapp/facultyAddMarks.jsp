@@ -133,7 +133,7 @@ table input{
                 if(request.getParameter("next")==null && request.getParameter("addMarks")==null){%>
                 <%@include file="/subjectBatchForm.jsp"%>
                 <%}
-                else if(request.getParameter("next")!=null){
+                if(request.getParameter("next")!=null){
                     rsSubject=con.SelectData("select subjectName from subject_master where subjectID="+request.getParameter("subjectid")+";");
                     rsSubject.next();
                     rs=con.SelectData("select * from exam_master where examID in (select distinct examID from question_master) and subjectID="+request.getParameter("subjectid")+" and batch="+request.getParameter("batch1")+";");
@@ -151,7 +151,7 @@ table input{
                     out.println("</select></div></div>");
                     out.println("<center class=\"mt-3\"><button class='btn' id='addMarks' name='addMarks' value='addMarks' disabled>Add Marks</button></center></form><br/>");
                 }  
-                else if(request.getParameter("addMarks")!=null){
+                if(request.getParameter("addMarks")!=null){
                 rs4=con.SelectData("select typeDescription,examName from exam_master,examtype_master where exam_master.examtypeID=examtype_master.examtypeID and examID="+request.getParameter("exam_id")+";");
                 rs4.next();
                 if(s.equals(rs4.getString("typeDescription"))){
@@ -175,12 +175,7 @@ table input{
                     }
                     out.println("</table><button class='btn' type='submit' name='submit' value='submit'>Submit</button></center></div></form>");  
                 }
-
-
-
-
-                else{    
-                
+                else{                    
                 out.println("<form method='POST'><input type='number' name='examid2' value='"+request.getParameter("exam_id")+"' hidden readonly/>");
                 rs2=con.SelectData("SELECT questionID,queDesc,queMaxMarks,calcQuesMaxMarks,nCalcQuesMaxMarks FROM question_master qm where examID="+request.getParameter("exam_id")+" order by questionID;");
                 rs2.last();
@@ -220,7 +215,7 @@ table input{
             }}%>
 
 	<%
-                else if(request.getParameter("submit")!=null){
+                if(request.getParameter("submit")!=null){
                     
                     rs4=con.SelectData("select typeDescription from exam_master,examtype_master where exam_master.examtypeID=examtype_master.examtypeID and examID="+request.getParameter("examid2")+";");
                     rs4.next();
