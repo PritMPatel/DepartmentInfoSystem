@@ -73,7 +73,7 @@ table input{
 							EXAM</a></li>
 					<li><a href="#" class="main-link">UPDATE
 							QUESTION</a></li>
-					<li><a href="#" class="main-link">UPDATE
+					<li><a href="facultyUpdateMarks.jsp" class="main-link">UPDATE
 							MARKS</a></li>
 							</ul></li>
 					<li><a href="viewMarks.jsp" class="main-link">VIEW
@@ -133,7 +133,7 @@ table input{
                 if(request.getParameter("next")==null && request.getParameter("addMarks")==null){%>
                 <%@include file="/subjectBatchForm.jsp"%>
                 <%}
-                if(request.getParameter("next")!=null){
+                else if(request.getParameter("next")!=null){
                     rsSubject=con.SelectData("select subjectName from subject_master where subjectID="+request.getParameter("subjectid")+";");
                     rsSubject.next();
                     rs=con.SelectData("select * from exam_master where examID in (select distinct examID from question_master) and subjectID="+request.getParameter("subjectid")+" and batch="+request.getParameter("batch1")+";");
@@ -151,7 +151,7 @@ table input{
                     out.println("</select></div></div>");
                     out.println("<center class=\"mt-3\"><button class='btn' id='addMarks' name='addMarks' value='addMarks' disabled>Add Marks</button></center></form><br/>");
                 }  
-                if(request.getParameter("addMarks")!=null){
+                else if(request.getParameter("addMarks")!=null){
                 rs4=con.SelectData("select typeDescription,examName from exam_master,examtype_master where exam_master.examtypeID=examtype_master.examtypeID and examID="+request.getParameter("exam_id")+";");
                 rs4.next();
                 if(s.equals(rs4.getString("typeDescription"))){
@@ -220,7 +220,7 @@ table input{
             }}%>
 
 	<%
-                if(request.getParameter("submit")!=null){
+                else if(request.getParameter("submit")!=null){
                     
                     rs4=con.SelectData("select typeDescription from exam_master,examtype_master where exam_master.examtypeID=examtype_master.examtypeID and examID="+request.getParameter("examid2")+";");
                     rs4.next();
@@ -250,7 +250,7 @@ table input{
                                 float obtMarks = marks*rs2.getFloat("queMaxMarks")/examMaxMarks;
                                 float calcObtMarks = obtMarks*nFact;
                                 float nCalcObtMarks = obtMarks*wFact;
-                                value += "("+request.getParameter("enroll"+x2)+","+rs2.getInt("questionID")+","+obtMarks+","+calcObtMarks+","+nCalcObtMarks+")";
+                                value += "('"+request.getParameter("enroll"+x2)+"',"+rs2.getInt("questionID")+","+obtMarks+","+calcObtMarks+","+nCalcObtMarks+")";
                                 if(x2!=nOfStudents || x!=nOfQue){
                                     value += ",";
                                 }
@@ -301,7 +301,7 @@ table input{
                             //float obtNormMarks = Float.parseFloat(request.getParameter(x2+"que"+x))*nFact;
                             //out.println("<br><br>n w oN oW"+"-"+nFact+"-"+wFact+"-"+obtNormMarks+"-"+obtWeighMarks+"<br><br>");
 
-                            value += "("+request.getParameter("enroll"+x2)+","+rs2.getInt("questionID")+","+Float.parseFloat(request.getParameter(x2+"que"+x))+","+calcObtMarks+","+nCalcObtMarks+")";
+                            value += "('"+request.getParameter("enroll"+x2)+"',"+rs2.getInt("questionID")+","+Float.parseFloat(request.getParameter(x2+"que"+x))+","+calcObtMarks+","+nCalcObtMarks+")";
                             if(x2!=nOfStudents || x!=nOfQue){
                                 value += ",";
                             }

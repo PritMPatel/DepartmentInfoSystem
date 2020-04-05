@@ -65,6 +65,7 @@ public class Connect {
 			ResultSet rs = SelectData(str);
 			if (rs.next())
 				b = true;
+			rs.close();
 			CloseConnection();
 		} catch (SQLException ex) {
 			Logger.getLogger(Connect.class.getName()).log(Level.SEVERE, null, ex);

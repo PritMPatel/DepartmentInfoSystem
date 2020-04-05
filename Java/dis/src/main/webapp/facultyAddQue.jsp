@@ -59,7 +59,7 @@
 							EXAM</a></li>
 					<li><a href="#" class="main-link">UPDATE
 							QUESTION</a></li>
-					<li><a href="#" class="main-link">UPDATE
+					<li><a href="facultyUpdateMarks.jsp" class="main-link">UPDATE
 							MARKS</a></li>
 							</ul></li>
 					<li><a href="viewMarks.jsp" class="main-link">VIEW
@@ -189,6 +189,9 @@
 								}
 							}
 							value += "('"+request.getParameter("q"+x)+"',"+request.getParameter("qMarks"+x)+","+request.getParameter("map"+x)+","+calcQuesMaxMarks+","+nCalcQuesMaxMarks+","+request.getParameter("exam_id")+","+coVal+")";	
+							if(x!=qunos){
+								value+=",";
+							}
 							x++;
 						}
 						if (con.Ins_Upd_Del("insert into question_master(queDesc,queMaxMarks,multipleMap,calcQuesMaxMarks,nCalcQuesMaxMarks,examID,coID1,coID2,coID3,coID4,coID5,coID6,coID7) values "+value)) {

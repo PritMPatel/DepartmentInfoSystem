@@ -86,7 +86,7 @@ a:hover{
 							EXAM</a></li>
 					<li><a href="#" class="main-link">UPDATE
 							QUESTION</a></li>
-					<li><a href="#" class="main-link">UPDATE
+					<li><a href="facultyUpdateMarks.jsp" class="main-link">UPDATE
 							MARKS</a></li>
 							</ul></li>
 					<li><a href="viewMarks.jsp" class="main-link">VIEW
