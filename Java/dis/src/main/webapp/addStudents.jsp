@@ -60,6 +60,7 @@ table input{
 							class="fa fa-caret-down"></i></a>
 						<ul class="hidden">
 					<li><a href="addStudents.jsp" class="main-link">ADD STUDENTS</a></li>
+					<li><a href="addSubject.jsp" class="main-link">ADD SUBJECT</a></li>
 							</ul></li>
 					<li><a href="#" class="main-link">USERS &nbsp;<i
 							class="fa fa-caret-down"></i></a>
