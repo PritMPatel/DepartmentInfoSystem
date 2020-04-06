@@ -65,7 +65,7 @@ table input{
 							EXAM</a></li>
 					<li><a href="facultyAddQue.jsp" class="main-link">ADD
 							QUESTION</a></li>
-					<li><a href="facultyAddMarks.jsp" class="active main-link">ADD
+					<li><a href="facultyAddMarks.jsp" class="main-link">ADD
 							MARKS</a></li>
 							</ul></li>
 					<li><a href="#" class="main-link">UPDATE &nbsp;<i
@@ -163,7 +163,7 @@ table input{
                 nOfQue = rs2.getRow();
                 rs2.beforeFirst();
                 rsMark=con.SelectData("select enrollmentno, obtainedMarks from marks_obtained_master where questionID in (select questionID from question_master where examID = "+request.getParameter("exam_id")+") and enrollmentno="+request.getParameter("enrollmentno")+" order by questionID;");
-                rsMark.next();
+                
                 x=1;
                 out.println("<form method='POST'><input type='number' name='examid2' value='"+request.getParameter("exam_id")+"' hidden readonly/>");
                         out.println("<div class=\"form-row\">"
@@ -178,8 +178,10 @@ table input{
                 }
                 rs2.close();
                 x=1;
+                rsMark.next();
                 out.println("<tr><td class='uk-width-small'><input class='uk-input uk-form-blank uk-form-small' type='text' name='enrollment' value='"+rsMark.getString("enrollmentno")+"' readonly></td>");
-                while(x<=nOfQue){
+                rsMark.beforeFirst();
+                while(x<=nOfQue && rsMark.next()){
                     out.println("<td class='uk-width-small'><input class='uk-input uk-form-blank uk-form-small uk-form-width-small' type='text' id='que"+x+"' name='que"+x+"' value='"+(float)rsMark.getFloat("obtainedMarks")+"' required></td>");
                     x++;
                 }
@@ -199,6 +201,9 @@ table input{
         nOfQue = rs2.getRow();
         rs2.beforeFirst();
         String value="";
+        String obtMrk="";
+        String calObtMrk="";
+        String nCalObtMrk="";
         if(s.equals(rs4.getString("typeDescription"))){
             x=1;
             rs5=con.SelectData("select * from exam_master where examID="+request.getParameter("examid2")+";");
@@ -212,19 +217,10 @@ table input{
                 float obtMarks = marks*rs2.getFloat("queMaxMarks")/examMaxMarks;
                 float calcObtMarks = obtMarks*nFact;
                 float nCalcObtMarks = obtMarks*wFact;
-                value += "('"+request.getParameter("enrollment")+"',"+rs2.getInt("questionID")+","+obtMarks+","+calcObtMarks+","+nCalcObtMarks+")";
-                if(x!=nOfQue){
-                    value+=",";
-                }
+                obtMrk += "WHEN "+rs2.getInt("questionID")+" THEN "+obtMarks+" ";
+                calObtMrk += "WHEN "+rs2.getInt("questionID")+" THEN "+calcObtMarks+" ";
+                nCalObtMrk += "WHEN "+rs2.getInt("questionID")+" THEN "+nCalcObtMarks+" ";
                 x++;
-            }
-            if(con.Ins_Upd_Del("delete from marks_obtained_master where enrollmentno='"+request.getParameter("enrollment")+"' and questionID in (select questionID from question_master where examID="+request.getParameter("examid2")+");") && con.Ins_Upd_Del("insert into marks_obtained_master(enrollmentno,questionID,obtainedMarks,calcObtainedMarks,nCalcObtainedMarks) values "+value+";")){
-                out.println("<script>$('#head').prepend('<div class=\"uk-alert-success\" uk-alert><a class=\"uk-alert-close\" uk-close></a><b>Marks updateed Successfully.</b></div>')</script>");        
-                con.commitData();
-            }
-            else{
-                out.println("<script>$('#head').prepend('<div class=\"uk-alert-danger\" uk-alert><a class=\"uk-alert-close\" uk-close></a><b>ERROR</b>: Please Update Marks Again.</div>')</script>");
-                con.rollbackData();
             }
         }
         else{
@@ -235,20 +231,19 @@ table input{
                 float obtMarks = Float.parseFloat(request.getParameter("que"+x));
                 float calcObtMarks = obtMarks*nFact;
                 float nCalcObtMarks = obtMarks*wFact;
-                value += "('"+request.getParameter("enrollment")+"',"+rs2.getInt("questionID")+","+obtMarks+","+calcObtMarks+","+nCalcObtMarks+")";
-                if(x!=nOfQue){
-                    value+=",";
-                }
+                obtMrk += "WHEN "+rs2.getInt("questionID")+" THEN "+obtMarks+" ";
+                calObtMrk += "WHEN "+rs2.getInt("questionID")+" THEN "+calcObtMarks+" ";
+                nCalObtMrk += "WHEN "+rs2.getInt("questionID")+" THEN "+nCalcObtMarks+" ";
                 x++;
             }
-            if(con.Ins_Upd_Del("delete from marks_obtained_master where enrollmentno='"+request.getParameter("enrollment")+"' and questionID in (select questionID from question_master where examID="+request.getParameter("examid2")+");") && con.Ins_Upd_Del("insert into marks_obtained_master(enrollmentno,questionID,obtainedMarks,calcObtainedMarks,nCalcObtainedMarks) values "+value+";")){
-                out.println("<script>$('#head').prepend('<div class=\"uk-alert-success\" uk-alert><a class=\"uk-alert-close\" uk-close></a><b>Marks Updated Successfully.</b></div>')</script>");        
-                con.commitData();
-            }
-            else{
-                out.println("<script>$('#head').prepend('<div class=\"uk-alert-danger\" uk-alert><a class=\"uk-alert-close\" uk-close></a><b>ERROR</b>: Please Update Marks Again.</div>')</script>");
-                con.rollbackData();
-            }
+        }
+        if(con.Ins_Upd_Del("UPDATE marks_obtained_master SET obtainedMarks= CASE questionID "+obtMrk+"END ,calcObtainedMarks= CASE questionID "+calObtMrk+"END ,nCalcObtainedMarks= CASE questionID "+nCalObtMrk+"END WHERE enrollmentno="+request.getParameter("enrollment")+" and questionID in (select questionID from question_master where examID="+request.getParameter("examid2")+");")){
+            out.println("<script>$('#head').prepend('<div class=\"uk-alert-success\" uk-alert><a class=\"uk-alert-close\" uk-close></a><b>Marks Updated Successfully.</b></div>')</script>");        
+            con.commitData();
+        }
+        else{
+            out.println("<script>$('#head').prepend('<div class=\"uk-alert-danger\" uk-alert><a class=\"uk-alert-close\" uk-close></a><b>ERROR</b>: Please Update Marks Again.</div>')</script>");
+            con.rollbackData();
         }
     }
 

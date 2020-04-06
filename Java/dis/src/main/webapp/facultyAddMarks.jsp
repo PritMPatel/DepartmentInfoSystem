@@ -175,7 +175,12 @@ table input{
                     }
                     out.println("</table><button class='btn' type='submit' name='submit' value='submit'>Submit</button></center></div></form>");  
                 }
-                else{                    
+
+
+
+
+                else{    
+                
                 out.println("<form method='POST'><input type='number' name='examid2' value='"+request.getParameter("exam_id")+"' hidden readonly/>");
                 rs2=con.SelectData("SELECT questionID,queDesc,queMaxMarks,calcQuesMaxMarks,nCalcQuesMaxMarks FROM question_master qm where examID="+request.getParameter("exam_id")+" order by questionID;");
                 rs2.last();
@@ -222,7 +227,7 @@ table input{
                     rs2=con.SelectData("SELECT questionID,queDesc,queMaxMarks,calcQuesMaxMarks,nCalcQuesMaxMarks FROM question_master qm where examID="+request.getParameter("examid2")+" order by questionID;");
                     rs2.last();
                     nOfQue = rs2.getRow();
-                    rs3=con.SelectData("select enrollmentno from student_master where batch in (select batch from exam_master where examID="+request.getParameter("exam_id")+") and enrollmentno not in(select enrollmentno from marks_obtained_master where questionID in (select questionID from question_master where examID = "+request.getParameter("exam_id")+")) and studentDepartment="+(int)session.getAttribute("facultyDepartment")+" order by enrollmentno;");
+                    rs3=con.SelectData("select enrollmentno from student_master where batch in (select batch from exam_master where examID="+request.getParameter("examid2")+") and enrollmentno not in(select enrollmentno from marks_obtained_master where questionID in (select questionID from question_master where examID = "+request.getParameter("examid2")+")) and studentDepartment="+(int)session.getAttribute("facultyDepartment")+" order by enrollmentno;");
                     rs3.last();
                     nOfStudents = rs3.getRow();
                     //out.println(nOfStudents);
