@@ -114,7 +114,7 @@ table input{
     if(request.getParameter("next")==null && request.getParameter("updateMarks")==null){%>
     <%@include file="/subjectBatchForm.jsp"%>
     <%}
-    else if(request.getParameter("next")!=null){
+    if(request.getParameter("next")!=null){
         rsSubject=con.SelectData("select subjectName from subject_master where subjectID="+request.getParameter("subjectid")+";");
                     rsSubject.next();
                     rs=con.SelectData("select * from exam_master where examID in (select distinct examID from question_master) and subjectID="+request.getParameter("subjectid")+" and batch="+request.getParameter("batch1")+";");
@@ -132,7 +132,7 @@ table input{
                     out.println("</select></div><div class='col-sm'><label for='enrollmentno'>Enrollment No:</label><input type='text' name='enrollmentno' class='uk-input' maxlength='12' size='12' placeholder='Enter Enrollment No'/></div></div>");
                     out.println("<center class=\"mt-3\"><button class='btn' id='updateMarks' name='updateMarks' value='updateMarks'>Update Marks</button></center></form><br/>");
     }
-    else if(request.getParameter("updateMarks")!=null){
+    if(request.getParameter("updateMarks")!=null){
         rs4=con.SelectData("select typeDescription,examName from exam_master,examtype_master where exam_master.examtypeID=examtype_master.examtypeID and examID="+request.getParameter("exam_id")+";");
         rs4.next();
         if(con.CheckData("select distinct enrollmentno from attainment_co where enrollmentno="+request.getParameter("enrollmentno")+" and subjectID in (select subjectID from exam_master where examID="+request.getParameter("exam_id")+");")){
@@ -141,7 +141,7 @@ table input{
             out.println("<script>UIkit.modal.alert('<p class=\"uk-modal-body uk-text-center\"><b>ERROR</b>: Can\\'t Update Marks. You already saved CO Attainment Calculations.</p>').then(function(){window.history.back();});</script>");
             //response.sendRedirect("facultyUpdateMarks.jsp");
         }
-        else if(con.CheckData("select distinctrow enrollmentno from marks_obtained_master where questionID in (select questionID from question_master where examID = "+request.getParameter("exam_id")+") and enrollmentno="+request.getParameter("enrollmentno")+";")){
+        if(con.CheckData("select distinctrow enrollmentno from marks_obtained_master where questionID in (select questionID from question_master where examID = "+request.getParameter("exam_id")+") and enrollmentno="+request.getParameter("enrollmentno")+";")){
             if(s.equals(rs4.getString("typeDescription"))){
                 out.println("<form method='POST'><input type='number' name='examid2' value='"+request.getParameter("exam_id")+"' hidden readonly/>");
                         out.println("<div class=\"form-row\">"
@@ -191,7 +191,7 @@ table input{
             out.println("<script>UIkit.modal.alert('<p class=\"uk-modal-body uk-text-center\"><b>ERROR</b>: Enrollment No. Not Found.</p>').then(function(){window.history.back();});</script>");
         }
     }
-    else if(request.getParameter("submit")!=null){
+    if(request.getParameter("submit")!=null){
         rs4=con.SelectData("select typeDescription from exam_master,examtype_master where exam_master.examtypeID=examtype_master.examtypeID and examID="+request.getParameter("examid2")+";");
         rs4.next();
         rs2=con.SelectData("SELECT questionID,queDesc,queMaxMarks,calcQuesMaxMarks,nCalcQuesMaxMarks FROM question_master qm where examID="+request.getParameter("examid2")+" order by questionID;");
