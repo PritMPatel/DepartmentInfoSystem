@@ -90,7 +90,7 @@ a:hover{
 	<div id="head"></div>
 	<%
 	rsBatch=con.SelectData("select distinctrow batch from attainment_overall,student_master,subject_master where attainment_overall.enrollmentno=student_master.enrollmentno and attainment_overall.subjectID=subject_master.subjectID and studentDepartment="+userDept+" order by batch desc,semester desc,subject_master.subjectID asc;");
-	rsCount=con.SelectData("select count(*) as cnt  from (select * from (select adminID as id,isApproved from admin_master where isApproved=0) as t1 UNION ALL (select facultyID as id, isApproved from faculty_master where isApproved=0 and facultyDepartment="+userDept+") as t2) as t3;");
+	rsCount=con.SelectData("select count(*) as cnt  from (select adminID as id,isApproved from admin_master where isApproved=0) as t1 UNION ALL (select facultyID as id, isApproved from faculty_master where isApproved=0 and facultyDepartment="+userDept+");");
 	rsCount.next();
 	%>
 	
