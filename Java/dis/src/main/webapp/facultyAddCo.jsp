@@ -59,7 +59,7 @@
 					<li><a href="#" class="main-link">UPDATE &nbsp;<i
 							class="fa fa-caret-down"></i></a>
 						<ul class="hidden">
-					<li><a href="#" class="main-link">UPDATE CO</a></li>
+					<li><a href="facultyUpdateCo.jsp" class="main-link">UPDATE CO</a></li>
 					<li><a href="#" class="main-link">UPDATE
 							EXAM</a></li>
 					<li><a href="#" class="main-link">UPDATE
@@ -89,7 +89,6 @@
 	<h3 style="text-align: center; padding-bottom: 10px;">ADD
 		COURSE OUTCOME</h3>
 	<form method="POST">
-	<span uk-toggle=".my-class"></span>
 		<div class="form-row">
 			<div class="col-sm"></div>
 			<div class="col-sm">
@@ -171,20 +170,21 @@
 					if (request.getParameter("submit") != null) {
 						int conos = Integer.parseInt(request.getParameter("cono"));
 						int x = 1;
+						String query = "";
 						while (x <= conos) {
-							if (con.Ins_Upd_Del("insert into co_master(coSrNo,coStatement,subjectID,facultyID,batch) VALUES(" + x
-									+ ",'" + request.getParameter("co" + x) + "'," + request.getParameter("subject_id")
-									+ "," + request.getParameter("faculty_id") + ","+ request.getParameter("batch") +");")){
-								if(x==conos){
-									out.println("<script>$('#head').prepend('<div class=\"uk-alert-success uk-alert\" uk-alert><a class=\"uk-alert-close uk-close\" uk-close></a><b>COs Inserted Successfully</b>.</div>');</script>");
-									con.commitData();
-								}	
-							}
-							else{
-								out.println("<script>$('#head').prepend('<div class=\"uk-alert-danger uk-alert\" uk-alert><a class=\"uk-alert-close uk-close\" uk-close></a><b>ERROR</b>: COs of this Subject & Batch Already Exist.</div>');</script>");
-								con.rollbackData();
+							query += "("+x+",'"+request.getParameter("co"+x)+"',"+request.getParameter("subject_id")+","+request.getParameter("faculty_id")+","+request.getParameter("batch")+")";
+							if(x!=conos){
+								query += ",";
 							}
 							x++;
+						}
+						if (con.Ins_Upd_Del("insert into co_master(coSrNo,coStatement,subjectID,facultyID,batch) VALUES "+query+";")){
+							out.println("<script>$('#head').prepend('<div class=\"uk-alert-success uk-alert\" uk-alert><a class=\"uk-alert-close uk-close\" uk-close></a><b>COs Inserted Successfully</b>.</div>');</script>");
+							con.commitData();
+						}
+						else{
+							out.println("<script>$('#head').prepend('<div class=\"uk-alert-danger uk-alert\" uk-alert><a class=\"uk-alert-close uk-close\" uk-close></a><b>ERROR</b>: COs of this Subject & Batch Already Exist.</div>');</script>");
+							con.rollbackData();
 						}
 					}
 				%>

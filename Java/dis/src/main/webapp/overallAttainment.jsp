@@ -64,7 +64,7 @@
 					<li><a href="#" class="main-link">UPDATE &nbsp;<i
 							class="fa fa-caret-down"></i></a>
 						<ul class="hidden">
-					<li><a href="#" class="main-link">UPDATE CO</a></li>
+					<li><a href="facultyUpdateCo.jsp" class="main-link">UPDATE CO</a></li>
 					<li><a href="#" class="main-link">UPDATE
 							EXAM</a></li>
 					<li><a href="#" class="main-link">UPDATE
