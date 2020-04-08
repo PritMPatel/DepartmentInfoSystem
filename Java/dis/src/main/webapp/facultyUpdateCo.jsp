@@ -146,7 +146,7 @@
                     <div class="form-row">
                         <div class="col-sm">
                             <label for="coStmt">CO Statement <%=rs.getInt("coSrNo")%> :</label>
-                            <input type="text" class="uk-input" name="co<%=rs.getInt("coSrNo")%>" value="<%=rsCo.getString("coStatement")%>" required>
+                            <input type="text" class="uk-input" name="co<%=rs.getInt("coSrNo")%>" value="<%=rs.getString("coStatement")%>" required>
                         </div>
                     </div>  
                     <%
@@ -167,17 +167,16 @@
             }
         }
         if(request.getParameter("update")!=null){
-            rs=con.SelectData("select * from co_master where subjectID="+request.getParameter("subjectid")+" and batch="+request.getParameter("batch1")+" and facultyID="+(int)session.getAttribute("facultyID")+" and coID not in (select distinct coID from attainment_co) order by coSrNo;");
+            rs=con.SelectData("select * from co_master where subjectID="+request.getParameter("subject_id")+" and batch="+request.getParameter("batch")+" and facultyID="+(int)session.getAttribute("facultyID")+" and coID not in (select distinct coID from attainment_co) order by coSrNo;");
             rs.last();
             int conos = rs.getRow();
             rs.beforeFirst();
             int x = 1;
             String coStat="";
-            while(x<=conos && rs.next()){
-                coStat += "WHEN "+rs.getInt("coSrNo")+" THEN '"+request.getParameter("co"+rs.getInt("coSrNo"))+"' ";
-                x++;
+            while(rs.next()){
+                coStat += "WHEN "+rs.getInt("coSrNo")+" THEN '"+request.getParameter("co"+rs.getInt("coSrNo"))+"' "
             }
-            if(con.Ins_Upd_Del("UPDATE co_master SET coStatement = CASE coSrNo "+coStat+"END WHERE subjectID="+request.getParameter("subject_id")+" and batch="+request.getParameter("batch")+" and facultyID="+(int)session.getAttribute("facultyID")+";")){
+            if(con.Ins_Upd_Del("UPDATE co_master SET coStatement = CASE coSrNo "+coStat+"END WHERE subjectID="+request.getParameter("subject_id")+" and batch="+request.getParameter("batch")+" and facultyID="+(int)session.getAttribute("facultyID")+" and coID not in(select distinct coID from attainment_co);")){
                 out.println("<script>$('#head').prepend('<div class=\"uk-alert-success\" uk-alert><a class=\"uk-alert-close\" uk-close></a><b>CO Statements Updated Successfully.</b></div>')</script>");        
                 con.commitData();
             }
