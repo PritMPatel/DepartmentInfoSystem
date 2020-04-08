@@ -132,20 +132,21 @@
         <%}
         if(request.getParameter("next")!=null){
             rsCo=con.SelectData("select * from co_master where subjectID="+request.getParameter("subjectid")+" and batch="+request.getParameter("batch1")+" and facultyID="+(int)session.getAttribute("facultyID")+";");
+            rs=con.SelectData("select * from co_master where subjectID="+request.getParameter("subjectid")+" and batch="+request.getParameter("batch1")+" and facultyID="+(int)session.getAttribute("facultyID")+" and coID not in (select distinct coID from attainment_co) order by coSrNo;");
             if(rsCo.next()){
-                if(!con.CheckData("select coID from attainment_co where coID in(select coID from co_master where subjectID="+request.getParameter("subjectid")+" and batch="+request.getParameter("batch1")+" and facultyID="+(int)session.getAttribute("facultyID")+");")){
-                    rsCo.last();
-                    int nOfCo = rsCo.getRow();
-                    rsCo.beforeFirst();
+                if(rs.next())){
+                    rs.last();
+                    int nOfCo = rs.getRow();
+                    rs.beforeFirst();
                     out.println("<input type='number' name='subject_id' value='"+request.getParameter("subjectid")+"' readonly hidden>");
                     out.println("<input type='number' name='batch' value='"+request.getParameter("batch1")+"' readonly hidden>");
                     out.println("<input type='number' name='cono' value='"+nOfCo+"' readonly hidden>");
                     int x=1;
-                    while(rsCo.next()){%>
+                    while(rs.next()){%>
                     <div class="form-row">
                         <div class="col-sm">
-                            <label for="coStmt">CO Statement <%=x%> :</label>
-                            <input type="text" class="uk-input" name="co<%=x%>" value="<%=rsCo.getString("coStatement")%>" required>
+                            <label for="coStmt">CO Statement <%=rs.getInt("coSrNo")%> :</label>
+                            <input type="text" class="uk-input" name="co<%=rs.getInt("coSrNo")%>" value="<%=rsCo.getString("coStatement")%>" required>
                         </div>
                     </div>  
                     <%
@@ -166,11 +167,14 @@
             }
         }
         if(request.getParameter("update")!=null){
-            int conos = Integer.parseInt(request.getParameter("cono"));
+            rs=con.SelectData("select * from co_master where subjectID="+request.getParameter("subjectid")+" and batch="+request.getParameter("batch1")+" and facultyID="+(int)session.getAttribute("facultyID")+" and coID not in (select distinct coID from attainment_co) order by coSrNo;");
+            rs.last();
+            int conos = rs.getRow();
+            rs.beforeFirst();
             int x = 1;
             String coStat="";
-            while(x<=conos){
-                coStat += "WHEN "+x+" THEN '"+request.getParameter("co"+x)+"' ";
+            while(x<=conos && rs.next()){
+                coStat += "WHEN "+rs.getInt("coSrNo")+" THEN '"+request.getParameter("co"+rs.getInt("coSrNo"))+"' ";
                 x++;
             }
             if(con.Ins_Upd_Del("UPDATE co_master SET coStatement = CASE coSrNo "+coStat+"END WHERE subjectID="+request.getParameter("subject_id")+" and batch="+request.getParameter("batch")+" and facultyID="+(int)session.getAttribute("facultyID")+";")){
