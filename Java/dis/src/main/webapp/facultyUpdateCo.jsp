@@ -134,7 +134,7 @@
             rsCo=con.SelectData("select * from co_master where subjectID="+request.getParameter("subjectid")+" and batch="+request.getParameter("batch1")+" and facultyID="+(int)session.getAttribute("facultyID")+";");
             rs=con.SelectData("select * from co_master where subjectID="+request.getParameter("subjectid")+" and batch="+request.getParameter("batch1")+" and facultyID="+(int)session.getAttribute("facultyID")+" and coID not in (select distinct coID from attainment_co) order by coSrNo;");
             if(rsCo.next()){
-                if(rs.next())){
+                if(rs.next()){
                     rs.last();
                     int nOfCo = rs.getRow();
                     rs.beforeFirst();
