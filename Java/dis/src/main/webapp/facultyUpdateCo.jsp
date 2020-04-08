@@ -174,7 +174,7 @@
             int x = 1;
             String coStat="";
             while(rs.next()){
-                coStat += "WHEN "+rs.getInt("coSrNo")+" THEN '"+request.getParameter("co"+rs.getInt("coSrNo"))+"' "
+                coStat += "WHEN "+rs.getInt("coSrNo")+" THEN '"+request.getParameter("co"+rs.getInt("coSrNo"))+"' ";
             }
             if(con.Ins_Upd_Del("UPDATE co_master SET coStatement = CASE coSrNo "+coStat+"END WHERE subjectID="+request.getParameter("subject_id")+" and batch="+request.getParameter("batch")+" and facultyID="+(int)session.getAttribute("facultyID")+" and coID not in(select distinct coID from attainment_co);")){
                 out.println("<script>$('#head').prepend('<div class=\"uk-alert-success\" uk-alert><a class=\"uk-alert-close\" uk-close></a><b>CO Statements Updated Successfully.</b></div>')</script>");        
