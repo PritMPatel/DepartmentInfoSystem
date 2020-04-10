@@ -155,20 +155,22 @@ body {
 
 
 /* LOGIN BOX*/
-
+/* 
 input[type=text],
 input[type=password],
+input[type=email],
 input[type=Date],
 input[type=number],
 .uk-select{
     width: 100%;
     padding: 12px 20px !important;
-    /*margin: 8px 0;*/
+    margin: 8px 0;
     display: inline-block;
     border: 1px solid #bbb !important;
     box-sizing: border-box;
     border-radius: 8px !important;
-}
+} 
+*/
 
 /*=== 2. Anchor Link ===*/
 
