@@ -14,7 +14,7 @@
 <%@page import="Connection.Connect"%>
 <%@page import="java.sql.ResultSetMetaData"%>
 <%@include file="/header.jsp"%>
-	<title>CALCULATE ATTAINMENT</title>
+	<title>VIEW MARKS</title>
 	<script src="js/jquery.table2excel.js"></script>
 		<style type="text/css">
 		@media print {@page { size: landscape;}}
@@ -131,7 +131,7 @@
                 rsCo=con.SelectData("select * from co_master where subjectID="+request.getParameter("subjectid")+" and batch="+request.getParameter("batch1")+" and facultyID="+(int)session.getAttribute("facultyID")+";");
                 if(!rsCo.next()){
                     out.println("<script>$('#head').prepend('<div class=\"uk-alert-danger\" uk-alert><a class=\"uk-alert-close\" uk-close></a><b>ACCESS DENIED</b>: You can't Access requested Data.</div>')</script>");
-                    response.sendRedirect("dis/viewMarks.jsp");
+                    response.sendRedirect("/dis/viewMarks.jsp");
                 }
                 rsCo.beforeFirst();
                 rsSubject=con.SelectData("select subjectName from subject_master where subjectID="+request.getParameter("subjectid")+";");
