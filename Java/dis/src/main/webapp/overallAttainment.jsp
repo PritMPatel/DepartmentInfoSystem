@@ -14,7 +14,7 @@
 <%@page import="Connection.Connect"%>
 <%@page import="java.sql.ResultSetMetaData"%>
 <%@include file="/header.jsp"%>
-<title>CALCULATE ATTAINMENT</title>
+<title>OVERALL ATTAINMENT</title>
 
 <script src="js/jquery.table2excel.js"></script>
 <style type="text/css">
