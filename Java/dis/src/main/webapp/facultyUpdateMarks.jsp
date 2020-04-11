@@ -72,7 +72,7 @@ table input{
 							class="fa fa-caret-down"></i></a>
 						<ul class="hidden">
 					<li><a href="facultyUpdateCo.jsp" class="main-link">UPDATE CO</a></li>
-					<li><a href="#" class="main-link">UPDATE
+					<li><a href="facultyUpdateExam.jsp" class="main-link">UPDATE
 							EXAM</a></li>
 					<li><a href="#" class="main-link">UPDATE
 							QUESTION</a></li>
@@ -115,22 +115,27 @@ table input{
     <%@include file="/subjectBatchForm.jsp"%>
     <%}
     if(request.getParameter("next")!=null){
-        rsSubject=con.SelectData("select subjectName from subject_master where subjectID="+request.getParameter("subjectid")+";");
-                    rsSubject.next();
-                    rs=con.SelectData("select * from exam_master where examID in (select distinct examID from question_master) and subjectID="+request.getParameter("subjectid")+" and batch="+request.getParameter("batch1")+";");
-                    out.println(
-                            "<div class='form-row'><div class='col-sm'><label for='subjectID'>Subject:</label><input type='number' class='uk-input' id='subject_id' name='subject_id' value='"+request.getParameter("subjectid")+"' hidden/><input type='text' class='uk-input' id='subjectName' name='subjectName' value='"+ rsSubject.getString("subjectName")+"' readonly/></div>");
-                    out.println(
-                            "<div class='col-sm'><label for='batch'>Batch:</label><input type='number' name='batch' class='uk-input' id='batch' value='"
-                                    + request.getParameter("batch1") + "' readonly/></div></div> ");
-                    out.println(
-                            "<div class='form-row'><div class='col-sm'><label for='examID'>Exam:</label><select class='uk-select' id='exam_id' name='exam_id' required><option value='' selected disabled>SELECT EXAM</option>");
-                    while (rs.next()) {
-                        out.println("<option value='" + rs.getInt("examID") + "'>"
-                                + rs.getString("examName") + "</option>");
-                    }
-                    out.println("</select></div><div class='col-sm'><label for='enrollmentno'>Enrollment No:</label><input type='text' name='enrollmentno' class='uk-input' maxlength='12' size='12' placeholder='Enter Enrollment No'/></div></div>");
-                    out.println("<center class=\"mt-3\"><button class='btn' id='updateMarks' name='updateMarks' value='updateMarks'>Update Marks</button></center></form><br/>");
+        if(!con.CheckData("select * from co_master where facultyID="+(int) session.getAttribute("facultyID")+" and subjectID="+request.getParameter("subjectid")+" and batch="+request.getParameter("batch1")+";")){
+            out.println("<script>UIkit.modal.alert('<p class=\"uk-modal-body uk-text-center\"><b>ERROR</b>: No Data Found. Please Check Subject and Batch again.</p>').then(function(){window.history.back();});</script>");
+        }
+        else{
+            rsSubject=con.SelectData("select subjectName from subject_master where subjectID="+request.getParameter("subjectid")+";");
+            rsSubject.next();
+            rs=con.SelectData("select * from exam_master where examID in (select distinct examID from question_master) and subjectID="+request.getParameter("subjectid")+" and batch="+request.getParameter("batch1")+";");
+            out.println(
+                    "<div class='form-row'><div class='col-sm'><label for='subjectID'>Subject:</label><input type='number' class='uk-input' id='subject_id' name='subject_id' value='"+request.getParameter("subjectid")+"' hidden/><input type='text' class='uk-input' id='subjectName' name='subjectName' value='"+ rsSubject.getString("subjectName")+"' readonly/></div>");
+            out.println(
+                    "<div class='col-sm'><label for='batch'>Batch:</label><input type='number' name='batch' class='uk-input' id='batch' value='"
+                            + request.getParameter("batch1") + "' readonly/></div></div> ");
+            out.println(
+                    "<div class='form-row'><div class='col-sm'><label for='examID'>Exam:</label><select class='uk-select' id='exam_id' name='exam_id' required><option value='' selected disabled>SELECT EXAM</option>");
+            while (rs.next()) {
+                out.println("<option value='" + rs.getInt("examID") + "'>"
+                        + rs.getString("examName") + "</option>");
+            }
+            out.println("</select></div><div class='col-sm'><label for='enrollmentno'>Enrollment No:</label><input type='text' name='enrollmentno' class='uk-input' maxlength='12' size='12' placeholder='Enter Enrollment No'/></div></div>");
+            out.println("<center class=\"mt-3\"><button class='btn' id='updateMarks' name='updateMarks' value='updateMarks'>Update Marks</button></center></form><br/>");
+        }
     }
     if(request.getParameter("updateMarks")!=null){
         rs4=con.SelectData("select typeDescription,examName from exam_master,examtype_master where exam_master.examtypeID=examtype_master.examtypeID and examID="+request.getParameter("exam_id")+";");

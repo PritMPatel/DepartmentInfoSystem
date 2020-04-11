@@ -55,7 +55,7 @@
 							class="fa fa-caret-down"></i></a>
 						<ul class="hidden">
 					<li><a href="facultyUpdateCo.jsp" class="main-link">UPDATE CO</a></li>
-					<li><a href="#" class="main-link">UPDATE
+					<li><a href="facultyUpdateExam.jsp" class="main-link">UPDATE
 							EXAM</a></li>
 					<li><a href="#" class="main-link">UPDATE
 							QUESTION</a></li>
@@ -115,6 +115,10 @@
 						<%@include file="/subjectBatchForm.jsp"%>
 					<%}
 					if (request.getParameter("next") != null) {
+						if(!con.CheckData("select * from co_master where facultyID="+(int) session.getAttribute("facultyID")+" and subjectID="+request.getParameter("subjectid")+" and batch="+request.getParameter("batch1")+";")){
+							out.println("<script>UIkit.modal.alert('<p class=\"uk-modal-body uk-text-center\"><b>ERROR</b>: No Data Found. Please Check Subject and Batch again.</p>').then(function(){window.history.back();});</script>");
+						}
+						else{
 						rsSubject=con.SelectData("select subjectName from subject_master where subjectID="+request.getParameter("subjectid")+";");
 						rsSubject.next();
 						rs = con.SelectData("select * from exam_master where subjectID=" + request.getParameter("subjectid")
@@ -141,6 +145,7 @@
 							"<center class=\"mt-3\">"+
 								"<button type=\"submit\" class=\"btn\" id='submit' name=\"submit\" value=\"submit\" disabled>Submit</button>"+
 							"</center>");
+						}
 					}
 			%>
 		

@@ -171,7 +171,7 @@ table input{
                 reader.onload = function (e) {
                     var table = document.createElement("table");
                     var rows = e.target.result.split("\n");
-                    for (var i = 0; i < rows.length; i++) {
+                    for (var i = 0; i < rows.length-1; i++) {
                         if(i!=0){
                         var cells = rows[i].split(",");
                         if (cells.length >= 1) {

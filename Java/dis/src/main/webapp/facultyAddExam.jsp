@@ -64,7 +64,7 @@
 							class="fa fa-caret-down"></i></a>
 						<ul class="hidden">
 					<li><a href="facultyUpdateCo.jsp" class="main-link">UPDATE CO</a></li>
-					<li><a href="#" class="main-link">UPDATE
+					<li><a href="facultyUpdateExam.jsp" class="main-link">UPDATE
 							EXAM</a></li>
 					<li><a href="#" class="main-link">UPDATE
 							QUESTION</a></li>
@@ -165,6 +165,10 @@
 					int n_marks1 = 0;
 					float MaxWeightMarks = 0;*/
 					if (request.getParameter("submit") != null) {
+						if(!con.CheckData("select * from co_master where facultyID="+(int) session.getAttribute("facultyID")+" and subjectID="+request.getParameter("subject_id")+" and batch="+request.getParameter("batch")+";")){
+							out.println("<script>UIkit.modal.alert('<p class=\"uk-modal-body uk-text-center\"><b>ERROR</b>: No Data Found. Please Check Subject and Batch again.</p>').then(function(){window.history.back();});</script>");
+						}
+						else{
 						int i = Integer.parseInt(request.getParameter("exam_type"));
 						rs = con.SelectData("select * from examtype_master where examTypeID=" + i + ";");
 						if (con.Ins_Upd_Del(
@@ -180,6 +184,7 @@
 								out.println("<script>$('#head').prepend('<div class=\"uk-alert-danger\" uk-alert><a class=\"uk-alert-close\" uk-close></a><b>ERROR</b>: Same Exam Name Exist for Selected Subject and Batch.</div>')</script>");
 								con.rollbackData();
 							}
+						}
 					}
 				
 			%>
