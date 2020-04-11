@@ -85,7 +85,7 @@
 	ResultSet rsExamType=null;
 	ResultSet rsSubject=null;
     if(request.getParameter("next")==null){
-        AllExam= con.SelectData("select * from exam_master,subject_master where subject_master.subjectID=exam_master.subjectID and (exam_master.subjectID,batch) in (select subjectID,batch from co_master where facultyID="+(int)session.getAttribute("facultyID")+") and examID not in (select distinct examID from question_master);");
+        AllExam= con.SelectData("select * from exam_master,subject_master where subject_master.subjectID=exam_master.subjectID and (exam_master.subjectID,batch) in (select subjectID,batch from co_master where facultyID="+(int)session.getAttribute("facultyID")+") and examID not in (select distinct examID from question_master) order by batch desc, subjectName asc;");
         %>
         <input type="number" id="subject_id" name="subject_id" hidden required>
         <input type="number" id="exam_id" name="exam_id" hidden required>
@@ -154,6 +154,7 @@
 				<label for="subjectID">Subject:</label>
 				<input type="text" class="uk-input" name="subjectName" placeholder="Subject Name" value="<%=rsSubject.getString("subjectName")%>" readonly required/>
 				<input type="text" class="uk-input" name="subject_id" placeholder="Subject Name" value="<%=Exam.getInt("subjectID")%>" hidden readonly required/>
+				<input type="text" class="uk-input" name="exam_id" placeholder="ExamID" value="<%=Exam.getInt("examID")%>" hidden readonly required/>
 			</div>
 			<%}%>
 			<div class="col-sm">
@@ -168,7 +169,14 @@
 		}
     }
 	if(request.getParameter("update")!=null){
-
+		if(con.Ins_Upd_Del("UPDATE exam_master SET examName='"+request.getParameter("exam_name")+"',examtypeID="+request.getParameter("exam_type")+",totalMaxMarks="+request.getParameter("total_max_marks")+",weightage="+request.getParameter("weightage")+" WHERE examID = "+request.getParameter("exam_id")+";")){
+			out.println("<script>$('#head').prepend('<div class=\"uk-alert-success\" uk-alert><a class=\"uk-alert-close\" uk-close></a><b>Exam Updated Successfully.</b></div>')</script>");        
+            con.commitData();
+		}
+		else{
+			out.println("<script>$('#head').prepend('<div class=\"uk-alert-danger\" uk-alert><a class=\"uk-alert-close\" uk-close></a><b>ERROR</b>: Please Update Exam Again. Try Using Different Exam Name.</div>')</script>");
+            con.rollbackData();
+		}
 	}
 %>
     <script type="text/javascript">
