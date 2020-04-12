@@ -14,6 +14,10 @@
 <%@include file="/header.jsp"%>
 <title>ADD MARKS</title>
 <style>
+.uk-form-small{
+    margin: 8px 4px !important;
+    width: min-content;
+}
 .col-sm{
 	padding-left: 30px !important;
 	padding-right: 30px !important;
@@ -24,6 +28,7 @@ td{
 th{
     background-color: #cf6766 !important;
     color: black !important;
+    text-align:center !important;
 }
 table input{
     border: 0px !important;
@@ -157,17 +162,17 @@ table input{
                     }
                 }  
                 if(request.getParameter("addMarks")!=null){
-                rs4=con.SelectData("select typeDescription,examName from exam_master,examtype_master where exam_master.examtypeID=examtype_master.examtypeID and examID="+request.getParameter("exam_id")+";");
+                rs4=con.SelectData("select typeDescription,examName,totalMaxMarks from exam_master,examtype_master where exam_master.examtypeID=examtype_master.examtypeID and examID="+request.getParameter("exam_id")+";");
                 rs4.next();
                 if(s.equals(rs4.getString("typeDescription"))){
                     out.println("<form method='POST'><input type='number' name='examid2' value='"+request.getParameter("exam_id")+"' hidden readonly/>");
                     out.println("<div class=\"form-row\">"
                         +"<div class=\"col-sm\"></div>"
-                        +"<div class=\"col-sm\"><label for='exam'>Exam:</label><input type='text' value='"+rs4.getString("examName")+"' name='examName' readonly/></div>"
+                        +"<div class=\"col-sm\"><label for='exam'>Exam:</label><input type='text' class='uk-input' value='"+rs4.getString("examName")+"' name='examName' readonly/></div>"
                         +"<div class=\"col-sm\"></div>"
                     +"</div><div class=\"form-row\"><div class=\"col-sm\"></div><div class=\"col-sm\"><div class=\"form-row\" style=\"margin:0px !important;\"><div class=\"col-sm\" style='padding:0px !important;'><label><input class=\"uk-radio\" type=\"radio\" id='import' name=\"import\" value='importdata'> Import</label></div><div class=\"col-sm\" style='padding:0px !important;'><label><input class=\"uk-radio\" type=\"radio\" id='import' name=\"import\" value='insertdata'> Insert</label></div></div></div><div class=\"col-sm\"></div></div>");
                     out.println("<div class='form-row' id='importAuto' style='display: none;'><div class='col-sm'><div class='form-row'><b>Instructions for IMPORT:</b></div><div class='form-row'><li>Upload .csv File Only</li></div><div class='form-row'><li>Enrollment should be same as mentioned below.</li></div><div class='form-row'><li>Column Order Should be same as Below</li></div><div class='form-row'><li>First Row will be considered as a HEADING</li></div><div class='form-row'><li>Please <b>VERIFY</b> the Data before SUBMIT</li></div></div><div class='col-sm'><div class='uk-form-custom'><input type=\"file\" id=\"fileUpload\"><button class=\"uk-button uk-button-default\" type=\"button\">SELECT FILE</button></div><button class=\"uk-button uk-button-default\" type=\"button\" id=\"upload\" value=\"Import\" onclick=\"UploadESE()\">Import</button></div></div>");
-                    out.println("<div id='insertManual' style='display: none;'><div class=\"form-row\"></div><center><table class='uk-table uk-table-hover uk-table-divider uk-table-small' border='1'><tr><th class='uk-table-small'>Enrollment</th><th class='uk-width-auto'>Obtained Marks</th></tr>");
+                    out.println("<div id='insertManual' style='display: none;'><div class=\"form-row\"></div><center><table class='uk-table uk-table-hover uk-table-divider uk-table-small uk-width-auto' border='1'><tr><th class='uk-table-small'>Enrollment</th><th class='uk-width-auto'>Obtained Marks</th></tr>");
                     rs3=con.SelectData("select enrollmentno from student_master where batch in (select batch from exam_master where examID="+request.getParameter("exam_id")+") and enrollmentno not in(select enrollmentno from marks_obtained_master where questionID in (select questionID from question_master where examID = "+request.getParameter("exam_id")+")) and studentDepartment="+(int)session.getAttribute("facultyDepartment")+" order by enrollmentno;");
                     rs3.last();
                     nOfStudents=rs3.getRow();
@@ -175,7 +180,7 @@ table input{
                     x2=1;
                     while(x2<=nOfStudents && rs3.next()){
                         out.println("<tr><td class='uk-width-small'><input class='uk-input uk-form-blank uk-form-small' type='text' name='enroll"+x2+"' value='"+rs3.getString("enrollmentno")+"' readonly></td>");
-                        out.println("<td class='uk-width-small'><input class='uk-input uk-form-blank uk-form-small uk-form-width-small' type='text' id='"+x2+"marks' name='"+x2+"marks' required></td></tr>");
+                        out.println("<td class='uk-width-small'><input class='uk-input uk-form-blank uk-form-small uk-form-width-small' type='number' id='"+x2+"marks' name='"+x2+"marks' max='"+rs4.getFloat("totalMaxMarks")+"' required></td></tr>");
                         x2++; 
                     }
                     out.println("</table><button class='btn' type='submit' name='submit' value='submit'>Submit</button></center></div></form>");  
@@ -195,11 +200,11 @@ table input{
                 rs2.beforeFirst();
                 out.println("<div class=\"form-row\">"
                         +"<div class=\"col-sm\"></div>"
-                        +"<div class=\"col-sm\"><label for='exam'>Exam:</label><input type='text' value='"+rs4.getString("examName")+"' name='examName' readonly/></div>"
+                        +"<div class=\"col-sm\"><label for='exam'>Exam:</label><input type='text' class='uk-input' value='"+rs4.getString("examName")+"' name='examName' readonly/></div>"
                         +"<div class=\"col-sm\"></div>"
                     +"</div><div class=\"form-row\"><div class=\"col-sm\"></div><div class=\"col-sm\"><div class=\"form-row\" style=\"margin:0px !important;\"><div class=\"col-sm\" style='padding:0px !important;'><label><input class=\"uk-radio\" type=\"radio\" id='import' name=\"import\" value='importdata'> Import</label></div><div class=\"col-sm\" style='padding:0px !important;'><label><input class=\"uk-radio\" type=\"radio\" id='import' name=\"import\" value='insertdata'> Insert</label></div></div></div><div class=\"col-sm\"></div></div>");
                 out.println("<div class='form-row' id='importAuto' style='display: none;'><div class='col-sm'><div class='form-row'><b>Instructions for IMPORT:</b></div><div class='form-row'><li>Upload .csv File Only</li></div><div class='form-row'><li>Enrollment should be same as mentioned below.</li></div><div class='form-row'><li>Column Order Should be same as Below</li></div><div class='form-row'><li>First Row will be considered as a HEADING</li></div><div class='form-row'><li>Please <b>VERIFY</b> the Data before SUBMIT</li></div></div><div class='col-sm'><div class='uk-form-custom'><input type=\"file\" id=\"fileUpload\"><button class=\"uk-button uk-button-default\" type=\"button\">SELECT FILE</button></div><button class=\"uk-button uk-button-default\" type=\"button\" id=\"upload\" value=\"Import\" onclick=\"Upload()\">Import</button></div></div>");
-                out.println("<div id='insertManual' style='display: none;'><div class=\"form-row\"></div><center><table class='uk-table uk-table-hover uk-table-divider uk-table-small' border='1'><tr><th class='uk-table-small'>Enrollment</th>");
+                out.println("<div id='insertManual' style='display: none;'><div class=\"form-row\"></div><center><table class='uk-table uk-table-hover uk-table-divider uk-table-small uk-width-auto' border='1'><tr><th class='uk-table-small'>Enrollment</th>");
                 while(x<=nOfQue && rs2.next()){
                     out.println("<th class='uk-width-auto'>"+rs2.getString("queDesc")+"</th>");
                     x++;
@@ -213,10 +218,11 @@ table input{
                 rs3.beforeFirst();
                 while(x2<=nOfStudents && rs3.next()){
                     out.println("<tr><td class='uk-width-small'><input class='uk-input uk-form-blank uk-form-small' type='text' name='enroll"+x2+"' value='"+rs3.getString("enrollmentno")+"' readonly></td>");
-                    while(x<=nOfQue){
-                        out.println("<td class='uk-width-small'><input class='uk-input uk-form-blank uk-form-small uk-form-width-small' type='text' id='"+x2+"que"+x+"' name='"+x2+"que"+x+"' required></td>");
+                    while(x<=nOfQue && rs2.next()){
+                        out.println("<td class='uk-width-small'><input class='uk-input uk-form-blank uk-form-small uk-form-width-small' type='number' id='"+x2+"que"+x+"' name='"+x2+"que"+x+"' step='0.01' max='"+rs2.getFloat("queMaxMarks")+"' required></td>");
                         x++;
                     }
+                    rs2.beforeFirst();
                     x=1;
                     out.println("</tr>");
                     x2++;
