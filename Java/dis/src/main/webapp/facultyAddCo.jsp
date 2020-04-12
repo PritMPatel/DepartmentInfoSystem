@@ -168,7 +168,10 @@
 		<%
 				
 					if (request.getParameter("submit") != null) {
-						int conos = Integer.parseInt(request.getParameter("cono"));
+						if(con.CheckData("select * from co_master where subjectID="+request.getParameter("subject_id")+" and batch="+request.getParameter("batch")+";")){
+							out.println("<script>UIkit.modal.alert('<p class=\"uk-modal-body uk-text-center\"><b>ERROR</b>: COs of this Subject for Given Batch Already Exist.</p>').then(function(){window.history.back();});</script>");
+						}
+						else{int conos = Integer.parseInt(request.getParameter("cono"));
 						int x = 1;
 						String query = "";
 						while (x <= conos) {
@@ -185,7 +188,7 @@
 						else{
 							out.println("<script>$('#head').prepend('<div class=\"uk-alert-danger uk-alert\" uk-alert><a class=\"uk-alert-close uk-close\" uk-close></a><b>ERROR</b>: COs of this Subject & Batch Already Exist.</div>');</script>");
 							con.rollbackData();
-						}
+						}}
 					}
 				%>
 	</form>
